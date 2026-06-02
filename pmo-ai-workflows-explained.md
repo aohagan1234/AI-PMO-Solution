@@ -204,6 +204,59 @@ Without a consolidated view, things get missed.
 
 ---
 
+## Work Stream 5: Onboarding Access
+
+*Scored: 6/25 — lower priority, handled differently to the other four streams.*
+
+### Why It Scores Lower
+
+| Work Stream | Score | Approach |
+|---|---|---|
+| Meeting Intelligence | 25 | AI-led |
+| Personal Task Mgmt | 20 | AI-led |
+| Status Reports | 16 | AI-led |
+| Strategic Resourcing | 12 | AI-led |
+| **Onboarding Access** | **6** | **RPA/Hybrid** |
+
+The score is low because most of this work is straightforward and rule-based — it does not require AI judgment.
+
+### How It Works
+
+Onboarding access splits into two very different types of task:
+
+**1. Access checking and provisioning (automated — no AI needed)**
+
+When a new joiner starts, the system checks whether their access to tools and systems has been set up correctly. If something is missing, it triggers the relevant request automatically.
+
+This is a simple pass/fail check against a list of required systems. No interpretation needed — a standard automation tool (e.g. Power Automate) handles this reliably.
+
+**Why this way:** Using AI here would be over-engineering. The rule is fixed: "Does this person have access to X? Yes or No." Automation is faster, cheaper, and more reliable for this.
+
+**Value:** No new joiner sits waiting for access that was missed. Checks happen automatically on day one.
+
+---
+
+**2. Onboarding exceptions (AI-assisted)**
+
+Sometimes access requests fall outside the standard checklist — a contractor needing unusual system access, a role with non-standard tool requirements, or an access conflict that needs a judgement call.
+
+This is where AI adds value: reviewing the context, flagging the exception, and recommending a course of action for a human to approve.
+
+**Why this way:** Exceptions by definition don't fit a simple rule. They require reading the situation — which is where AI judgment is appropriate.
+
+**Value:** Exceptions get caught and reviewed rather than ignored or escalated slowly.
+
+---
+
+### Where It Fits in the Roadmap
+
+Onboarding Access is **not a Wave 1 priority**. The recommended approach is:
+
+- Use existing automation tooling (RPA) for access checking now
+- Revisit the exceptions piece in Wave 3 once the higher-value AI streams are established
+
+---
+
 ## Summary: What Changes for a PMO
 
 | Today | With the AI Tool |
