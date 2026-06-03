@@ -56,15 +56,15 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 | Work Stream | Volume (1-5) | Non-Det (1-5) | Score | Priority |
 |---|---|---|---|---|
 | Meeting Intelligence | 5 | 5 | 25 | ★ Wave 1 |
-| Personal Task Mgmt | 5 | 4 | 20 | ★ Wave 1 |
-| Proactive Risk Monitoring | 4 | 5 | 20 | Wave 2 |
-| Governance Monitoring | 4 | 5 | 20 | Wave 2 *(new)* |
-| Status Reports | 4 | 4 | 16 | ★ Wave 1 |
-| Change Request Management | 4 | 4 | 16 | Wave 2 |
-| Stakeholder Communications | 4 | 4 | 16 | Wave 2 *(new)* |
-| Lessons Learned | 3 | 5 | 15 | Wave 3 *(high priority)* |
-| Strategic Resourcing | 3 | 4 | 12 | ★ Wave 1 |
-| Dependency Tracking | 3 | 4 | 12 | Wave 3 |
+| Personal Task Mgmt | 5 | 4 | 20 | ★ Wave 2 |
+| Proactive Risk Monitoring | 4 | 5 | 20 | Wave 3 |
+| Governance Monitoring | 4 | 5 | 20 | Wave 3 *(high priority)* |
+| Status Reports | 4 | 4 | 16 | ★ Wave 2 |
+| Change Request Management | 4 | 4 | 16 | Wave 3 |
+| Stakeholder Communications | 4 | 4 | 16 | Wave 3 *(high priority)* |
+| Lessons Learned | 3 | 5 | 15 | Wave 4 *(high priority)* |
+| Strategic Resourcing | 3 | 4 | 12 | ★ Wave 2 |
+| Dependency Tracking | 3 | 4 | 12 | Wave 4 |
 | Onboarding Access | 3 | 2 | 6 | RPA/Hybrid |
 
 ---
@@ -365,16 +365,16 @@ NON-DETERMINISM
 
 **All four are grounded in direct stakeholder quotes. None depend on messy pre-conditions to deliver value.**
 
-**Why not the others in Wave 1?**
+**Why not the others in Waves 1–2?**
 
 | Stream | Score | Why Deferred |
 |---|---|---|
-| Proactive Risk Monitoring | 20 | Dependent on project data being clean and current. No stakeholder quote. Wave 2 once data foundations are established. |
-| Governance Monitoring | 20 | Requires Wave 1 data (RAID logs, meeting records, decisions) to assess governance compliance meaningfully. High priority Wave 2. |
-| Change Request Management | 16 | No stakeholder quote — identified through analysis. Requires change management process maturity. Wave 2. |
-| Stakeholder Communications | 16 | Extends Meeting Intelligence and Status Reports; benefits from those foundations being in place. High priority Wave 2. |
-| Lessons Learned | 15 | Needs a body of structured data from earlier streams. **High-priority Wave 3** — explicitly called out in Problem Statement as a core pain (knowledge loss when PMs rotate). |
-| Dependency Tracking | 12 | Requires a mature, connected data model across projects. Wave 3. |
+| Proactive Risk Monitoring | 20 | Dependent on project data being clean and current. No stakeholder quote. Wave 3 once data foundations are established. |
+| Governance Monitoring | 20 | Requires Wave 1–2 data (RAID logs, meeting records, decisions) to assess governance compliance meaningfully. High priority Wave 3. |
+| Change Request Management | 16 | No stakeholder quote — identified through analysis. Requires change management process maturity. Wave 3. |
+| Stakeholder Communications | 16 | Extends Meeting Intelligence and Status Reports; benefits from those foundations being in place. High priority Wave 3. |
+| Lessons Learned | 15 | Needs a body of structured data from earlier streams. **High-priority Wave 4** — explicitly called out in Problem Statement as a core pain (knowledge loss when PMs rotate). |
+| Dependency Tracking | 12 | Requires a mature, connected data model across projects. Wave 4. |
 | Onboarding Access | 6 | Core work handled by RPA. AI adds value only at the exception margin. |
 
 ---

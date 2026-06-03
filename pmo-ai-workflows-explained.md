@@ -13,9 +13,9 @@ The tool is built as an **orchestrated multi-agent system**: a central agent rec
 | # | Work Stream | Score | Wave |
 |---|---|---|---|
 | 1 | **Meeting Intelligence** | 25 | ★ Wave 1 |
-| 2 | **Status Reports & Scorecards** | 16 | ★ Wave 1 |
-| 3 | **Personal Task Management** | 20 | ★ Wave 1 |
-| 4 | **Strategic Resourcing** | 12 | ★ Wave 1 |
+| 2 | **Status Reports & Scorecards** | 16 | ★ Wave 2 |
+| 3 | **Personal Task Management** | 20 | ★ Wave 2 |
+| 4 | **Strategic Resourcing** | 12 | ★ Wave 2 |
 | 5 | Proactive Risk Monitoring | 20 | Wave 3 |
 | 6 | Governance Monitoring | 20 | Wave 3 — high priority |
 | 7 | Change Request Management | 16 | Wave 3 |
