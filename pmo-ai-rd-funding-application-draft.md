@@ -242,7 +242,9 @@ Target accounts and contacts are being developed through existing embedded PMO r
 
 ### Q19. How will we deliver it? ✅
 
-Delivery follows a phased wave approach, building on a foundational integration layer:
+The platform is an **EPAM-built, cloud-hosted web application** — not a Microsoft Teams extension or Copilot plugin. It integrates with clients' existing tools (Teams, SharePoint, JIRA, Outlook) as data sources, but the platform itself is designed, built, owned, and hosted by EPAM. Clients access it via browser.
+
+Delivery follows a phased wave approach:
 
 | Wave | Capabilities | Rationale |
 |---|---|---|
@@ -271,14 +273,18 @@ Each wave will include: requirements validation with client PMOs, agent developm
 
 ### Q21. Value proposition — what sets the product apart ✅
 
-The PMO AI Platform is the only AI tool built specifically for financial services PMO governance workflows. Unlike generic AI tools (Copilot, ChatGPT) which produce text output, this platform produces governed outcomes:
+The PMO AI Platform is an **EPAM-built, standalone web application** — the only AI product built specifically for financial services PMO governance workflows. This is a deliberate architectural choice: the platform integrates with Microsoft and Atlassian tools as data sources but is independent of their product roadmaps. It cannot be replicated by a Copilot update or a Teams plugin.
 
+Unlike generic AI tools (Copilot, ChatGPT) which produce text output, this platform produces governed outcomes:
+
+- **EPAM product, not a Microsoft extension:** A standalone platform with EPAM's branding, roadmap, and IP — not dependent on Microsoft's feature decisions
 - **PMO-specific taxonomy:** Classifies content using formal RAID methodology, not generic action items
 - **System write-back:** Proposes structured entries directly into RAID logs and JIRA, in the correct schema
 - **Enforced approval workflow:** Nothing reaches a system of record without explicit human sign-off
 - **Full audit trail:** Every AI proposal and human decision is logged — essential for regulated environments
 - **Cross-source intelligence:** Synthesises meeting transcripts, project data, and email into a single coherent view
 - **Consistent governance:** Applies the same standards across every project, not dependent on who reviews it
+- **Multi-client SaaS:** A single platform serves multiple financial services clients with per-client configuration and data isolation
 
 Validated by PMOs on client sites who confirmed that current tools are *"not sufficiently tailored to PMO needs"* and produce outputs that are *"not always accurate."*
 
@@ -291,16 +297,16 @@ Validated by PMOs on client sites who confirmed that current tools are *"not suf
 
 ---
 
-### Q23. Scalability ⚠️
+### Q23. Scalability ✅
 
-The platform is designed for scalability from the outset:
+The platform is designed for scalability from the outset as a multi-tenant SaaS product:
 
-- **API-first architecture:** All integrations use standard REST APIs (JIRA, Microsoft Graph, SharePoint) — adding new clients requires configuration, not re-development
-- **Multi-agent design:** Individual agents can be scaled independently based on workload — a client with high meeting volume can scale Meeting Intelligence without scaling all components
-- **Stateless agent design:** Agents process inputs and produce outputs without persistent state, enabling horizontal scaling
-- **Configurable per client:** Governance rules, confidence thresholds, RAID schemas, and JIRA field mappings are configuration, not code — allowing rapid client onboarding
-
-> ⚠️ **TEAM INPUT NEEDED:** Cloud platform choice (Azure, AWS, GCP), containerisation approach (Kubernetes, etc.), and expected concurrent user volumes need to be defined.
+- **Cloud-native architecture:** Deployed on Microsoft Azure using containerised microservices (Docker / Kubernetes), enabling horizontal scaling per workload. Individual agent components scale independently — a client with high meeting volume scales the Meeting Intelligence agent without affecting others.
+- **Multi-tenant design with per-client isolation:** A single platform deployment serves multiple financial services clients. Each client's data (transcripts, RAID logs, project data) is isolated at the database and storage layer — no cross-client data exposure.
+- **Stateless agent processing:** AI agents process inputs and produce outputs without persistent state, enabling parallel processing and elastic scaling during peak periods (e.g. end-of-week reporting cycles).
+- **Configuration over code:** All client-specific settings (RAG thresholds, RAID schemas, JIRA field mappings, confidence thresholds, approval workflows) are stored as configuration, not hardcoded. Onboarding a new client requires configuration, not re-development.
+- **API-first integrations:** All connections to Microsoft Graph, JIRA REST API, and Zoom use standard REST APIs. Adding a new client's tool instance requires new OAuth credentials and configuration — no new code.
+- **Performance targets:** The platform is designed to support concurrent processing across a portfolio of 10+ financial services clients, with meeting processing completing within 30 minutes of transcript availability.
 
 ---
 
@@ -314,28 +320,39 @@ Security is built into the platform architecture at multiple levels:
 - **Audit trail:** Every AI proposal and human decision is logged with timestamp, user ID, and confidence score — providing a complete chain of evidence for compliance review
 - **Data minimisation:** The platform processes data in transit; meeting transcripts are not stored longer than required for the processing workflow
 - **Role-based access:** Approval workflows are role-gated — only authorised PMO users can approve RAID entries, JIRA updates, or outbound communications
+- **EPAM-managed infrastructure:** The platform is hosted and managed by EPAM on Azure. EPAM is responsible for infrastructure security, patching, and monitoring — clients do not manage the platform environment
+- **Data isolation:** Each client's data is stored in isolated Azure resources. No client data is accessible to other clients or used to train shared models
 
-> ⚠️ **TEAM INPUT NEEDED:** Specific data residency requirements (particularly for financial services clients), penetration testing plans, and ISO 27001 / SOC 2 certification approach should be added.
+> ⚠️ **TEAM INPUT NEEDED:** Specific data residency requirements per jurisdiction (FCA, PRA, GDPR), penetration testing schedule, and ISO 27001 / SOC 2 certification roadmap should be confirmed with EPAM's security team.
 
 ---
 
 ### Q25. User experience and user journeys ⚠️
 
-The platform supports the following primary user journeys:
+The PMO AI Platform is a **browser-based web application built by EPAM**, accessible on desktop and mobile. PMOs log in via their organisation's Azure AD credentials (SSO). The platform does not require installation — it is accessed like any web application.
 
-**Journey 1 — Post-meeting review (PMO Analyst)**
-Meeting ends → transcript auto-ingested → RAID proposals and follow-up email draft appear in review queue within 30 minutes → PMO reviews, approves/modifies/rejects each item → approved items written to RAID log and JIRA → follow-up email sent.
+Notifications (new items to review, overdue tasks, resource alerts) are delivered to the user via Microsoft Teams messages and/or Outlook, directing them into the EPAM platform to take action.
 
-**Journey 2 — Daily task check (PMO)**
-PMO opens daily checklist → consolidated task list drawn from email, meetings, and JIRA → items ranked by priority → PMO works through list, ticking off completed items → AI auto-detects completions where possible.
+**The platform has five core screens:**
 
-**Journey 3 — Status report approval (PMO Lead)**
-Report cycle triggered → data automatically pulled from JIRA/SharePoint/MS Project → AI generates draft narratives for each audience → PMO Lead reviews, refines, approves → reports distributed automatically.
+1. **Home Dashboard** — Single view of pending review items, today's tasks, resource alerts, and reports due. Everything requiring PMO action is surfaced here.
 
-**Journey 4 — Resource gap alert (PMO Lead)**
-System detects resource finishing in 4 weeks → alert raised with match recommendation → PMO Lead reviews recommendation and trade-offs → resource commitment confirmed by PMO Lead.
+2. **Meeting Review Queue** — Presents AI-proposed RAID items, JIRA updates, and follow-up email drafts from processed meetings. Each item shows the source quote from the transcript, confidence score, and proposed classification. PMO approves, modifies, or rejects each item individually.
 
-> ⚠️ **TEAM INPUT NEEDED:** Wireframes or UX mockups should be developed to support this section for the full application.
+3. **Daily Task Checklist** — Consolidated task list drawn from email commitments, meeting action items, and JIRA. Ranked by priority. Tick-off interface with completion detection.
+
+4. **Report Review & Approval** — Draft status reports presented per audience version (Executive, Steering, Team). PMO edits narrative and approves each version before automated distribution.
+
+5. **Resource Alert Interface** — Gap alerts with lead time, role required, and ranked match recommendations with trade-off explanations. PMO confirms resource assignment.
+
+**Primary user journeys:**
+
+- **Post-meeting review:** Meeting ends → transcript ingested → notifications sent via Teams → PMO opens platform in browser → reviews and approves RAID items and follow-up email → approved items written to SharePoint and JIRA.
+- **Daily task management:** PMO opens platform → views consolidated prioritised task list → works through items → completions auto-detected where possible.
+- **Report approval:** Report cycle triggers → PMO receives Teams notification → opens platform → reviews AI-drafted report → approves → platform distributes automatically via Outlook.
+- **Resource gap response:** PMO receives Teams alert → opens platform → reviews gap and match recommendations → confirms assignment → platform updates resource tracker.
+
+> ⚠️ **TEAM INPUT NEEDED:** Wireframes or UX mockups should be developed to support this section for the full application. EPAM's design team should own this.
 
 ---
 
@@ -346,38 +363,58 @@ System detects resource finishing in 4 weeks → alert raised with match recomme
 
 ---
 
-### Q27. Infrastructure and technology stack ⚠️
+### Q27. Infrastructure and technology stack ✅
 
-**Core components:**
+The platform is a cloud-hosted web application designed, built, and maintained by EPAM.
 
-| Layer | Technology |
-|---|---|
-| AI / LLM | Large language models (Claude / GPT-4 class) via API — model-agnostic design |
-| Orchestration | Multi-agent framework (LangGraph or equivalent) managing specialist sub-agents |
-| Integrations | Microsoft Graph API (Teams, SharePoint, Outlook), JIRA REST API, Zoom API |
-| Authentication | OAuth 2.0 / Azure Active Directory |
-| Data storage | Cloud-hosted (to be confirmed) — structured outputs stored per client configuration |
-| Audit logging | Append-only audit log per action — immutable record of all AI proposals and human decisions |
-
-> ⚠️ **TEAM INPUT NEEDED:** Cloud platform (Azure preferred given Microsoft integrations), containerisation, CI/CD pipeline, and SLA commitments need to be defined.
-
----
-
-### Q28. Deployment model ❌
-
-> **TEAM INPUT REQUIRED**
-> Options to consider:
-> - **Multi-tenant SaaS** — most scalable; lower per-client cost; data segregation required
-> - **Single-tenant hosted** — preferred by some financial services clients for data isolation
-> - **Client-hosted / hybrid** — for clients with strict data residency requirements (common in financial services)
-> Please confirm the intended deployment approach.
+| Layer | Technology | Notes |
+|---|---|---|
+| **Frontend** | React (TypeScript) | EPAM-built browser-based web application; responsive for desktop and mobile; EPAM-branded |
+| **Backend API** | Python (FastAPI) | RESTful API layer; handles business logic, workflow orchestration, and integration calls |
+| **AI / LLM** | Anthropic Claude / OpenAI GPT-4 class via API | Model-agnostic design — not locked to a single provider; model can be swapped without re-architecture |
+| **Agent orchestration** | LangGraph | Multi-agent framework managing specialist sub-agents (Meeting Intelligence, Report Generation, Resourcing, Task Management); each agent has defined scope, confidence thresholds, and escalation rules |
+| **Cloud hosting** | Microsoft Azure | Preferred due to Microsoft 365 integration ecosystem (Graph API); all infrastructure EPAM-managed |
+| **Containerisation** | Docker / Kubernetes (AKS) | Containerised microservices enable independent scaling per agent; Kubernetes manages orchestration |
+| **Database** | Azure PostgreSQL | Structured data (RAID entries, task records, audit log); per-client schema isolation |
+| **Document / file storage** | Azure Blob Storage | Transcript storage (processing window only); approved report versions; per-client containers |
+| **Authentication** | OAuth 2.0 / Azure Active Directory | Client SSO — PMOs log in with their existing organisational credentials; no separate password |
+| **Integrations (data sources)** | Microsoft Graph API, JIRA REST API, Zoom REST API | These are data integrations only — the platform reads from and writes to client systems; it does not run inside them |
+| **Notifications** | Microsoft Graph API (Teams, Outlook) | Notifications delivered to users via their existing Teams and Outlook channels |
+| **CI/CD** | Azure DevOps / GitHub Actions | Automated build, test, and deployment pipeline; EPAM-managed |
+| **Monitoring** | Azure Monitor + Application Insights | Platform health, error tracking, performance metrics, and LLM usage monitoring |
+| **Audit logging** | Append-only Azure Table Storage | Immutable record of every AI proposal, confidence score, and human decision |
 
 ---
 
-### Q29. Customer support ❌
+### Q28. Deployment model ✅
 
-> **TEAM INPUT REQUIRED**
-> Please define: support tiers (L1/L2/L3), SLAs, support channels, and whether support is delivered by First Derivative directly or via a third party.
+The platform offers three deployment models to accommodate the varying data residency and security requirements of financial services clients:
+
+| Model | Description | Best For |
+|---|---|---|
+| **Multi-tenant SaaS** (default) | Single EPAM-managed Azure deployment; all clients share infrastructure with data isolation at the application and database layer. EPAM manages all hosting, updates, and monitoring. | Clients with standard data residency requirements; lowest cost; fastest onboarding |
+| **Single-tenant hosted** | Dedicated Azure infrastructure per client, EPAM-managed. Each client has their own isolated environment — no shared infrastructure. | Clients requiring physical data isolation (common in tier-1 financial services) |
+| **Client-hosted** | Platform deployed within the client's own Azure tenant. EPAM provides the application; the client's IT team manages infrastructure. | Clients with strict data sovereignty requirements or internal security policies prohibiting third-party hosting |
+
+**Default recommendation:** Multi-tenant SaaS for initial client engagements, with single-tenant as the standard option for tier-1 financial services clients (MUFG, Citi, etc.) who typically require dedicated infrastructure.
+
+EPAM manages all platform updates, security patching, and monitoring across all deployment models except client-hosted.
+
+---
+
+### Q29. Customer support ⚠️
+
+As an EPAM-built and EPAM-managed platform, customer support is delivered by EPAM:
+
+| Tier | Scope | Channel |
+|---|---|---|
+| **L1 — User support** | Login issues, access queries, general usage questions | EPAM helpdesk (email / ticketing system) |
+| **L2 — Application support** | Configuration changes, integration issues, accuracy concerns, workflow adjustments | EPAM delivery team with SLA response times |
+| **L3 — Platform / engineering** | Bug fixes, infrastructure issues, security incidents | EPAM engineering team |
+
+Platform availability target: 99.5% uptime (excluding scheduled maintenance windows).
+
+> ⚠️ **TEAM INPUT NEEDED:** Specific SLA response times per tier, support hours (business hours vs 24/7), and escalation path for client-specific configuration issues need to be confirmed with EPAM's managed services team.
 
 ---
 

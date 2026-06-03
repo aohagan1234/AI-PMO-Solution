@@ -6,7 +6,9 @@
 
 > These requirements cover Wave 1 only. The remaining confirmed workstreams — Status Reports (#2), Personal Task Management (#3), and Strategic Resourcing (#4) — are deferred to Wave 2 and will have their own requirements documents. Governance Monitoring, Stakeholder Communications, and later waves are out of scope for this document.
 
-> **Architecture note:** The platform is built as an orchestrated multi-agent system. A central orchestrator agent receives unstructured inputs and routes them to specialist sub-agents. This document covers the requirements for the Meeting Intelligence sub-agent and its integrations. The orchestration layer itself will be covered in a separate architecture document.
+> **Platform note:** The PMO AI Platform is an **EPAM-built, browser-based web application** hosted on Microsoft Azure and managed by EPAM. PMOs access it via browser using Azure AD SSO. It is not a Microsoft Teams app or Copilot plugin — it is an independent EPAM product. Microsoft tools (Teams, SharePoint, Outlook) and JIRA are data integrations only.
+>
+> **Architecture note:** The platform uses an orchestrated multi-agent system. A central orchestrator receives unstructured inputs and routes them to specialist sub-agents. This document covers requirements for the Meeting Intelligence sub-agent and its integrations. The orchestration layer will be covered in a separate architecture document.
 
 ---
 
@@ -90,12 +92,14 @@
 
 ## 8. Integrations
 
+> These are data integrations — the EPAM platform connects to client tools to read inputs and write approved outputs. The platform itself runs independently on EPAM-managed Azure infrastructure; it does not run inside Microsoft Teams or any client system.
+
 | # | Requirement | Why |
 |---|---|---|
-| BR-30 | The system must integrate with Microsoft Teams via the Microsoft Graph API to retrieve meeting transcripts and attendance data. | Teams is the primary meeting platform. Connecting via the official API ensures transcripts are retrieved reliably and at scale without manual export. |
-| BR-31 | The system must integrate with Zoom via REST API as an alternative transcript source. | Not all meetings may be held in Teams. Zoom support ensures the tool works across the actual meeting platforms in use. |
-| BR-32 | The system must integrate with Jira via REST API for reading and proposing ticket updates. | Jira is the primary project tracking tool. Direct API integration avoids manual copy-paste and ensures proposed updates are accurately formatted for the target ticket. |
-| BR-33 | The system must integrate with SharePoint via the Microsoft Graph API for RAID log read and write operations. | The RAID log lives in SharePoint. The integration allows the system to propose structured entries directly into the log rather than requiring the PMO to copy items across manually. |
+| BR-30 | The EPAM platform must integrate with Microsoft Teams via the Microsoft Graph API to retrieve meeting transcripts and attendance data. | Teams is the primary meeting platform. Connecting via the official API ensures transcripts are retrieved reliably and at scale without manual export. |
+| BR-31 | The EPAM platform must integrate with Zoom via REST API as an alternative transcript source. | Not all meetings may be held in Teams. Zoom support ensures the tool works across the actual meeting platforms in use. |
+| BR-32 | The EPAM platform must integrate with Jira via REST API for reading and proposing ticket updates. | Jira is the primary project tracking tool. Direct API integration avoids manual copy-paste and ensures proposed updates are accurately formatted for the target ticket. |
+| BR-33 | The EPAM platform must integrate with SharePoint via the Microsoft Graph API for RAID log read and write operations. | The RAID log lives in SharePoint. The integration allows the system to propose structured entries directly into the log rather than requiring the PMO to copy items across manually. |
 | BR-34 | All integrations must use OAuth 2.0 authentication. | OAuth 2.0 is the security standard required for Microsoft Graph and Jira APIs. It ensures access is properly permissioned, auditable, and can be revoked without changing passwords. |
 
 ---

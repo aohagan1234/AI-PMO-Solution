@@ -8,7 +8,9 @@ A plain-English guide to what the AI does, why it works that way, and what value
 
 Eleven workstreams were assessed across surveys, interviews, and the Problem Statement. Four are selected for the initial focus — all four are grounded in direct stakeholder quotes, all four are deliverable without significant pre-conditions, and together they cover the full breadth of a PMO's week.
 
-The tool is built as an **orchestrated multi-agent system**: a central agent receives unstructured inputs (transcripts, status data, emails, project plans) and routes them to specialist sub-agents, each focused on a specific output. The PMO validates and approves outputs before anything is written to a system or sent externally.
+The **EPAM PMO AI Platform** is a browser-based web application built, hosted, and managed by EPAM. PMOs access it via any browser using their existing organisational credentials (Azure AD SSO). It is not a Microsoft Teams app, Copilot extension, or plugin — it is an independent EPAM product that integrates with Microsoft tools and JIRA as data sources.
+
+The platform is built as an **orchestrated multi-agent system**: a central agent receives unstructured inputs (transcripts, status data, emails, project plans) and routes them to specialist sub-agents, each focused on a specific output. The PMO validates and approves outputs before anything is written to a system or sent externally. Notifications are delivered to the user via Teams or Outlook, directing them into the EPAM platform to take action.
 
 | # | Work Stream | Score | Wave |
 |---|---|---|---|

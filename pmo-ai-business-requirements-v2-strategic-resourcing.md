@@ -6,6 +6,8 @@
 **Depends on:** Wave 1 (Meeting Intelligence) outputs — resource-related decisions and RAID items from meetings provide context for resourcing recommendations
 
 > This document covers Wave 2 requirements for the Strategic Resourcing workstream only. See `pmo-ai-business-requirements-v1.md` for Wave 1 (Meeting Intelligence).
+>
+> **Platform note:** The PMO AI Platform is an **EPAM-built, browser-based web application** hosted on Azure and managed by EPAM. SharePoint, MS Project, and HR systems are data integrations only — the platform reads from them and writes approved outputs back. The resource alert and approval interface is accessed via browser.
 
 ---
 
@@ -67,9 +69,11 @@
 
 ## 6. Integrations
 
+> These are data integrations — the EPAM platform reads resource data from client systems (SharePoint, MS Project, HR systems) and writes confirmed assignments back. The platform itself is EPAM-hosted; none of these tools host the platform.
+
 | # | Requirement | Why |
 |---|---|---|
-| BR-RS-22 | The system must integrate with the client's SharePoint resource tracker and/or MS Project via the Microsoft Graph API to read resource records, project allocations, and end dates. | Resource data lives in these systems. Reading directly from them ensures the tool is working from the same source of truth as the PMO. |
+| BR-RS-22 | The EPAM platform must integrate with the client's SharePoint resource tracker and/or MS Project via the Microsoft Graph API to read resource records, project allocations, and end dates. | Resource data lives in these systems. Reading directly from them ensures the tool is working from the same source of truth as the PMO. |
 | BR-RS-23 | The system must integrate with the HR system where an API is available, to read availability, role profiles, and skills data. | HR systems often hold the most authoritative record of a person's skills and availability. Where an API exists, this is the preferred data source. |
 | BR-RS-24 | The system must consume resource-related outputs from Wave 1 Meeting Intelligence — specifically RAID items, decisions, and action items referencing resourcing. | Meeting outputs provide context that structured data alone cannot — for example, a verbal commitment to keep a resource on a project, or a risk raised about a key person leaving. |
 | BR-RS-25 | All integrations must use OAuth 2.0 authentication. | Consistent with Wave 1 security standards. Resource and HR data is sensitive and must be accessed through properly permissioned, auditable channels. |

@@ -6,6 +6,8 @@
 **Depends on:** Wave 1 (Meeting Intelligence) outputs — action items from meetings feed directly into the consolidated task list
 
 > This document covers Wave 2 requirements for the Personal Task Management workstream only. See `pmo-ai-business-requirements-v1.md` for Wave 1 (Meeting Intelligence).
+>
+> **Platform note:** The PMO AI Platform is an **EPAM-built, browser-based web application** hosted on Azure and managed by EPAM. Outlook, JIRA, and Microsoft Teams are data integrations only — the platform itself runs independently on EPAM infrastructure. Notifications are delivered via Teams/Outlook; the task interface is accessed via browser.
 
 ---
 
@@ -78,9 +80,11 @@
 
 ## 7. Integrations
 
+> These are data integrations — the EPAM platform connects to Outlook, JIRA, and Teams as data sources and notification channels. The platform UI itself is browser-based and EPAM-hosted; it does not run inside any of these tools.
+
 | # | Requirement | Why |
 |---|---|---|
-| BR-PT-26 | The system must integrate with Outlook via the Microsoft Graph API to scan the inbox and monitor the sent folder. | Outlook is the primary email platform. Graph API access is required to read inbox content and detect sent responses. |
+| BR-PT-26 | The EPAM platform must integrate with Outlook via the Microsoft Graph API to scan the inbox and monitor the sent folder. | Outlook is the primary email platform. Graph API access is required to read inbox content and detect sent responses. |
 | BR-PT-27 | The system must integrate with JIRA via REST API to retrieve tickets assigned to the PMO and monitor ticket status changes. | JIRA is where project actions are formally tracked. Pulling assigned tickets into the consolidated list ensures nothing tracked in JIRA is missed. |
 | BR-PT-28 | The system must consume action items assigned to the PMO from Wave 1 Meeting Intelligence outputs. | Meeting action items are a primary source of PMO commitments. Without Wave 1 integration, the task list is incomplete by definition. |
 | BR-PT-29 | The system must integrate with Microsoft Teams for reminder delivery. | Teams is the primary collaboration platform. Delivering reminders where the PMO is already working reduces the friction of acting on them. |

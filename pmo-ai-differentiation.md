@@ -4,7 +4,21 @@ A response to the most important challenge in any pitch:
 
 > *"We already have Copilot / Teams / an internal AI tool. Why do we need this?"*
 
-This document explains, for each of the four priority workstreams, what existing tools already cover, where the genuine gap is, and what the PMO AI tool does that those tools do not.
+This document explains what existing tools already cover, where the genuine gap is, and what the EPAM PMO AI Platform does that those tools do not.
+
+---
+
+## The EPAM product distinction
+
+Before addressing individual workstreams, the most important point of differentiation is architectural:
+
+**This is an EPAM-built standalone web application — not a Microsoft Teams tab, not a Copilot extension, not a plugin.**
+
+It integrates *with* Microsoft tools (Teams, SharePoint, Outlook, MS Project) and JIRA as data sources, but the platform itself is designed, built, hosted, and roadmapped by EPAM. This matters for three reasons:
+
+1. **It cannot be replicated by a Microsoft product update.** A Copilot feature release in six months does not obsolete this platform, because this platform does things Copilot architecturally cannot — system write-back with governed approval workflows, RAID-specific taxonomy, cross-source synthesis with audit trail.
+2. **EPAM controls the roadmap.** New capabilities (Governance Monitoring, Stakeholder Communications, Lessons Learned) are delivered by EPAM on EPAM's timeline, not dependent on Microsoft's product decisions.
+3. **It is a commercial EPAM asset.** The platform, its IP, and its client relationships belong to EPAM — not to a third-party tool vendor.
 
 ---
 
@@ -14,7 +28,7 @@ Several capabilities in this tool are available in some form today through Micro
 
 The differentiation is not in reading a meeting or pulling a number from a spreadsheet. It is in **what happens after** — turning AI output into governed, traceable, approved updates to project management systems, with a consistent workflow that runs whether or not someone remembers to trigger it.
 
-Generic AI gives you better output. This tool gives you a managed PMO process.
+Generic AI gives you better output. This EPAM platform gives you a managed PMO process.
 
 ---
 
@@ -168,14 +182,14 @@ Resource gaps get missed because no single person has visibility across the full
 
 ## Summary
 
-| Stream | What existing tools give you | What this adds |
+| Stream | What existing tools give you | What the EPAM platform adds |
 |---|---|---|
-| Meeting Intelligence | Better notes and action lists | RAID classification, system write-back, approval workflow, audit trail |
-| Status Reports | Data dashboards and narrative drafts | Cross-source reconciliation, meeting-informed narrative, governed distribution |
-| Personal Task Management | Manual task lists and email flagging | Automatic cross-source consolidation, commitment extraction, PMO-aware prioritisation |
-| Strategic Resourcing | Passive records of who is where | Proactive gap alerts, cross-project match reasoning, context-aware recommendations |
+| Meeting Intelligence | Better notes and action lists (Copilot) | RAID classification, system write-back, approval workflow, full audit trail — as an EPAM-governed process |
+| Status Reports | Data dashboards and narrative drafts (Power BI + Copilot) | Cross-source reconciliation, meeting-informed narrative, financial variance analysis, governed distribution |
+| Personal Task Management | Manual task lists and email flagging (Outlook / To Do) | Automatic cross-source consolidation, commitment extraction, PMO-context-aware prioritisation |
+| Strategic Resourcing | Passive records of who is where (spreadsheets / SharePoint) | Proactive gap alerts, multi-factor match reasoning, context-aware recommendations |
 
-**The common thread:** existing tools produce output. This tool produces *governed outcomes* — with human approval built into every step that matters.
+**The common thread:** existing tools produce output. The EPAM PMO AI Platform produces *governed outcomes* — with human approval built into every step that matters, delivered as an EPAM-owned, EPAM-hosted product that no Microsoft update can replace.
 
 ---
 

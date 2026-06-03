@@ -6,6 +6,8 @@
 **Depends on:** Wave 1 (Meeting Intelligence) outputs — RAID items, decisions, and meeting summaries feed into report narratives
 
 > This document covers Wave 2 requirements for the Status Reports & Scorecards workstream only. See `pmo-ai-business-requirements-v1.md` for Wave 1 (Meeting Intelligence).
+>
+> **Platform note:** The PMO AI Platform is an **EPAM-built, browser-based web application** hosted on Azure and managed by EPAM. Microsoft tools (JIRA, SharePoint, MS Project, Outlook) are data integrations only — the platform itself runs independently on EPAM infrastructure.
 
 ---
 
@@ -87,9 +89,11 @@
 
 ## 8. Integrations
 
+> These are data integrations — the EPAM platform connects to client tools as data sources. JIRA, SharePoint, MS Project, and Outlook are not the platform; they are systems the platform reads from and writes approved outputs to.
+
 | # | Requirement | Why |
 |---|---|---|
-| BR-SR-28 | The system must integrate with JIRA via REST API to retrieve ticket status, milestone completion, and project health metrics. | JIRA is the primary project tracking system. Direct API integration ensures data is current and removes the manual export step. |
+| BR-SR-28 | The EPAM platform must integrate with JIRA via REST API to retrieve ticket status, milestone completion, and project health metrics. | JIRA is the primary project tracking system. Direct API integration ensures data is current and removes the manual export step. |
 | BR-SR-29 | The system must integrate with SharePoint via the Microsoft Graph API to retrieve RAID log entries, project documentation, and list data. | RAID log data and project documents live in SharePoint. Incorporating them into the report narrative requires API access. |
 | BR-SR-30 | The system must integrate with MS Project via the Microsoft Graph API to retrieve schedule data, milestone status, and resource allocation. | MS Project holds the plan. Schedule and milestone data from MS Project is essential for RAG calculation and progress reporting. |
 | BR-SR-31 | The system must consume Wave 1 (Meeting Intelligence) outputs — specifically RAID items, decisions, and meeting summaries — as inputs to narrative generation. | Meeting intelligence is the richest source of context for explaining what is happening on a project. Without it, the narrative is limited to what the structured data shows. |
