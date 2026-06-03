@@ -52,25 +52,24 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 | Work Stream | Volume (1-5) | Non-Det (1-5) | Score | Priority |
 |---|---|---|---|---|
-| Meeting Intelligence | 5 | 5 | 25 | ★ PRIMARY |
-| Personal Task Mgmt | 5 | 4 | 20 | High |
-| Proactive Risk Monitoring | 4 | 5 | 20 | High *(new)* |
-| Status Reports | 4 | 4 | 16 | High |
-| Change Request Management | 4 | 4 | 16 | High *(new)* |
-| Lessons Learned | 3 | 5 | 15 | Medium *(new)* |
-| Strategic Resourcing | 3 | 4 | 12 | Medium |
-| Dependency Tracking | 3 | 4 | 12 | Medium *(new)* |
+| Meeting Intelligence | 5 | 5 | 25 | ★ Wave 1 |
+| Personal Task Mgmt | 5 | 4 | 20 | ★ Wave 1 |
+| Proactive Risk Monitoring | 4 | 5 | 20 | Wave 2 |
+| Status Reports | 4 | 4 | 16 | ★ Wave 1 |
+| Change Request Management | 4 | 4 | 16 | Wave 2 |
+| Lessons Learned | 3 | 5 | 15 | Wave 3 |
+| Strategic Resourcing | 3 | 4 | 12 | ★ Wave 1 |
+| Dependency Tracking | 3 | 4 | 12 | Wave 3 |
 | Onboarding Access | 3 | 2 | 6 | RPA/Hybrid |
 
 ---
 
-### Recommended Five Work Streams (Initial Focus)
+### Recommended Four Work Streams (Initial Focus)
 
 1. **Meeting Intelligence** — RAID extraction, JIRA updates *(PRIMARY)*
-2. **Personal Task Management** — email intelligence and reminders
-3. **Proactive Risk Monitoring** — early warning from project data signals
-4. **Status Reports & Scorecards** — synthesis and generation
-5. **Change Request Management** — impact assessment and approval routing
+2. **Status Reports & Scorecards** — synthesis and generation
+3. **Personal Task Management** — email intelligence and reminders
+4. **Strategic Resourcing** — proactive gap detection and matching
 
 ---
 
@@ -92,15 +91,14 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ---
 
-### The Five Priority Work Streams
+### The Four Priority Work Streams
 
 | Stream | Description | Volume | Time | Stakeholder Quote |
 |---|---|---|---|---|
 | 1. Meeting Intelligence | RAID extraction, JIRA updates | ~80/mo | ~30 min/mtg | "Raw meeting notes," "action items," "RAID logs" |
-| 2. Personal Task Mgmt | Email intelligence, reminders | Continuous | ~2 hrs/day | "Read emails, checklist, tick off" |
-| 3. Proactive Risk Monitoring | Early warning from project data | Continuous | ~1 hr/wk | Risks missed until too late |
-| 4. Status Reports | Synthesis, scorecards | ~50/mo | ~45 min/rpt | "Automate reports, automate scorecards" |
-| 5. Change Request Mgmt | Impact assessment, approval routing | ~30/mo | ~60 min/req | Slow, inconsistent change assessment |
+| 2. Status Reports | Synthesis, scorecards | ~50/mo | ~45 min/rpt | "Automate reports, automate scorecards" |
+| 3. Personal Task Mgmt | Email intelligence, reminders | Continuous | ~2 hrs/day | "Read emails, checklist, tick off" |
+| 4. Strategic Resourcing | Gap detection, skills matching | ~40/mo | ~60 min/case | "Resources finishing up, match it up, skills pool" |
 
 ---
 
@@ -328,41 +326,45 @@ NON-DETERMINISM
          │               │ ★ MEETING INTELLIGENCE │
          │               │                        │
     V 4 ┼───────────────┼────────────────────────┤
-    O    │               │ PERSONAL TASKS         │
-    L    │               │ PROACTIVE RISK          │
-    U    │               │ STATUS REPORTS         │
-    M    │               │ CHANGE REQUESTS        │
+    O    │               │ ★ PERSONAL TASKS       │
+    L    │               │   PROACTIVE RISK        │
+    U    │               │ ★ STATUS REPORTS       │
+    M    │               │   CHANGE REQUESTS      │
     E 3 ┼───────────────┼────────────────────────┤
-         │               │ LESSONS LEARNED        │
-         │               │ RESOURCING             │
-         │               │ DEPENDENCY TRACKING    │
+         │               │   LESSONS LEARNED      │
+         │               │ ★ RESOURCING           │
+         │               │   DEPENDENCY TRACKING  │
     Low  ├───────────────┼────────────────────────┤
          │ ONBOARDING    │                        │
        1 ┼───────────────┴────────────────────────┘
+
+★ = Selected for Wave 1
 ```
 
 ---
 
-### Top 5 Selected — Reasoning
+### Top 4 Selected — Reasoning
 
-**Why these five?**
+**Why these four?**
 
 | Stream | Score | Reason for Selection |
 |---|---|---|
-| Meeting Intelligence | 25 | Highest score; every meeting; foundation for all other streams |
-| Personal Task Management | 20 | Daily volume; immediate, visible PMO time saving |
-| Proactive Risk Monitoring | 20 | Catches risks before meetings — complements, not duplicates, Meeting Intelligence |
-| Status Reports | 16 | High frequency; clear quantifiable time saving; low complexity to implement |
-| Change Request Management | 16 | Core PMO function; poor impact assessment causes real project harm |
+| Meeting Intelligence | 25 | Highest score; every meeting; foundation for all other streams; directly stakeholder-quoted |
+| Status Reports | 16 | Universal PMO pain; immediately demonstrable; self-contained — works without other streams; directly stakeholder-quoted |
+| Personal Task Management | 20 | Daily volume; every PMO relates to it personally; directly stakeholder-quoted |
+| Strategic Resourcing | 12 | Directly stakeholder-quoted; wrong resource decisions are expensive; no data-quality dependency risk |
 
-**Why not the others (in this iteration)?**
+**All four are grounded in direct stakeholder quotes. None depend on messy pre-conditions to deliver value.**
+
+**Why not the others in Wave 1?**
 
 | Stream | Score | Why Deferred |
 |---|---|---|
-| Lessons Learned | 15 | Needs data from other streams to be meaningful; best in Wave 3 |
-| Strategic Resourcing | 12 | Data-dependent; builds naturally on top of Meeting Intelligence and Status Reports |
-| Dependency Tracking | 12 | Valuable but requires a mature data foundation across projects first |
-| Onboarding Access | 6 | Handled by RPA; AI adds value only at the exception margin |
+| Proactive Risk Monitoring | 20 | Entirely dependent on project data being clean and current — a pre-condition that often doesn't exist on day 1. No stakeholder quote. Better as Wave 2 once data foundations are established. |
+| Change Request Management | 16 | No stakeholder quote — identified through analysis, not stated customer pain. Requires change management process maturity. Wave 2 addition. |
+| Lessons Learned | 15 | Needs a body of structured data from earlier streams to be meaningful. Wave 3. |
+| Dependency Tracking | 12 | Requires a mature, connected data model across projects. Wave 3. |
+| Onboarding Access | 6 | Core work handled by RPA. AI adds value only at the exception margin. |
 
 ---
 
@@ -371,12 +373,11 @@ NON-DETERMINISM
 | Value Driver | Calculation | Annual |
 |---|---|---|
 | Meeting follow-up time freed | 40 hrs/mo × 50% × 12 × $75 | ~$18,000 |
-| Personal task management | 1 hr/day × 50% × 220 days × $75 | ~$8,250 |
 | Status report time freed | 50 reports/mo × 35 min saved × 12 × $75/hr | ~$26,250 |
-| Change request assessment | 30 requests/mo × 40 min saved × 12 × $75/hr | ~$22,500 |
-| Reduced dropped items / risk misses | Qualitative | TBD |
-| Fewer decision disputes | Qualitative | TBD |
-| **Quantifiable total** | | **~$75,000** |
+| Personal task management | 1 hr/day × 50% × 220 days × $75 | ~$8,250 |
+| Strategic resourcing (wrong placements avoided) | Qualitative — cost of one wrong hire/placement | TBD |
+| Reduced dropped items / decision disputes | Qualitative | TBD |
+| **Quantifiable total** | | **~$52,500** |
 
 ---
 
@@ -385,9 +386,9 @@ NON-DETERMINISM
 | Wave | Streams | Rationale |
 |---|---|---|
 | 1 | Meeting Intelligence | Highest score; builds the data and integration foundation |
-| 2 | Personal Task Management + Proactive Risk Monitoring | Leverages Wave 1 outputs; adds continuous monitoring capability |
-| 3 | Status Reports + Change Request Management | Higher integration complexity; benefits from Wave 1–2 data |
-| 4 | Lessons Learned + Strategic Resourcing + Dependency Tracking | Require mature data foundation from earlier waves |
+| 2 | Status Reports + Personal Task Management + Strategic Resourcing | All leverage Wave 1 outputs; all stakeholder-quoted; can run in parallel |
+| 3 | Proactive Risk Monitoring + Change Request Management | Benefit from clean data foundation built in Waves 1–2 |
+| 4 | Lessons Learned + Dependency Tracking | Require mature data across the full portfolio |
 
 ---
 
