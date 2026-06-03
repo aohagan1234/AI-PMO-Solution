@@ -45,6 +45,9 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 | Checklist management | ❌ Deterministic | State updates |
 | Onboarding access check | ❌ Deterministic | API/RPA |
 | Onboarding exceptions | ✅ Agentic | Context-dependent judgment |
+| Governance compliance check | ✅ Agentic | Assessing adequacy requires judgment, not a checklist |
+| Stakeholder comms drafting | ✅ Agentic | Tone, audience framing, and content selection require judgment |
+| Financial variance analysis | ✅ Agentic | Interpreting budget signals requires context and judgment |
 
 ---
 
@@ -55,9 +58,11 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 | Meeting Intelligence | 5 | 5 | 25 | ★ Wave 1 |
 | Personal Task Mgmt | 5 | 4 | 20 | ★ Wave 1 |
 | Proactive Risk Monitoring | 4 | 5 | 20 | Wave 2 |
+| Governance Monitoring | 4 | 5 | 20 | Wave 2 *(new)* |
 | Status Reports | 4 | 4 | 16 | ★ Wave 1 |
 | Change Request Management | 4 | 4 | 16 | Wave 2 |
-| Lessons Learned | 3 | 5 | 15 | Wave 3 |
+| Stakeholder Communications | 4 | 4 | 16 | Wave 2 *(new)* |
+| Lessons Learned | 3 | 5 | 15 | Wave 3 *(high priority)* |
 | Strategic Resourcing | 3 | 4 | 12 | ★ Wave 1 |
 | Dependency Tracking | 3 | 4 | 12 | Wave 3 |
 | Onboarding Access | 3 | 2 | 6 | RPA/Hybrid |
@@ -307,12 +312,14 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 | 1. Meeting Intelligence | 5 | 5 | 25 | Every meeting; RAID classification is judgment-intensive |
 | 2. Personal Task Mgmt | 5 | 4 | 20 | Daily; email comprehension requires reading intent |
 | 3. Proactive Risk Monitoring | 4 | 5 | 20 | Synthesising weak signals into risk assessments requires judgment |
-| 4. Status Reports | 4 | 4 | 16 | High volume; narrative synthesis + audience adaptation |
-| 5. Change Request Mgmt | 4 | 4 | 16 | Frequent; multi-factor impact assessment is judgment-intensive |
-| 6. Lessons Learned | 3 | 5 | 15 | Lower volume; pattern recognition across projects is highly non-deterministic |
-| 7. Strategic Resourcing | 3 | 4 | 12 | Trade-off analysis; medium volume |
-| 8. Dependency Tracking | 3 | 4 | 12 | Cross-project impact assessment; medium volume |
-| 9. Onboarding Access | 3 | 2 | 6 | Mostly rule-based; RPA handles the majority |
+| 4. Governance Monitoring | 4 | 5 | 20 | Assessing compliance against governance standards requires judgment, not a checklist |
+| 5. Status Reports | 4 | 4 | 16 | High volume; narrative synthesis, financial analysis + audience adaptation |
+| 6. Change Request Mgmt | 4 | 4 | 16 | Frequent; multi-factor impact assessment is judgment-intensive |
+| 7. Stakeholder Communications | 4 | 4 | 16 | Frequent; tone, framing, and content selection require judgment |
+| 8. Lessons Learned | 3 | 5 | 15 | Lower volume; pattern recognition across projects is highly non-deterministic |
+| 9. Strategic Resourcing | 3 | 4 | 12 | Trade-off analysis; medium volume |
+| 10. Dependency Tracking | 3 | 4 | 12 | Cross-project impact assessment; medium volume |
+| 11. Onboarding Access | 3 | 2 | 6 | Mostly rule-based; RPA handles the majority |
 
 ---
 
@@ -328,9 +335,11 @@ NON-DETERMINISM
     V 4 ┼───────────────┼────────────────────────┤
     O    │               │ ★ PERSONAL TASKS       │
     L    │               │   PROACTIVE RISK        │
-    U    │               │ ★ STATUS REPORTS       │
-    M    │               │   CHANGE REQUESTS      │
-    E 3 ┼───────────────┼────────────────────────┤
+    U    │               │   GOVERNANCE MONITORING│
+    M    │               │ ★ STATUS REPORTS       │
+         │               │   CHANGE REQUESTS      │
+    E    │               │   STAKEHOLDER COMMS    │
+      3 ┼───────────────┼────────────────────────┤
          │               │   LESSONS LEARNED      │
          │               │ ★ RESOURCING           │
          │               │   DEPENDENCY TRACKING  │
@@ -360,9 +369,11 @@ NON-DETERMINISM
 
 | Stream | Score | Why Deferred |
 |---|---|---|
-| Proactive Risk Monitoring | 20 | Entirely dependent on project data being clean and current — a pre-condition that often doesn't exist on day 1. No stakeholder quote. Better as Wave 2 once data foundations are established. |
-| Change Request Management | 16 | No stakeholder quote — identified through analysis, not stated customer pain. Requires change management process maturity. Wave 2 addition. |
-| Lessons Learned | 15 | Needs a body of structured data from earlier streams to be meaningful. Wave 3. |
+| Proactive Risk Monitoring | 20 | Dependent on project data being clean and current. No stakeholder quote. Wave 2 once data foundations are established. |
+| Governance Monitoring | 20 | Requires Wave 1 data (RAID logs, meeting records, decisions) to assess governance compliance meaningfully. High priority Wave 2. |
+| Change Request Management | 16 | No stakeholder quote — identified through analysis. Requires change management process maturity. Wave 2. |
+| Stakeholder Communications | 16 | Extends Meeting Intelligence and Status Reports; benefits from those foundations being in place. High priority Wave 2. |
+| Lessons Learned | 15 | Needs a body of structured data from earlier streams. **High-priority Wave 3** — explicitly called out in Problem Statement as a core pain (knowledge loss when PMs rotate). |
 | Dependency Tracking | 12 | Requires a mature, connected data model across projects. Wave 3. |
 | Onboarding Access | 6 | Core work handled by RPA. AI adds value only at the exception margin. |
 
@@ -387,8 +398,8 @@ NON-DETERMINISM
 |---|---|---|
 | 1 | Meeting Intelligence | Highest score; builds the data and integration foundation |
 | 2 | Status Reports + Personal Task Management + Strategic Resourcing | All leverage Wave 1 outputs; all stakeholder-quoted; can run in parallel |
-| 3 | Proactive Risk Monitoring + Change Request Management | Benefit from clean data foundation built in Waves 1–2 |
-| 4 | Lessons Learned + Dependency Tracking | Require mature data across the full portfolio |
+| 3 | Governance Monitoring + Stakeholder Communications + Proactive Risk Monitoring + Change Request Management | Require Wave 1–2 data and integration foundations; governance and comms are high priority in this wave |
+| 4 | Lessons Learned + Dependency Tracking | Require mature data across the full portfolio; Lessons Learned is high priority within this wave |
 
 ---
 

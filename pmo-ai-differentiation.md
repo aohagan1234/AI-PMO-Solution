@@ -179,4 +179,40 @@ Resource gaps get missed because no single person has visibility across the full
 
 ---
 
-*Version: v1.0 | Relates to: pmo-ai-workflows-explained.md, pmo-ai-tool-deliverables.md*
+## What PMOs on Client Site Actually Said
+
+The following is drawn from surveys and interviews conducted with PMOs across financial services clients (MUFG, Citi, and others). These responses validate the differentiation above and provide direct evidence for the pitch.
+
+**On current AI tools:**
+
+> *"I use Copilot on Teams where meetings are recorded. It can summarise the call and I can ask for specific details. It is not always accurate but definitely helps with minutes."*
+
+> *"Copilot in emails, but this is a separate application to emails and would be good if it came up as a prompt when writing emails."*
+
+> *"Outputs not sufficiently tailored to PMO needs."* — Cited as a challenge by multiple respondents.
+
+These responses confirm that generic AI tools are being used but falling short — inaccurate, not integrated into the workflow, and not tailored to PMO-specific needs. This is the gap the tool fills.
+
+**On where AI should go further:**
+
+> *"Automation of basic admin tasks and/or repetitive tasks would save significant time — Minutes and Actions taking, Project descriptions, risks, benefits descriptions. Email automations. Collating information that is saved in various systems in order to be included in a report."* — ADC
+
+> *"AI tooling to analyse complex and large financial data would provide valuable insights."* — Caitlin
+
+> *"Citi needs predictive PMOs — do not view them as advisory, can do more with AI than they are doing. Health scorecards, steering committee reports."* — Chirantan interview
+
+> *"Share resource calendar, capacity utilisation of shared resources and predict availability. Where we map resources are going to be free — link in resource supply with client demand."* — Chirantan interview
+
+**On governance and oversight:**
+
+All respondents who answered Q9 either strongly agreed or agreed that *"clear governance or guidance on AI use would be helpful"* and that *"training would improve effective use."* This validates the human-in-the-loop design of the tool — PMOs want AI assistance but with clear controls, not autonomous AI acting on their behalf.
+
+**On stakeholder management:**
+
+> *"A key aspect of the PMO role is stakeholder management. AI can assist in saving time on routine tasks and providing valuable insight, but this should not be the only focus on improving PMO delivery."* — ADC and Caitlin (independently)
+
+This is an important nuance for the pitch: the tool is positioned as freeing PMO time *for* stakeholder management, not replacing it.
+
+---
+
+*Version: v1.1 | Relates to: pmo-ai-workflows-explained.md, pmo-ai-tool-deliverables.md*
