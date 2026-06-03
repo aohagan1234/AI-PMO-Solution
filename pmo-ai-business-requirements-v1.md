@@ -1,10 +1,12 @@
 # PMO AI Tool — Business Requirements (Iteration 1)
 
 **Scope:** Meeting Intelligence (Wave 1)
-**Version:** v0.2
+**Version:** v0.3
 **Status:** Pending stakeholder validation
 
-> These requirements cover the first iteration only. Streams 2–4 (Status Reports, Strategic Resourcing, Personal Task Management) are out of scope for this iteration.
+> These requirements cover Wave 1 only. The remaining confirmed workstreams — Status Reports (#2), Personal Task Management (#3), and Strategic Resourcing (#4) — are deferred to Wave 2 and will have their own requirements documents. Governance Monitoring, Stakeholder Communications, and later waves are out of scope for this document.
+
+> **Architecture note:** The platform is built as an orchestrated multi-agent system. A central orchestrator agent receives unstructured inputs and routes them to specialist sub-agents. This document covers the requirements for the Meeting Intelligence sub-agent and its integrations. The orchestration layer itself will be covered in a separate architecture document.
 
 ---
 
@@ -123,30 +125,40 @@
 
 ---
 
-## 11. Out of Scope (Iteration 1)
+## 11. Out of Scope (Wave 1)
 
-The following are explicitly out of scope and will be considered in later iterations:
+The following are out of scope for this document. Confirmed future waves are noted.
 
-- Status report generation and distribution
-- Strategic resourcing gap detection and matching
-- Personal task management and email scanning
-- Onboarding access checking (handled by existing RPA tooling)
-- Real-time meeting processing
-- Automatic sending of any communication
+| Item | Status |
+|---|---|
+| Status report generation and distribution | Wave 2 — confirmed |
+| Personal task management and email scanning | Wave 2 — confirmed |
+| Strategic resourcing gap detection and matching | Wave 2 — confirmed |
+| Governance monitoring and compliance checking | Wave 3 — confirmed |
+| Stakeholder communications drafting | Wave 3 — confirmed |
+| Proactive risk monitoring from project data signals | Wave 3 — confirmed |
+| Change request management and impact assessment | Wave 3 — confirmed |
+| Lessons learned and knowledge capture | Wave 4 — confirmed, high priority |
+| Dependency tracking | Wave 4 — confirmed |
+| Onboarding access checking | RPA — not AI-first; handled by existing automation tooling |
+| Real-time (in-meeting) processing | Out of scope — asynchronous processing is sufficient for Wave 1 |
+| Automatic sending of any communication | Out of scope permanently — all external communications require human approval |
 
 ---
 
 ## Open Items — Requires Stakeholder Input
 
-| # | Question | Impact if Unresolved |
-|---|---|---|
-| OI-01 | Are meetings currently recorded and transcribed in Teams/Zoom? | Cannot process meetings without transcripts |
-| OI-02 | What is the current RAID log schema and location in SharePoint? | Cannot propose RAID entries |
-| OI-03 | What JIRA fields are used per project? | Cannot match or update tickets accurately |
-| OI-04 | What defines a "high-priority" JIRA ticket in this context? | Cannot apply correct approval rules |
-| OI-05 | Who has authority to approve RAID log entries? | Cannot design the approval workflow |
-| OI-06 | Does the Graph API access for Teams transcripts need to be provisioned by IT? | Blocking — cannot begin without this |
+| # | Question | Status | Impact if Unresolved |
+|---|---|---|---|
+| OI-01 | Are meetings currently recorded and transcribed in Teams/Zoom? | **Partially answered** — PMO surveys confirm Teams is in use and transcription is happening, but not universally across all client sites. Confirm per-client before build. | Cannot process meetings without transcripts |
+| OI-02 | What is the current RAID log schema and location in SharePoint? | **Open** | Cannot propose RAID entries in the correct format |
+| OI-03 | What JIRA fields are used per project? | **Open** | Cannot match or update tickets accurately |
+| OI-04 | What defines a "high-priority" JIRA ticket in this context? | **Open** — assumed to be Priority: Highest/High or labelled "executive-visible" but must be confirmed per client | Cannot apply correct approval rules |
+| OI-05 | Who has authority to approve RAID log entries? | **Open** — governance model varies by client | Cannot design the approval workflow |
+| OI-06 | Does the Graph API access for Teams transcripts need to be provisioned by IT? | **Open — blocking** | Cannot begin without this; IT provisioning may have a long lead time |
+| OI-07 | Are there meeting types that should be explicitly excluded from processing (e.g. HR, 1:1s, confidential)? | **Open** — identified through survey analysis | Scope exclusions must be defined before build; incorrect processing of sensitive meetings creates a trust risk |
+| OI-08 | What is the expected volume of meetings per month across the target client portfolio? | **Open** — estimated at ~80/month per PMO based on stakeholder input; needs confirmation | Affects infrastructure sizing and performance SLA targets |
 
 ---
 
-*Version: v0.2 | Relates to: pmo-ai-tool-deliverables.md*
+*Version: v0.3 | Relates to: pmo-ai-tool-deliverables.md, pmo-ai-workflows-explained.md*
