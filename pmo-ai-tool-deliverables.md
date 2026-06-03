@@ -54,18 +54,23 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 |---|---|---|---|---|
 | Meeting Intelligence | 5 | 5 | 25 | ★ PRIMARY |
 | Personal Task Mgmt | 5 | 4 | 20 | High |
+| Proactive Risk Monitoring | 4 | 5 | 20 | High *(new)* |
 | Status Reports | 4 | 4 | 16 | High |
+| Change Request Management | 4 | 4 | 16 | High *(new)* |
+| Lessons Learned | 3 | 5 | 15 | Medium *(new)* |
 | Strategic Resourcing | 3 | 4 | 12 | Medium |
+| Dependency Tracking | 3 | 4 | 12 | Medium *(new)* |
 | Onboarding Access | 3 | 2 | 6 | RPA/Hybrid |
 
 ---
 
-### Recommended Four Work Streams
+### Recommended Five Work Streams (Initial Focus)
 
 1. **Meeting Intelligence** — RAID extraction, JIRA updates *(PRIMARY)*
-2. **Status Reports & Scorecards** — synthesis and generation
-3. **Strategic Resourcing** — proactive gap detection and matching
-4. **Personal Task Management** — email intelligence and reminders
+2. **Personal Task Management** — email intelligence and reminders
+3. **Proactive Risk Monitoring** — early warning from project data signals
+4. **Status Reports & Scorecards** — synthesis and generation
+5. **Change Request Management** — impact assessment and approval routing
 
 ---
 
@@ -87,14 +92,15 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ---
 
-### The Four Work Streams
+### The Five Priority Work Streams
 
 | Stream | Description | Volume | Time | Stakeholder Quote |
 |---|---|---|---|---|
 | 1. Meeting Intelligence | RAID extraction, JIRA updates | ~80/mo | ~30 min/mtg | "Raw meeting notes," "action items," "RAID logs" |
-| 2. Status Reports | Synthesis, scorecards | ~50/mo | ~45 min/rpt | "Automate reports, automate scorecards" |
-| 3. Strategic Resourcing | Gap detection, matching | ~40/mo | ~60 min/case | "Resources finishing up, match it up, skills pool" |
-| 4. Personal Task Mgmt | Email intelligence, reminders | Continuous | ~2 hrs/day | "Read emails, checklist, tick off" |
+| 2. Personal Task Mgmt | Email intelligence, reminders | Continuous | ~2 hrs/day | "Read emails, checklist, tick off" |
+| 3. Proactive Risk Monitoring | Early warning from project data | Continuous | ~1 hr/wk | Risks missed until too late |
+| 4. Status Reports | Synthesis, scorecards | ~50/mo | ~45 min/rpt | "Automate reports, automate scorecards" |
+| 5. Change Request Mgmt | Impact assessment, approval routing | ~30/mo | ~60 min/req | Slow, inconsistent change assessment |
 
 ---
 
@@ -296,14 +302,19 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 
 ## Deliverable 3: Volume × Value Analysis
 
-### Stream Scoring
+### Full Stream Scoring (All Workstreams)
 
 | Stream | Vol | Non-Det | Score | Justification |
 |---|---|---|---|---|
 | 1. Meeting Intelligence | 5 | 5 | 25 | Every meeting; RAID classification is judgment-intensive |
-| 2. Status Reports | 4 | 4 | 16 | Synthesis + audience adaptation |
-| 3. Strategic Resourcing | 3 | 4 | 12 | Trade-off analysis |
-| 4. Personal Task Mgmt | 5 | 4 | 20 | Daily email comprehension |
+| 2. Personal Task Mgmt | 5 | 4 | 20 | Daily; email comprehension requires reading intent |
+| 3. Proactive Risk Monitoring | 4 | 5 | 20 | Synthesising weak signals into risk assessments requires judgment |
+| 4. Status Reports | 4 | 4 | 16 | High volume; narrative synthesis + audience adaptation |
+| 5. Change Request Mgmt | 4 | 4 | 16 | Frequent; multi-factor impact assessment is judgment-intensive |
+| 6. Lessons Learned | 3 | 5 | 15 | Lower volume; pattern recognition across projects is highly non-deterministic |
+| 7. Strategic Resourcing | 3 | 4 | 12 | Trade-off analysis; medium volume |
+| 8. Dependency Tracking | 3 | 4 | 12 | Cross-project impact assessment; medium volume |
+| 9. Onboarding Access | 3 | 2 | 6 | Mostly rule-based; RPA handles the majority |
 
 ---
 
@@ -311,27 +322,47 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 
 ```
 NON-DETERMINISM
-        Low ◄───────────────────► High
+        Low ◄───────────────────────────────► High
 
- High 5 ┼───────────┬─────────────────┐
-         │           │ ★ MEETING      │
-         │           │   INTELLIGENCE │
-    V 4 ┼───────────┼─────────────────┤
-    O    │           │ PERSONAL TASKS │
-    L    │           │ STATUS REPORTS │
-    U 3 ┼───────────┼─RESOURCING─────┤
-    M    │           │                │
-    E 2 ┼───────────┼─────────────────┤
- Low 1 ┼───────────┴─────────────────┘
+ High 5 ┼───────────────┬────────────────────────┐
+         │               │ ★ MEETING INTELLIGENCE │
+         │               │                        │
+    V 4 ┼───────────────┼────────────────────────┤
+    O    │               │ PERSONAL TASKS         │
+    L    │               │ PROACTIVE RISK          │
+    U    │               │ STATUS REPORTS         │
+    M    │               │ CHANGE REQUESTS        │
+    E 3 ┼───────────────┼────────────────────────┤
+         │               │ LESSONS LEARNED        │
+         │               │ RESOURCING             │
+         │               │ DEPENDENCY TRACKING    │
+    Low  ├───────────────┼────────────────────────┤
+         │ ONBOARDING    │                        │
+       1 ┼───────────────┴────────────────────────┘
 ```
 
-**Winner: Meeting Intelligence (Score 25)**
+---
 
-Why it wins:
-- Maximum score — highest volume × highest non-determinism
-- Explicitly requested — "Raw meeting notes," "action items," "RAID logs"
-- Governance value — Decisions (D) prevent costly disputes; Risks (R) caught early
-- Foundation — meeting outputs feed status reports, personal tasks, resourcing
+### Top 5 Selected — Reasoning
+
+**Why these five?**
+
+| Stream | Score | Reason for Selection |
+|---|---|---|
+| Meeting Intelligence | 25 | Highest score; every meeting; foundation for all other streams |
+| Personal Task Management | 20 | Daily volume; immediate, visible PMO time saving |
+| Proactive Risk Monitoring | 20 | Catches risks before meetings — complements, not duplicates, Meeting Intelligence |
+| Status Reports | 16 | High frequency; clear quantifiable time saving; low complexity to implement |
+| Change Request Management | 16 | Core PMO function; poor impact assessment causes real project harm |
+
+**Why not the others (in this iteration)?**
+
+| Stream | Score | Why Deferred |
+|---|---|---|
+| Lessons Learned | 15 | Needs data from other streams to be meaningful; best in Wave 3 |
+| Strategic Resourcing | 12 | Data-dependent; builds naturally on top of Meeting Intelligence and Status Reports |
+| Dependency Tracking | 12 | Valuable but requires a mature data foundation across projects first |
+| Onboarding Access | 6 | Handled by RPA; AI adds value only at the exception margin |
 
 ---
 
@@ -339,20 +370,24 @@ Why it wins:
 
 | Value Driver | Calculation | Annual |
 |---|---|---|
-| Follow-up time freed | 40 hrs/mo × 50% × 12 × $75 | ~$18,000 |
-| Reduced dropped items | Qualitative | TBD |
+| Meeting follow-up time freed | 40 hrs/mo × 50% × 12 × $75 | ~$18,000 |
+| Personal task management | 1 hr/day × 50% × 220 days × $75 | ~$8,250 |
+| Status report time freed | 50 reports/mo × 35 min saved × 12 × $75/hr | ~$26,250 |
+| Change request assessment | 30 requests/mo × 40 min saved × 12 × $75/hr | ~$22,500 |
+| Reduced dropped items / risk misses | Qualitative | TBD |
 | Fewer decision disputes | Qualitative | TBD |
-| **Quantifiable** | | **~$18,000** |
+| **Quantifiable total** | | **~$75,000** |
 
 ---
 
 ### Sequencing
 
-| Wave | Stream | Rationale |
+| Wave | Streams | Rationale |
 |---|---|---|
-| 1 | Meeting Intelligence | Highest score; builds foundation |
-| 2 | Personal Tasks + Status Reports | Leverages Wave 1 outputs |
-| 3 | Strategic Resourcing | Builds on data foundation |
+| 1 | Meeting Intelligence | Highest score; builds the data and integration foundation |
+| 2 | Personal Task Management + Proactive Risk Monitoring | Leverages Wave 1 outputs; adds continuous monitoring capability |
+| 3 | Status Reports + Change Request Management | Higher integration complexity; benefits from Wave 1–2 data |
+| 4 | Lessons Learned + Strategic Resourcing + Dependency Tracking | Require mature data foundation from earlier waves |
 
 ---
 
