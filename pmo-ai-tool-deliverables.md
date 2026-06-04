@@ -1,15 +1,11 @@
-# PMO AI TOOL — WEEK 2 DELIVERABLES
+# PMO AI Tool — Technical Design Reference
 
-**Date:** Week 2 Submission
-**Scenario:** PMO AI Tool — Meeting Intelligence Focus
-**Stakeholder Source:** Senior PMOs (MUFG meeting notes)
+**Stakeholder Source:** Senior PMOs (MUFG, Citi, and other financial services clients)
 **RAID Log Format:** Risks, Actions, Issues, Decisions
-
-> **Note:** No legacy billing system applies to this scenario. All systems referenced are from stakeholder meeting notes.
 
 ---
 
-## Deliverable 0: PMO Workflows — Agentic vs Deterministic
+## Section 1: PMO Workflows — Agentic vs Deterministic
 
 ### What is a RAID Log?
 
@@ -78,7 +74,7 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ---
 
-## Deliverable 1: Cognitive Load Map
+## Section 2: Cognitive Load Map
 
 ### Frame
 
@@ -235,7 +231,7 @@ BP3: Governance Gate (Synthesize → Execute)
 
 ---
 
-## Deliverable 2: Delegation Suitability Matrix
+## Section 3: Delegation Suitability Matrix
 
 **Suitability Gate: PASS**
 
@@ -359,7 +355,7 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 
 ---
 
-## Deliverable 3: Volume × Value Analysis
+## Section 4: Volume × Value Analysis
 
 ### Full Stream Scoring (All Workstreams)
 
@@ -466,7 +462,7 @@ NON-DETERMINISM
 
 ---
 
-## Deliverable 4: Agent Purpose Document
+## Section 5: Agent Purpose Document
 
 **Agent Name:** PMO Meeting Intelligence Agent (MeetingBot)
 
@@ -619,7 +615,7 @@ Every action logs: `meeting_id`, `timestamp`, `event_type`, `raid_type` (R/A/I/D
 
 ---
 
-## Deliverable 5: System/Data Inventory
+## Section 6: System/Data Inventory
 
 ### Systems Inventory
 
@@ -746,7 +742,7 @@ Teams/Zoom ──► Agent [Ingest → Extract → Classify → Generate] ──
 
 ---
 
-## Deliverable 6: Discovery Questions
+## Section 7: Discovery Questions
 
 ### Top 10 Design-Changing Questions
 
@@ -830,7 +826,7 @@ Teams/Zoom ──► Agent [Ingest → Extract → Classify → Generate] ──
 
 ---
 
-## Deliverable 7: CLAUDE.md
+## Section 8: Agent Configuration Reference
 
 ### Project Intent
 
@@ -981,5 +977,4 @@ email:
 
 ---
 
-*End of PMO AI Tool Deliverables — Complete Package*
-*Agent version: v1.0-design*
+*Relates to: pmo-ai-workflows-explained.md, pmo-ai-business-requirements-v1-meeting-intelligence.md, pmo-ai-differentiation.md*
