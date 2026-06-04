@@ -18,24 +18,25 @@ It connects to the tools PMOs already use — Microsoft Teams, SharePoint, Outlo
 
 A meeting ends at 3 PM. Teams transcribes the recording. Within minutes of the transcript being ready, the tool processes it — RAID items extracted, JIRA updates prepared, follow-up emails drafted.
 
-By 4 PM, the PMO gets a Teams notification:
+By 3:20 PM, the PMO gets a Teams notification:
 
 ```
-📋  3 meetings processed overnight
-    Project Apex Steering       →  6 items to review
-    Platform Migration Stand-up →  3 items to review
-    Risk & Governance Weekly    →  5 items to review
+📋  Project Apex Steering just processed
+    6 items ready for your review
+    Meeting ended 3:00 PM  ·  Ready at 3:18 PM
 
-    [Open Review Queue →]
+    [Review now →]    [Review in morning queue →]
 ```
 
-They click the link and land directly in the tool.
+If the PMO is free, they click **Review now** and clear the items before end of day. If they're still in back-to-back meetings, they click **Review in morning queue** — or simply ignore it — and the items wait in their dashboard.
+
+Either way, nothing is lost and nothing requires action that evening. The tool holds everything until the PMO is ready.
 
 ---
 
 ### The Home Dashboard
 
-The first thing they see is a single view of everything needing their attention today. Nothing is buried. Nothing requires searching.
+The next morning — or whenever they next open the tool — the first thing they see is a single view of everything needing their attention. Any meetings reviewed same-day are already cleared. Anything deferred, or processed after they logged off, is waiting in the queue. Nothing is buried. Nothing requires searching.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -196,7 +197,7 @@ The tool has already done the matching work — it knows who is available, what 
 | Task | Without the Tool | With the Tool |
 |---|---|---|
 | Meeting follow-up (3 meetings) | 60–90 min re-reading notes | 10–15 min in the review queue |
-| RAID log updated | Later that day, or never | Done before 9:30am |
+| RAID log updated | Later that day, or never | Same day if reviewed promptly, or first thing next morning |
 | JIRA updated | Manual, often forgotten | Automatic on approval |
 | Follow-up emails sent | Written from scratch, often delayed | Draft ready, sent in 2 minutes |
 | Daily task list | Mental model across inbox, notes, and JIRA | One screen, already consolidated |
