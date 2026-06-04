@@ -14,11 +14,11 @@ It connects to the tools PMOs already use — Microsoft Teams, SharePoint, Outlo
 
 ## A Day in the Life
 
-### Before the PMO Arrives
+### After the Meeting Ends (Same Day)
 
-The tool has been working overnight. Three meetings were recorded yesterday. By the time the PMO sits down, the transcripts have been processed, RAID items extracted, JIRA updates prepared, and follow-up emails drafted.
+A meeting ends at 3 PM. Teams transcribes the recording. Within minutes of the transcript being ready, the tool processes it — RAID items extracted, JIRA updates prepared, follow-up emails drafted.
 
-A Teams message is waiting:
+By 4 PM, the PMO gets a Teams notification:
 
 ```
 📋  3 meetings processed overnight
