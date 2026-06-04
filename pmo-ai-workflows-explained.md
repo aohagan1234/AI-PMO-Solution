@@ -222,7 +222,7 @@ These were assessed and validated but require the data foundations that earlier 
 | Today | With the AI Tool |
 |---|---|
 | 30 min writing up meeting notes | Draft ready automatically after the meeting |
-| RAID items lost or forgotten | Captured from every meeting; in the log within 30 min |
+| RAID items lost or forgotten | Processed within 30 min of transcript; in the log after PMO approval |
 | JIRA updated manually (or not at all) | Updates proposed automatically after each meeting |
 | Status reports take 45 min each, multiple manual versions | One data pull; AI generates audience-adapted versions in 10 min |
 | Financial analysis done separately in Excel | Variance analysis and budget health built into every report |

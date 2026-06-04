@@ -199,7 +199,7 @@ Survey data shows all respondents either agreed or strongly agreed that AI could
 
 Specific value delivered:
 
-- **No more lost RAID items:** Every meeting produces a structured, approved RAID log entry within 30 minutes
+- **No more lost RAID items:** Every meeting produces a structured RAID proposal within 30 minutes of the transcript being ready, logged after PMO approval
 - **No more decision disputes:** Every decision is documented with source traceability to the meeting transcript
 - **Reports in 10 minutes, not 45:** Status reports are auto-generated with audience-adapted versions from a single data pull
 - **Resource gaps caught early:** Proactive alerts surface resourcing issues weeks before they become crises
