@@ -24,12 +24,13 @@
 
 ---
 
-## 2. Meeting Summary
+## 2. Meeting Notes & Distribution
 
 | # | Requirement | Why |
 |---|---|---|
-| BR-06 | The system must generate a structured summary of each meeting, covering key topics, discussion points, and proposed next steps. | PMOs currently spend 20–30 minutes writing up meetings they have just attended. Automating the draft eliminates this and ensures a consistent format. |
-| BR-07 | The summary must be produced as a draft for PMO review — it must not be distributed without human approval. | Summaries are shared externally and represent the organisation. A human must verify accuracy before distribution. |
+| BR-06 | The system must generate meeting notes for each processed meeting. The notes must follow a consistent structure: key topics discussed, discussion points and context, decisions made — followed by an action section at the foot listing all RAID items with owners, due dates, and classifications. | This is the single post-meeting output sent to participants. Combining the narrative summary with the action list in one document means recipients get the full picture — what was discussed, what was decided, and what happens next — without receiving two separate communications. |
+| BR-07 | The system must retrieve the full invitee list from the meeting invitation (not only those who attended) and use this as the distribution list for the meeting notes. | People who were invited but could not attend need the notes as much as those who were present. Using only the attendee list from the transcript would routinely exclude people who have a stake in the outcome. |
+| BR-08 | The meeting notes must be produced as a draft for PMO review — they must not be distributed without human approval. | Meeting notes are sent externally and represent the organisation. A human must verify accuracy, tone, and completeness before they go out. |
 
 ---
 
@@ -71,13 +72,13 @@
 
 ---
 
-## 6. Follow-Up Email
+## 6. Meeting Notes Distribution
 
 | # | Requirement | Why |
 |---|---|---|
-| BR-25 | The system must draft a follow-up email for each processed meeting, including RAID items, owners, due dates, and key decisions. | Follow-up emails are a core part of meeting governance. They create a shared record of commitments. Currently these take significant time to write and are sometimes not sent at all. |
-| BR-26 | The system must never send an email without explicit PMO approval. | Emails are external communications that represent the organisation. Sending an incorrect or premature follow-up email could damage stakeholder relationships or create a false record of what was agreed. |
-| BR-27 | The draft email must be presented to the PMO for review before any send action is available. | Enforcing the review step in the workflow prevents accidental sends and ensures the PMO has eyes on the content before it leaves the system. |
+| BR-25 | The system must send the approved meeting notes to all invited participants via Outlook. The distribution list must be derived from the meeting invitation, not from the attendee list in the transcript. | Invited participants who could not attend need the notes. Using only the transcript attendee list would routinely miss them and create an uneven record of what was communicated. |
+| BR-26 | The system must never send meeting notes without explicit PMO approval. | Meeting notes are an external communication that represents the organisation and creates a formal record of what was discussed, decided, and committed to. Sending without review risks an inaccurate or incomplete record reaching participants. |
+| BR-27 | The draft meeting notes must be presented to the PMO for review in full — including the narrative summary, the decisions, and the RAID action list at the foot — before any send action is available. | The PMO must review the document as participants will receive it. Reviewing the RAID items and the meeting narrative separately (as two different screens) would risk approving a combined document that reads poorly or inconsistently. |
 
 ---
 
@@ -96,8 +97,8 @@
 
 | # | Requirement | Why |
 |---|---|---|
-| BR-30 | The EPAM platform must integrate with Microsoft Teams via the Microsoft Graph API to retrieve meeting transcripts and attendance data. | Teams is the primary meeting platform. Connecting via the official API ensures transcripts are retrieved reliably and at scale without manual export. |
-| BR-31 | The EPAM platform must integrate with Zoom via REST API as an alternative transcript source. | Not all meetings may be held in Teams. Zoom support ensures the tool works across the actual meeting platforms in use. |
+| BR-30 | The EPAM platform must integrate with Microsoft Teams via the Microsoft Graph API to retrieve meeting transcripts, attendance data, and the meeting invitation including the full invitee list. | Teams is the primary meeting platform. Retrieving the invitee list from the calendar event (not just the attendee list from the transcript) is essential for distributing meeting notes to all participants, including those who could not attend. |
+| BR-31 | The EPAM platform must integrate with Zoom via REST API as an alternative transcript source. Where Zoom is used, the invitee list must be retrieved from the Zoom calendar or meeting invite data. | Not all meetings may be held in Teams. Zoom support ensures the tool works across the actual meeting platforms in use, and the same invitee-list requirement applies regardless of platform. |
 | BR-32 | The EPAM platform must integrate with Jira via REST API for reading and proposing ticket updates. | Jira is the primary project tracking tool. Direct API integration avoids manual copy-paste and ensures proposed updates are accurately formatted for the target ticket. |
 | BR-33 | The EPAM platform must integrate with SharePoint via the Microsoft Graph API for RAID log read and write operations. | The RAID log lives in SharePoint. The integration allows the system to propose structured entries directly into the log rather than requiring the PMO to copy items across manually. |
 | BR-34 | All integrations must use OAuth 2.0 authentication. | OAuth 2.0 is the security standard required for Microsoft Graph and Jira APIs. It ensures access is properly permissioned, auditable, and can be revoked without changing passwords. |

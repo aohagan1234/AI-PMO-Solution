@@ -87,9 +87,9 @@ Each card shows:
 - **Proposed owner and severity**
 - **Three choices** — approve, modify, or reject
 
-The PMO works through all 14 items across three meetings in about 10–15 minutes. Every approved item is written to the SharePoint RAID log and JIRA automatically. The follow-up email is drafted and ready to send with one click.
+The PMO works through all 14 items across three meetings in about 10–15 minutes. Every approved item is written to the SharePoint RAID log and JIRA automatically. The meeting notes — covering what was discussed, what was decided, and the full action list at the foot — are drafted and ready to send to all invited participants with one click.
 
-**What happens without the tool:** 60–90 minutes of re-reading notes, guessing at owners, manually updating JIRA, writing emails from scratch — often the day after the meeting.
+**What happens without the tool:** 60–90 minutes of re-reading notes, guessing at owners, manually updating JIRA, writing up minutes from scratch — often the day after the meeting, and often not sent to everyone who was invited.
 
 ---
 
@@ -188,7 +188,7 @@ The tool knows the project context, the risk that triggered the change, and who 
 | Meeting follow-up (3 meetings) | 60–90 min re-reading notes | 10–15 min in the review queue |
 | RAID log updated | Later that day, or never | Same day if reviewed promptly, or first thing next morning |
 | JIRA updated | Manual, often forgotten | Automatic on approval |
-| Follow-up emails sent | Written from scratch, often delayed | Draft ready, sent in 2 minutes |
+| Meeting notes sent to all invitees | Written from scratch, often delayed, often sent only to attendees | Draft ready, sent to all invited participants in 2 minutes |
 | Governance gaps | Found in audits or escalations, too late | Every project checked weekly; gaps flagged automatically |
 | Escalation notices | Written from scratch under pressure | Drafted automatically on trigger; PMO reviews and sends |
 | Status report | 45 min to write, multiple manual versions | 10 min to review and approve |

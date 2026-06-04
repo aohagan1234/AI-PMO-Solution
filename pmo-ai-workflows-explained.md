@@ -43,18 +43,18 @@ After a meeting, a PMO typically spends 20–30 minutes re-reading notes to find
 | Step | What the AI Does | What the PMO Does |
 |---|---|---|
 | **Ingest transcript** | Reads the Teams/Zoom transcript, identifies speakers, links to project | Nothing — picked up automatically |
-| **Generate summary** | Produces a structured summary of topics, discussion, and next steps | Reviews and approves before sharing |
+| **Generate meeting notes** | Produces structured meeting notes covering key topics, discussion, and decisions — with all RAID items listed at the foot | Reviews and approves before distribution |
 | **Extract RAID items** | Identifies Risks, Actions, Issues, and Decisions with confidence scores | Reviews flagged items; approves all entries |
 | **Assign owners & dates** | Infers who owns each action and converts vague dates to specific ones | Confirms ambiguous cases |
 | **Propose JIRA updates** | Matches actions to existing tickets; prepares comments, status changes, new tickets | Confirms before any update is applied |
 | **Propose RAID log entries** | Formats items into RAID schema and queues for approval | Approves each entry — nothing is written without sign-off |
-| **Draft follow-up email** | Writes the follow-up with RAID items, owners, dates, and decisions | Reviews and sends — AI never sends independently |
+| **Distribute meeting notes** | Retrieves the full invitee list from the meeting invitation and sends approved notes via Outlook to all invited participants | Reviews and sends — AI never sends independently |
 
 **Why it is primary:** Highest score, fully standalone, and it acts as the foundation — the actions, decisions, and RAID items it captures feed directly into Status Reports, Personal Task Management, Strategic Resourcing, and Governance Monitoring.
 
 **What stakeholders said:** *"Raw meeting notes," "action items," "RAID logs"* — directly quoted. PMO survey respondents confirmed they currently use Copilot for meeting minutes but find it *"not always accurate"* and output is *"not sufficiently tailored to PMO needs."*
 
-**Value:** Follow-up time from ~30 minutes to under 5. RAID items captured consistently. Decisions documented. Estimated annual saving: ~$18,000.
+**Value:** Meeting notes drafted automatically — narrative summary, decisions, and action list in one document, sent to all invitees. What previously took 20–30 minutes of writing takes under 5 minutes to review and approve. RAID items captured consistently. Decisions documented. Estimated annual saving: ~$18,000.
 
 ---
 
