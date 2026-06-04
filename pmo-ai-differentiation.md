@@ -38,9 +38,9 @@ Generic AI gives you better output. This EPAM platform gives you a managed PMO p
 
 | Tool | What it covers |
 |---|---|
-| Microsoft Copilot for M365 | Meeting summaries, action item lists, follow-up email drafts, speaker attribution |
+| Microsoft Copilot for M365 | Meeting summaries, action item lists, meeting notes drafts, speaker attribution |
 | Zoom AI Companion | Meeting summaries, action items, smart chapters |
-| Internal AI (ChatGPT / Claude with transcript) | Summaries, action extraction, decision lists, draft emails |
+| Internal AI (ChatGPT / Claude with transcript) | Summaries, action extraction, decision lists, draft notes |
 
 If summarisation and action extraction were all this stream did, it would be very hard to justify. That capability is effectively commoditised.
 
@@ -62,13 +62,17 @@ Nothing gets written to a record or sent externally without explicit human appro
 
 Every RAID item is traced back to the meeting ID, timestamp, and speaker. If a decision is ever disputed — *"I never agreed to that"* — the PMO can point to the exact moment in the recording it came from. Generic summaries do not do this at the individual item level.
 
-**5. Consistency**
+**5. Meeting notes structure and distribution to all invitees**
+
+Copilot produces a summary for the person who asked for it. This tool produces structured meeting notes — narrative summary, decisions, and RAID action list at the foot — and distributes them via Outlook to every person who was *invited* to the meeting, not just those who attended. The invitee list is retrieved from the calendar invitation. People who could not attend receive the same governed record as those who were present. No generic AI tool manages this distribution step.
+
+**6. Consistency**
 
 A PMO using Copilot or an internal AI uses it when they remember to, with no standard process and no guaranteed connection to downstream systems. This tool runs as a standardised automated workflow for every meeting — the consistency is part of the governance value.
 
 ### The one-line answer for the pitch
 
-> *"Copilot gives you better notes. This gives you an automated PMO governance workflow — RAID classification, system write-back, approval routing, and a full audit trail. Those are different things."*
+> *"Copilot gives you better notes for yourself. This gives you an automated PMO governance workflow — RAID classification, system write-back, approval routing, structured minutes sent to all invitees, and a full audit trail. Those are different things."*
 
 ---
 
@@ -108,86 +112,92 @@ Nothing is distributed without PMO approval. The approval step is built into the
 
 ---
 
-## Work Stream 3: Personal Task Management
+## Work Stream 3: Governance Monitoring
 
 ### What existing tools already do
 
 | Tool | What it covers |
 |---|---|
-| Microsoft To Do / Planner | Manual task lists, reminders, JIRA integration |
-| Outlook flagging | Email task flagging, follow-up reminders |
-| Microsoft Copilot | Email summaries, suggested follow-up actions |
+| SharePoint / document libraries | Stores governance documents — but does not check whether they exist or are current |
+| Audit tools (e.g. manual checklists) | Periodic point-in-time governance reviews, manually triggered |
+| Microsoft Copilot | Can answer questions about specific documents if asked — but requires manual prompting |
 
-Individual task management tools exist. The challenge is valid — why does a PMO need another one?
+There is no tool on the market that continuously and automatically checks whether active projects are meeting their governance standards. Governance today is either periodic (a review conducted monthly or quarterly), reactive (triggered by a problem), or dependent on a specific individual's diligence.
 
 ### Where the genuine gap is
 
-**1. Automatic consolidation across sources — including meeting outputs**
+**1. Continuous automated checking versus periodic manual review**
 
-Every existing tool requires manual input: you flag an email, you add a task, you check JIRA. This tool automatically consolidates commitments from all sources into one list — and critically, action items extracted from meetings in Stream 1 flow directly into the personal task list without the PMO having to do anything. No existing tool does this cross-source consolidation automatically.
+Manual governance reviews happen when someone schedules one — which means they happen less often than they should, and gaps accumulate between reviews. This tool checks every active project against every applicable standard on a weekly cadence, automatically. Gaps are surfaced the week they appear, not in the next quarterly audit.
 
-**2. Commitment extraction, not just flagging**
+**2. Evidence-based checking using Wave 1 outputs**
 
-Outlook flags emails you manually mark. Copilot suggests follow-ups. Neither distinguishes between a hard commitment (*"I will send the updated plan by Friday"*), a soft commitment (*"I'll try to get to it this week"*), and an incoming request (*"Can you check the budget?"*). This tool reads intent — it extracts what you have committed to doing, and what others have committed to you, from natural language. That distinction determines whether something needs to be on your task list or not.
+Because Wave 1 (Meeting Intelligence) generates structured RAID logs and decision records, Governance Monitoring has real, traceable evidence to check against. A governance check for "has a risk log been maintained?" can be answered by reading the RAID log entries Wave 1 has been writing — not by asking someone to go and check a SharePoint folder manually.
 
-**3. PMO-specific prioritisation**
+**3. Portfolio-wide visibility**
 
-Generic task apps rank by due date or manual priority. This tool ranks by due date combined with requester seniority, project priority, and RAID context — so a task related to a project with an open critical risk surfaces above a routine admin task with the same due date.
+A PMO managing multiple projects cannot keep governance standards in their head for every project simultaneously. This tool monitors the whole portfolio and surfaces a governance scorecard across all active projects, so the PMO can see which projects need attention without manually reviewing each one.
 
-**4. Completion detection**
+**4. Gaps flagged before they become audit findings**
 
-The tool monitors your sent folder, JIRA changes, and SharePoint updates to automatically detect when tasks have been completed — rather than requiring you to manually tick them off. The list stays current without effort.
+The first time most organisations discover governance gaps is during an audit or a steering committee review that goes badly. By then it is too late to fix without embarrassment or escalation. This tool surfaces gaps early — when there is still time to resolve them quietly.
+
+**5. Consistent standards across projects and PMOs**
+
+Governance quality today depends on which PMO is conducting the review and how rigorous they are. This tool applies the same standards to every project, every week, regardless of who is working on it.
 
 ### The one-line answer for the pitch
 
-> *"Microsoft To Do needs you to add tasks manually. This tool finds your commitments automatically — across email, meetings, and JIRA — and consolidates them into one PMO-context-aware list without any manual input."*
+> *"There is no tool that checks whether your projects are actually meeting their governance standards — until now. This does it automatically, every week, across every project, using the evidence Wave 1 generates."*
 
 ---
 
-## Work Stream 4: Strategic Resourcing
+## Work Stream 4: Stakeholder Communications
 
 ### What existing tools already do
 
 | Tool | What it covers |
 |---|---|
-| SharePoint / Excel resource trackers | Record of who is on what project, end dates, skills |
-| HR systems | Skills inventories, role profiles |
-| MS Project | Resource allocation and scheduling |
+| Microsoft Copilot | Can draft an email if you describe what you want it to say |
+| Outlook templates | Static templates for recurring communication types |
+| Internal AI (ChatGPT / Claude) | Can draft communications from prompts, but requires the user to supply all context |
 
-Resource data exists. The information is there — it is just scattered, passive, and requires someone to go looking for it.
+The tools for *writing* communications exist. The problem is not the writing. The problem is knowing what to write, when to write it, and having the right information assembled at the moment you need it — which is usually the moment when a project has just escalated and the PMO is already stretched.
 
 ### Where the genuine gap is
 
-**1. Proactive alerting — the data becomes active**
+**1. Trigger detection — the tool knows when a communication is needed**
 
-A SharePoint resource tracker tells you what you ask it. It does not alert you that a key resource finishes their current project in three weeks and there is a gap opening up on a critical programme. The PMO AI tool monitors the data continuously and surfaces the alert before the gap becomes a crisis. Passive data versus active intelligence is the core difference.
+Copilot drafts emails you ask it to draft. This tool detects the events that should trigger a stakeholder communication — a RAG status change, a milestone slip, a risk escalation — and initiates the draft automatically. The PMO does not have to remember that this event requires a sponsor notification; the tool does.
 
-**2. Cross-project match reasoning**
+**2. Context awareness — drawn from live project data**
 
-Identifying who is available is a simple query. Recommending *who to assign* requires weighing competing factors simultaneously: this person has the right skills but is only free in five weeks; that person is available now but is a stretch for the seniority required; the programme director has expressed a preference for someone with specific sector experience. That multi-factor trade-off reasoning is where AI adds genuine value over a lookup table.
+When an escalation notice is needed, this tool has already assembled the relevant context: what changed, when, what the RAID log says about the underlying cause, what the RAG history shows, and what actions are already in place. A generic AI tool requires the PMO to supply all of this. The difference between a draft that needs extensive editing and one that can be sent with minor changes is whether the AI had the right information to start with.
 
-**3. Integration with project intelligence**
+**3. Audience adaptation built in**
 
-Because the tool connects to JIRA, RAID logs, and meeting outputs from Stream 1, it understands the *context* of a resource gap — not just that someone is finishing, but what they are finishing, what risks are open on the projects they might move to, and what decisions were recently made about resourcing priorities. A standalone HR system or spreadsheet has none of this context.
+The same trigger event may require a brief escalation note to an executive sponsor, a more detailed briefing for the programme director, and a different framing for the project team. This tool generates separate, appropriately toned drafts for each recipient type from the same underlying context. Writing three versions manually — or prompting a generic AI three times with different instructions — is exactly the kind of time pressure a PMO does not need at the moment a project escalates.
 
-**4. Consistency and coverage**
+**4. Governed sending — approval built into the workflow**
 
-Resource gaps get missed because no single person has visibility across the full portfolio. This tool monitors every project continuously — not just the ones a PMO happens to check this week.
+No communication is sent without explicit PMO approval. The draft is presented for review in the EPAM platform, with inline editing available, before any send action is accessible. Generic AI tools have no equivalent — they output text, and what happens next is up to the user. In a regulated financial services environment, a communication sent without review is a governance risk, not just an inconvenience.
 
 ### The one-line answer for the pitch
 
-> *"Your resource data already exists. The problem is it's passive — nobody looks until it's too late. This makes it active: proactive alerts, cross-project matching, and trade-off reasoning grounded in the full project context."*
+> *"Copilot drafts the email you ask it to write. This drafts the email you should be writing — triggered automatically when a project escalates, assembled from live project data, and routed through approval before it reaches a sponsor."*
 
 ---
 
 ## Summary
 
-| Stream | What existing tools give you | What the EPAM platform adds |
-|---|---|---|
-| Meeting Intelligence | Better notes and action lists (Copilot) | RAID classification, system write-back, approval workflow, full audit trail — as an EPAM-governed process |
-| Status Reports | Data dashboards and narrative drafts (Power BI + Copilot) | Cross-source reconciliation, meeting-informed narrative, financial variance analysis, governed distribution |
-| Personal Task Management | Manual task lists and email flagging (Outlook / To Do) | Automatic cross-source consolidation, commitment extraction, PMO-context-aware prioritisation |
-| Strategic Resourcing | Passive records of who is where (spreadsheets / SharePoint) | Proactive gap alerts, multi-factor match reasoning, context-aware recommendations |
+| Stream | Wave | What existing tools give you | What the EPAM platform adds |
+|---|---|---|---|
+| Meeting Intelligence | 1 | Better notes and action lists (Copilot) | RAID classification, system write-back, structured minutes to all invitees, approval workflow, full audit trail |
+| Status Reports | 2 | Data dashboards and narrative drafts (Power BI + Copilot) | Cross-source reconciliation, meeting-informed narrative, financial variance analysis, governed distribution |
+| Governance Monitoring | 2 | Periodic manual reviews, document storage (SharePoint) | Continuous automated checking against governance standards, evidence-based gap detection, portfolio scorecard |
+| Stakeholder Communications | 2 | Email drafting tools that require manual prompting (Copilot) | Trigger-aware drafting from live project data, audience adaptation, approval-gated sending |
+
+**Wave 3 (planned):** Personal Task Management (automatic cross-source commitment consolidation) and Strategic Resourcing (proactive gap alerts with match recommendations) extend the platform further once the Wave 1–2 data foundations are in place.
 
 **The common thread:** existing tools produce output. The EPAM PMO AI Platform produces *governed outcomes* — with human approval built into every step that matters, delivered as an EPAM-owned, EPAM-hosted product that no Microsoft update can replace.
 
