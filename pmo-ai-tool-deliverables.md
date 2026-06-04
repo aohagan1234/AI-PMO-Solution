@@ -56,14 +56,14 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 | Work Stream | Volume (1-5) | Non-Det (1-5) | Score | Priority |
 |---|---|---|---|---|
 | Meeting Intelligence | 5 | 5 | 25 | ★ Wave 1 |
-| Personal Task Mgmt | 5 | 4 | 20 | ★ Wave 2 |
+| Personal Task Mgmt | 5 | 4 | 20 | Wave 3 |
 | Proactive Risk Monitoring | 4 | 5 | 20 | Wave 3 |
-| Governance Monitoring | 4 | 5 | 20 | Wave 3 *(high priority)* |
+| Governance Monitoring | 4 | 5 | 20 | ★ Wave 2 |
 | Status Reports | 4 | 4 | 16 | ★ Wave 2 |
 | Change Request Management | 4 | 4 | 16 | Wave 3 |
-| Stakeholder Communications | 4 | 4 | 16 | Wave 3 *(high priority)* |
+| Stakeholder Communications | 4 | 4 | 16 | ★ Wave 2 |
 | Lessons Learned | 3 | 5 | 15 | Wave 4 *(high priority)* |
-| Strategic Resourcing | 3 | 4 | 12 | ★ Wave 2 |
+| Strategic Resourcing | 3 | 4 | 12 | Wave 3 |
 | Dependency Tracking | 3 | 4 | 12 | Wave 4 |
 | Onboarding Access | 3 | 2 | 6 | RPA/Hybrid |
 
@@ -71,10 +71,10 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ### Recommended Four Work Streams (Initial Focus)
 
-1. **Meeting Intelligence** — RAID extraction, JIRA updates *(PRIMARY)*
+1. **Meeting Intelligence** — RAID extraction, JIRA updates, meeting notes to all invitees *(PRIMARY)*
 2. **Status Reports & Scorecards** — synthesis and generation
-3. **Personal Task Management** — email intelligence and reminders
-4. **Strategic Resourcing** — proactive gap detection and matching
+3. **Governance Monitoring** — continuous compliance checking and scorecard generation
+4. **Stakeholder Communications** — trigger-aware comms drafting and governed distribution
 
 ---
 
@@ -100,10 +100,10 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 | Stream | Description | Volume | Time | Stakeholder Quote |
 |---|---|---|---|---|
-| 1. Meeting Intelligence | RAID extraction, JIRA updates | ~80/mo | ~30 min/mtg | "Raw meeting notes," "action items," "RAID logs" |
+| 1. Meeting Intelligence | RAID extraction, JIRA updates, meeting notes to all invitees | ~80/mo | ~30 min/mtg | "Raw meeting notes," "action items," "RAID logs" |
 | 2. Status Reports | Synthesis, scorecards | ~50/mo | ~45 min/rpt | "Automate reports, automate scorecards" |
-| 3. Personal Task Mgmt | Email intelligence, reminders | Continuous | ~2 hrs/day | "Read emails, checklist, tick off" |
-| 4. Strategic Resourcing | Gap detection, skills matching | ~40/mo | ~60 min/case | "Resources finishing up, match it up, skills pool" |
+| 3. Governance Monitoring | Continuous compliance checking, scorecard generation | Weekly per project | ~2 hrs/manual review | "Inconsistent governance" — Problem Statement |
+| 4. Stakeholder Communications | Trigger-aware comms drafting, governed distribution | Event-driven | ~30–60 min/communication | "A key aspect of the PMO role is stakeholder management" |
 
 ---
 
@@ -111,7 +111,7 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 **Job to be Done**
 
-> JtD-MEETING: Transform raw meeting transcripts into structured RAID entries (Risks, Actions, Issues, Decisions) with owners and due dates, update JIRA and RAID logs, and generate follow-up — ensuring nothing falls through.
+> JtD-MEETING: Transform raw meeting transcripts into structured RAID entries (Risks, Actions, Issues, Decisions) with owners and due dates, update JIRA and RAID logs, and generate structured meeting notes (narrative summary + RAID action list at foot) distributed to all invited participants — ensuring nothing falls through.
 
 **Micro-Task Inventory**
 
@@ -125,7 +125,7 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 - **[1.4] RAID Classification & Confidence** — Classify as R/A/I/D, generate confidence score per item, flag low-confidence (<0.80) for human review, cross-reference existing entries.
 - **[1.5] JIRA Integration** — Match actions to existing tickets, identify new tickets needed, prepare updates, flag high-priority for human review.
 - **[1.6] RAID Log Maintenance** — Format per schema, set severity for R/I, set due dates for A, link D to source meeting, route ALL entries for human approval.
-- **[1.7] Follow-Up Generation** — Draft email with RAID items, owners/dates, key decisions, next meeting. Route for human review before send.
+- **[1.7] Meeting Notes Generation** — Draft structured meeting notes: narrative summary of key topics and decisions, followed by the full RAID action list at the foot (owners, due dates, classifications). Retrieve invitee list from meeting calendar invitation. Route for human review before distribution to all invited participants via Outlook.
 
 **Cognitive Dimensions**
 
@@ -140,11 +140,45 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 | 1.4 Classification | H | M | L | H | H |
 | 1.5 JIRA | M | M | M | M | H |
 | 1.6 RAID Log | M | M | M | M | H |
-| 1.7 Follow-Up | M | M | M | L | M |
+| 1.7 Meeting Notes | M | M | M | L | M |
 
 ---
 
-### Stream 4: Personal Task Management — Full Decomposition
+### Stream 3 (Wave 2): Governance Monitoring — Summary Decomposition
+
+**Job to be Done**
+
+> JtD-GOVERNANCE: Continuously assess every active project against configured governance standards, detect gaps by type and severity, generate per-project scorecards, and surface escalation drafts for PMO review — ensuring governance failures are caught before they reach audits or steering committees.
+
+**Micro-Tasks**
+
+- **[3.1] Standards Assessment** — Run weekly checks of each project against all applicable governance rules; retrieve evidence from SharePoint, RAID logs, and JIRA
+- **[3.2] Gap Detection** — Classify each gap by type (Missing Document, Overdue Approval, etc.) and severity (High/Medium/Low); suppress duplicates; age persistent gaps in place
+- **[3.3] Scorecard Generation** — Produce per-project and portfolio-level scorecards; calculate trend versus previous assessment
+- **[3.4] Escalation Drafting** — For High severity gaps, draft an escalation notice for PMO review; never send independently
+- **[3.5] Resolution Tracking** — Track gap status (Open, In Progress, Resolved, Dismissed); enforce mandatory reason for all dismissals; maintain full audit trail
+
+---
+
+### Stream 4 (Wave 2): Stakeholder Communications — Summary Decomposition
+
+**Job to be Done**
+
+> JtD-COMMS: Detect events that require a stakeholder communication, assemble the relevant project context automatically, and generate accurate audience-adapted draft communications for PMO review — ensuring the right message reaches the right person at the right moment, without the PMO having to start from scratch under pressure.
+
+**Micro-Tasks**
+
+- **[4.1] Trigger Detection** — Monitor for RAG changes, milestone slips, High severity RAID items, governance gap escalations, and milestone completions; apply configurable mandatory vs optional draft rules per client
+- **[4.2] Context Gathering** — Pull relevant context from Wave 1 RAID items and decisions, Wave 2 status report and RAG history, governance gap records, and JIRA
+- **[4.3] Draft Generation** — Generate accurate, source-traceable draft communication; confidence-flag any uncertain statements; never fabricate content
+- **[4.4] Audience Adaptation** — Generate separate versions for different recipient types (sponsor, programme director, project team, executive) from the same underlying context
+- **[4.5] Distribution** — Send approved communications via Outlook; log all drafts (sent, edited, and discarded) to audit trail
+
+---
+
+### Stream 5 (Wave 3): Personal Task Management — Full Decomposition
+
+> *Note: Personal Task Management was reassigned from Wave 2 to Wave 3. Governance Monitoring and Stakeholder Communications are now the Wave 2 priority workstreams alongside Status Reports. The decomposition below is retained for Wave 3 planning.*
 
 **Job to be Done**
 
@@ -225,8 +259,8 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 | Owner assign | L | L | M | H | H | Agent-Led + Oversight |
 | JIRA update | M | M | H | M | H | Agent-Led + Oversight |
 | RAID entry | M | M | M | M | H | Human-Led + Support |
-| Follow-up draft | M | L | M | M | H | Human-Led + Support |
-| Follow-up send | H | H | H | L | H | Human Only |
+| Meeting notes draft | M | L | M | M | H | Human-Led + Support |
+| Meeting notes send | H | H | H | L | H | Human Only |
 
 #### Stream 2: Status Reports
 
@@ -239,7 +273,29 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 | Exec summary | M | L | M | H | H | Human-Led + Support |
 | Distribution | H | H | H | L | L | Fully Agentic |
 
-#### Stream 3: Strategic Resourcing
+#### Stream 3: Governance Monitoring (Wave 2)
+
+| Task | Input | Det. | Tools | Except. | Risk | Archetype |
+|---|---|---|---|---|---|---|
+| Standards assessment | H | M | H | M | M | Agent-Led + Oversight |
+| Gap detection | M | M | M | M | H | Agent-Led + Oversight |
+| Severity classification | M | L | M | H | H | Human-Led + Support |
+| Scorecard generation | H | H | H | L | L | Fully Agentic |
+| Escalation drafting | M | L | M | M | H | Human-Led + Support |
+| Escalation send | H | H | H | L | H | Human Only |
+| Resolution tracking | H | H | H | L | L | Fully Agentic |
+
+#### Stream 4: Stakeholder Communications (Wave 2)
+
+| Task | Input | Det. | Tools | Except. | Risk | Archetype |
+|---|---|---|---|---|---|---|
+| Trigger detection | H | M | H | M | M | Agent-Led + Oversight |
+| Context gathering | H | H | H | L | L | Fully Agentic |
+| Draft generation | L | L | M | H | H | Human-Led + Support |
+| Audience adaptation | M | L | M | H | M | Human-Led + Support |
+| Communication send | H | H | H | L | H | Human Only |
+
+#### Stream 5: Strategic Resourcing (Wave 3)
 
 | Task | Input | Det. | Tools | Except. | Risk | Archetype |
 |---|---|---|---|---|---|---|
@@ -249,7 +305,7 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 | Match recommend | M | L | M | H | H | Human-Led + Support |
 | Resource commit | L | L | M | H | H | Human Only |
 
-#### Stream 4: Personal Task Management
+#### Stream 6: Personal Task Management (Wave 3)
 
 | Task | Input | Det. | Tools | Except. | Risk | Archetype |
 |---|---|---|---|---|---|---|
@@ -307,19 +363,19 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 
 ### Full Stream Scoring (All Workstreams)
 
-| Stream | Vol | Non-Det | Score | Justification |
-|---|---|---|---|---|
-| 1. Meeting Intelligence | 5 | 5 | 25 | Every meeting; RAID classification is judgment-intensive |
-| 2. Personal Task Mgmt | 5 | 4 | 20 | Daily; email comprehension requires reading intent |
-| 3. Proactive Risk Monitoring | 4 | 5 | 20 | Synthesising weak signals into risk assessments requires judgment |
-| 4. Governance Monitoring | 4 | 5 | 20 | Assessing compliance against governance standards requires judgment, not a checklist |
-| 5. Status Reports | 4 | 4 | 16 | High volume; narrative synthesis, financial analysis + audience adaptation |
-| 6. Change Request Mgmt | 4 | 4 | 16 | Frequent; multi-factor impact assessment is judgment-intensive |
-| 7. Stakeholder Communications | 4 | 4 | 16 | Frequent; tone, framing, and content selection require judgment |
-| 8. Lessons Learned | 3 | 5 | 15 | Lower volume; pattern recognition across projects is highly non-deterministic |
-| 9. Strategic Resourcing | 3 | 4 | 12 | Trade-off analysis; medium volume |
-| 10. Dependency Tracking | 3 | 4 | 12 | Cross-project impact assessment; medium volume |
-| 11. Onboarding Access | 3 | 2 | 6 | Mostly rule-based; RPA handles the majority |
+| Stream | Vol | Non-Det | Score | Wave | Justification |
+|---|---|---|---|---|---|
+| 1. Meeting Intelligence | 5 | 5 | 25 | ★ Wave 1 | Every meeting; RAID classification is judgment-intensive |
+| 2. Personal Task Mgmt | 5 | 4 | 20 | Wave 3 | Daily; email commitment extraction requires reading intent — deferred due to NLP complexity |
+| 3. Proactive Risk Monitoring | 4 | 5 | 20 | Wave 3 | Synthesising weak signals requires judgment — deferred pending data quality |
+| 4. Governance Monitoring | 4 | 5 | 20 | ★ Wave 2 | Evidence-based checks use Wave 1 RAID outputs; addresses directly-cited governance inconsistency |
+| 5. Status Reports | 4 | 4 | 16 | ★ Wave 2 | High volume; narrative synthesis, financial analysis + audience adaptation |
+| 6. Change Request Mgmt | 4 | 4 | 16 | Wave 3 | Frequent; multi-factor impact assessment is judgment-intensive |
+| 7. Stakeholder Communications | 4 | 4 | 16 | ★ Wave 2 | Builds on Wave 1 + 2 context; trigger-detection and drafting under pressure is high-pain |
+| 8. Lessons Learned | 3 | 5 | 15 | Wave 4 | Lower volume; pattern recognition across projects is highly non-deterministic |
+| 9. Strategic Resourcing | 3 | 4 | 12 | Wave 3 | Trade-off analysis; deferred pending data quality pre-condition |
+| 10. Dependency Tracking | 3 | 4 | 12 | Wave 4 | Cross-project impact assessment; medium volume |
+| 11. Onboarding Access | 3 | 2 | 6 | RPA | Mostly rule-based; RPA handles the majority |
 
 ---
 
@@ -360,19 +416,24 @@ NON-DETERMINISM
 |---|---|---|
 | Meeting Intelligence | 25 | Highest score; every meeting; foundation for all other streams; directly stakeholder-quoted |
 | Status Reports | 16 | Universal PMO pain; immediately demonstrable; self-contained — works without other streams; directly stakeholder-quoted |
-| Personal Task Management | 20 | Daily volume; every PMO relates to it personally; directly stakeholder-quoted |
-| Strategic Resourcing | 12 | Directly stakeholder-quoted; wrong resource decisions are expensive; no data-quality dependency risk |
+| Governance Monitoring | 20 | Wave 1 generates the RAID logs and decision records needed as evidence; addresses directly-cited governance inconsistency problem; no generic tool does this |
+| Stakeholder Communications | 16 | Builds directly on Wave 1 and Wave 2 outputs for context; drafting under pressure is a high-pain PMO task; stakeholder management explicitly cited |
 
-**All four are grounded in direct stakeholder quotes. None depend on messy pre-conditions to deliver value.**
+**All four are grounded in stakeholder evidence and build logically on each other.**
+
+**Why Personal Task Management and Strategic Resourcing moved to Wave 3:**
+
+| Stream | Score | Why Deferred to Wave 3 |
+|---|---|---|
+| Personal Task Management | 20 | Email commitment extraction (distinguishing hard vs soft commitments) requires complex NLP. Completion detection via sent folder monitoring is fragile. Better once Wave 1–2 RAID context is mature. |
+| Strategic Resourcing | 12 | Matching recommendations depend entirely on a clean, current skills inventory — a data quality pre-condition that is often not met on day one. Wave 3 once data foundations are in place. |
 
 **Why not the others in Waves 1–2?**
 
 | Stream | Score | Why Deferred |
 |---|---|---|
 | Proactive Risk Monitoring | 20 | Dependent on project data being clean and current. No stakeholder quote. Wave 3 once data foundations are established. |
-| Governance Monitoring | 20 | Requires Wave 1–2 data (RAID logs, meeting records, decisions) to assess governance compliance meaningfully. High priority Wave 3. |
 | Change Request Management | 16 | No stakeholder quote — identified through analysis. Requires change management process maturity. Wave 3. |
-| Stakeholder Communications | 16 | Extends Meeting Intelligence and Status Reports; benefits from those foundations being in place. High priority Wave 3. |
 | Lessons Learned | 15 | Needs a body of structured data from earlier streams. **High-priority Wave 4** — explicitly called out in Problem Statement as a core pain (knowledge loss when PMs rotate). |
 | Dependency Tracking | 12 | Requires a mature, connected data model across projects. Wave 4. |
 | Onboarding Access | 6 | Core work handled by RPA. AI adds value only at the exception margin. |
@@ -385,10 +446,12 @@ NON-DETERMINISM
 |---|---|---|
 | Meeting follow-up time freed | 40 hrs/mo × 50% × 12 × $75 | ~$18,000 |
 | Status report time freed | 50 reports/mo × 35 min saved × 12 × $75/hr | ~$26,250 |
-| Personal task management | 1 hr/day × 50% × 220 days × $75 | ~$8,250 |
-| Strategic resourcing (wrong placements avoided) | Qualitative — cost of one wrong hire/placement | TBD |
+| Governance monitoring (audit findings avoided) | Qualitative — one avoided audit finding or escalation failure is significant | TBD |
+| Stakeholder communications drafting | 20 comms/mo × 30 min saved × 12 × $75/hr | ~$4,500 est. |
+| Personal task management *(Wave 3)* | 1 hr/day × 50% × 220 days × $75 | ~$8,250 |
+| Strategic resourcing *(Wave 3)* | Qualitative — cost of one wrong placement | TBD |
 | Reduced dropped items / decision disputes | Qualitative | TBD |
-| **Quantifiable total** | | **~$52,500** |
+| **Quantifiable total (Wave 1–2)** | | **~$48,750** |
 
 ---
 
@@ -396,9 +459,9 @@ NON-DETERMINISM
 
 | Wave | Streams | Rationale |
 |---|---|---|
-| 1 | Meeting Intelligence | Highest score; builds the data and integration foundation |
-| 2 | Status Reports + Personal Task Management + Strategic Resourcing | All leverage Wave 1 outputs; all stakeholder-quoted; can run in parallel |
-| 3 | Governance Monitoring + Stakeholder Communications + Proactive Risk Monitoring + Change Request Management | Require Wave 1–2 data and integration foundations; governance and comms are high priority in this wave |
+| 1 | Meeting Intelligence | Highest score; builds the data and integration foundation all subsequent waves depend on |
+| 2 | Status Reports + Governance Monitoring + Stakeholder Communications | Leverage Wave 1 RAID and decision outputs; governance checks and comms drafting are most valuable once structured project data exists |
+| 3 | Personal Task Management + Strategic Resourcing + Proactive Risk Monitoring + Change Request Management | Require mature data foundations and richer AI context from Waves 1–2 |
 | 4 | Lessons Learned + Dependency Tracking | Require mature data across the full portfolio; Lessons Learned is high priority within this wave |
 
 ---
@@ -429,7 +492,7 @@ NON-DETERMINISM
 | RAID classification | R/A/I/D with confidence scores |
 | JIRA integration | Match/create/update tickets |
 | RAID log proposals | Entries for human approval |
-| Follow-up drafts | Email for human review |
+| Meeting notes drafts | Structured notes — narrative summary, decisions, and RAID action list at foot — for human review and distribution to all invited participants via Outlook |
 | Audit logging | Full traceability |
 
 #### Guardrails — Agent MUST NOT:
@@ -461,7 +524,7 @@ NON-DETERMINISM
 | Metric | Target |
 |---|---|
 | RAID entries without approval | 0 |
-| Emails sent without approval | 0 |
+| Meeting notes sent without approval | 0 |
 | Decisions logged incorrectly | 0 |
 
 ---
@@ -489,7 +552,7 @@ LEVEL 2 — AGENT PROPOSES → HUMAN APPROVES
   • Low-confidence Action entries (A)
   • JIRA ticket creation
   • JIRA status changes
-  • Follow-up email content
+  • Meeting notes content
 
 LEVEL 1 — HUMAN DECIDES → AGENT SUPPORTS
   • Ambiguous R vs I classification
@@ -497,7 +560,7 @@ LEVEL 1 — HUMAN DECIDES → AGENT SUPPORTS
   • Severity assessment
 
 LEVEL 0 — HUMAN ONLY
-  • Sending follow-up emails
+  • Sending meeting notes
   • Final RAID log entry creation
   • Resource commitments
 ```
@@ -592,7 +655,8 @@ Every action logs: `meeting_id`, `timestamp`, `event_type`, `raid_type` (R/A/I/D
 |---|---|---|
 | List meetings | GET | `/me/onlineMeetings` |
 | Get transcript | GET | `/me/onlineMeetings/{id}/transcripts` |
-| Get attendees | GET | `/me/onlineMeetings/{id}/attendanceReports` |
+| Get attendees (actual) | GET | `/me/onlineMeetings/{id}/attendanceReports` |
+| Get invitees (full list) | GET | `/me/events/{eventId}` (calendar event — participants array) |
 
 #### Jira (REST API)
 
@@ -696,7 +760,7 @@ Teams/Zoom ──► Agent [Ingest → Extract → Classify → Generate] ──
 | 6 | "If the agent extracted a RAID item incorrectly, how would you know? Consequence?" | Shapes accuracy requirements and review workflow strictness |
 | 7 | "What % of meetings produce JIRA-worthy actions vs informal tracking?" | Scales JIRA integration scope |
 | 8 | "What makes a JIRA ticket 'high-priority' where you'd want manual confirmation?" | Defines escalation criteria for autonomy matrix |
-| 9 | "Do follow-up emails go to everyone or action owners? Who approves before sending?" | Defines email scope and recipient rules |
+| 9 | "Meeting notes go to all invited participants — not just those who attended. Is the calendar invite list maintained accurately, and are there meeting types where this distribution should be restricted?" | Defines distribution scope, invitee list reliability, and any exclusions |
 | 10 | "If we build one thing first — summaries, RAID extraction, or JIRA updates — which gives the most value fastest?" | Forces prioritization; shapes Wave 1 scope |
 
 ---
@@ -729,13 +793,14 @@ Teams/Zoom ──► Agent [Ingest → Extract → Classify → Generate] ──
 | "Consequence if a Risk is identified but not logged?" | Risk tolerance |
 | "What's the RAID log schema? SharePoint, Excel, or other?" | Technical integration |
 
-#### D. Follow-Up & Communication
+#### D. Meeting Notes & Distribution
 
 | Question | Design Impact |
 |---|---|
-| "What goes in a good follow-up email? What tone?" | Email generation template |
-| "Meetings where follow-ups shouldn't be sent?" | Scope exclusions |
-| "If the agent drafted a follow-up with a mistake, when would you catch it?" | Review workflow timing |
+| "What goes in good meeting notes? What structure and tone do you expect?" | Meeting notes template and format |
+| "Are there meeting types where notes shouldn't be distributed to all invitees (e.g. 1:1s, HR discussions)?" | Scope exclusions and distribution rules |
+| "If the agent drafted notes with a mistake, when would you catch it?" | Review workflow timing |
+| "Is the calendar invite list always accurate — are there cases where people are invited but shouldn't receive notes?" | Distribution list reliability |
 
 #### E. Systems
 
@@ -780,8 +845,8 @@ AI agent for PMO meeting intelligence. Transforms meeting transcripts into struc
 > 🛑 **No RAID Entries Without Approval**
 > RAID logs are governance artifacts. All entries require explicit human approval. Violation = GOVERNANCE BREACH.
 
-> 🛑 **No Emails Without Approval**
-> Follow-up emails represent the organization. Violation = UNAUTHORIZED COMMUNICATION.
+> 🛑 **No Meeting Notes Without Approval**
+> Meeting notes are distributed to all invited participants and represent the organisation. Violation = UNAUTHORIZED COMMUNICATION.
 
 > 🛑 **No High-Priority JIRA Updates Without Confirmation**
 > High-priority = Priority Highest/High OR label "executive-visible." Violation = STAKEHOLDER TRUST BREACH.
@@ -834,7 +899,8 @@ Tag all unconfirmed statements: `[ASSUMPTION: High/Medium/Low]`
 - Match JIRA by: explicit ticket mention, project context, keywords
 - All JIRA status changes require human confirmation
 - All RAID entries require human approval — no exceptions
-- All emails require human approval — no exceptions
+- All meeting notes require human approval before distribution — no exceptions
+- Meeting notes distributed to full invitee list from calendar invite, not just transcript attendees
 - PII detection and masking in debug/trace logs
 
 ---
@@ -870,7 +936,7 @@ Tag all unconfirmed statements: `[ASSUMPTION: High/Medium/Low]`
 | Confidence thresholds | PMO Lead |
 | JIRA field mappings | PMO Lead |
 | RAID log schema | PMO Lead + Compliance |
-| Email template | PMO Lead |
+| Meeting notes template | PMO Lead |
 
 ---
 
