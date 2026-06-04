@@ -93,39 +93,28 @@ The PMO works through all 14 items across three meetings in about 10–15 minute
 
 ---
 
-### 2. Daily Task Checklist
+### 2. Governance Dashboard
 
-After clearing the review queue the PMO opens their task list. Every commitment they have made — across email, meetings, and JIRA — is consolidated into one prioritised list. They did not have to build this list. It built itself.
+After clearing the review queue the PMO opens the governance dashboard. Every project in the portfolio has been checked overnight against the defined governance standards — documentation in place, approvals obtained, gates passed. Gaps are surfaced automatically.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  My Tasks  │  Tuesday 3 June                  8 tasks   │
+│  Governance  │  Tuesday 3 June          3 projects flagged│
 ├──────────────────────────────────────────────────────────┤
-│  ⚠️  OVERDUE                                              │
-│  [ ]  Send budget update to James             2 Jun      │
-│       📧  Email commitment                               │
+│  🔴  Project Apex                        2 gaps           │
+│      ❌  Steering committee pack — 3 days overdue         │
+│      ❌  Change request CR-014 — no sign-off recorded     │
 ├──────────────────────────────────────────────────────────┤
-│  TODAY                                                   │
-│  [ ]  Update Project Apex RAID log            3 Jun      │
-│       🤝  Meeting action  ·  Project Apex SC             │
-│  [ ]  Review UAT test cases                  3 Jun      │
-│       📧  Email from Sarah OBrien                        │
-│  [ ]  Confirm resource for Platform Mig       3 Jun      │
-│       🔔  Resource alert  ·  gap in 27 days              │
-│  [ ]  Steering committee pack — Apex          5 Jun      │
-│       📋  Report due                                     │
+│  🟡  Platform Migration                  1 gap            │
+│      ⚠️  Risk review overdue — last conducted 6 weeks ago │
+├──────────────────────────────────────────────────────────┤
+│  ✅  Risk & Governance Weekly            All clear        │
 └──────────────────────────────────────────────────────────┘
 ```
 
-Each task shows where it came from:
-- 📧 Email commitment extracted from inbox
-- 🤝 Meeting action item from the review queue
-- 📋 JIRA ticket assigned to them
-- 🔔 Resource or governance alert
+The PMO clicks into Project Apex. Each gap shows what is missing, how long it has been outstanding, and what governance rule it breaks. They resolve each one — escalating to a sponsor, noting an action, or dismissing with a reason. Nothing is auto-remediated.
 
-They tick items off as they go. Completions are auto-detected where possible — if they send the email, the task closes itself. Reminders arrive via Teams or Outlook for anything approaching its due date.
-
-**What happens without the tool:** Two hours a day scanning inbox, re-reading meeting notes, and checking the JIRA board — then still missing things.
+**What happens without the tool:** Governance gaps accumulate silently until an audit or steering committee review surfaces them. By then it is too late to resolve without embarrassment or escalation.
 
 ---
 
@@ -161,34 +150,34 @@ Nothing is sent without approval. If a RAG status has deteriorated since last we
 
 ---
 
-### 4. Resource Gap Alert
+### 4. Stakeholder Communication Draft
 
-The alert on the home dashboard flagged a resource gap 27 days out on Platform Migration. The PMO clicks through:
+Project Apex moved to Red RAG status this morning — confirmed in the status report after the vendor risk was flagged in yesterday's meeting review. Before the PMO has written a single word, the tool has drafted an escalation notice for the programme director.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  Resource Gap  ·  Platform Migration  ·  27 days         │
-│  Senior PMO Analyst needed  ·  available from 30 June    │
+│  Draft Ready  ·  Escalation Notice  ·  Project Apex      │
+│  Triggered by: RAG moved Red  ·  3 Jun 2026             │
 ├──────────────────────────────────────────────────────────┤
-│  ⭐  David Walsh              Best overall fit           │
-│      ✅ Available 25 Jun                                  │
-│      ✅ 8 years PMO experience                           │
-│      ✅ Financial services sector background             │
-│      ⚠️  Currently on Project Apex — confirm release     │
+│  To: David Murphy (Programme Director)                   │
+│  Subject: Project Apex — Status change to Red            │
 │                                                          │
-│  2.  Emma Byrne               Good skills, later start   │
-│      ✅ Strong JIRA / Agile delivery background          │
-│      ⚠️  Not available until 14 July — 2 weeks late      │
-│      ⚠️  No prior financial services client experience   │
+│  Project Apex has moved to Red this week following       │
+│  vendor disclosure of a potential one-week delay to the  │
+│  15 June integration milestone. James Chen is engaging   │
+│  the vendor for a revised timeline by 5 June. Budget     │
+│  remains within tolerance (+2% variance).                │
 │                                                          │
-│  [Confirm David Walsh]    [Confirm Emma Byrne]           │
-│  [View full resource pool]  [Flag — no suitable match]   │
+│  No immediate action required from you at this stage —  │
+│  we will provide an update by 6 June.                    │
+│                                                          │
+│  [✏ Edit]    [✓ Send via Outlook]    [✗ Discard]        │
 └──────────────────────────────────────────────────────────┘
 ```
 
-The tool has already done the matching work — it knows who is available, what their skills are, and what the trade-offs are between candidates. The PMO reads the recommendation, makes a call, and confirms. The resource tracker updates automatically.
+The tool knows the project context, the risk that triggered the change, and who the programme director is. The PMO reads the draft, adjusts the tone if needed, and sends in under two minutes. The AI never sends independently.
 
-**What happens without the tool:** The gap is found with a week's notice when someone mentions it in a meeting. There is no recommendation ready. The PMO scrambles.
+**What happens without the tool:** The PMO notices the RAG change, starts an email from scratch, refers back to meeting notes for the detail, and tries to remember the sponsor's address. Ten minutes later, a rushed escalation goes out — or doesn't, because something else came up first.
 
 ---
 
@@ -200,9 +189,9 @@ The tool has already done the matching work — it knows who is available, what 
 | RAID log updated | Later that day, or never | Same day if reviewed promptly, or first thing next morning |
 | JIRA updated | Manual, often forgotten | Automatic on approval |
 | Follow-up emails sent | Written from scratch, often delayed | Draft ready, sent in 2 minutes |
-| Daily task list | Mental model across inbox, notes, and JIRA | One screen, already consolidated |
+| Governance gaps | Found in audits or escalations, too late | Every project checked weekly; gaps flagged automatically |
+| Escalation notices | Written from scratch under pressure | Drafted automatically on trigger; PMO reviews and sends |
 | Status report | 45 min to write, multiple manual versions | 10 min to review and approve |
-| Resource gap identified | Found too late, no plan ready | Flagged 4 weeks early with a recommendation |
 
 ---
 

@@ -57,11 +57,11 @@ AI agents extract and classify RAID items, propose JIRA updates, and draft follo
 **Status reporting (currently: ~45 min per report / ~50 reports/month)**
 AI agents pull data from JIRA, SharePoint, and MS Project; reconcile inconsistencies; analyse budget variance; and generate audience-adapted narratives for executives, steering groups, and project teams — from a single data source.
 
-**Personal task management (currently: ~2 hours/day)**
-AI agents consolidate commitments from email, meetings, and JIRA into a single daily task list, with PMO-context-aware prioritisation and automatic completion detection.
+**Governance monitoring (currently: inconsistent, audit-driven, often too late)**
+AI agents continuously check every project against defined governance standards — documentation, approvals, and gate criteria — generating per-project scorecards and flagging gaps before they become audit findings or escalations.
 
-**Strategic resourcing (currently: reactive, manual, frequently too late)**
-AI agents monitor resource end dates, detect upcoming gaps, and recommend best-fit placements with trade-off explanations — surfacing gaps weeks earlier than current manual processes allow.
+**Stakeholder communications (currently: written from scratch, under pressure, inconsistently)**
+AI agents detect trigger events (RAG changes, milestone slips, risk escalations) and draft tailored communications for the appropriate audience — escalation notices, steering committee briefings, milestone announcements — drawing on live project context from meeting intelligence and status reports.
 
 ---
 
@@ -70,7 +70,7 @@ AI agents monitor resource end dates, detect upcoming gaps, and recommend best-f
 The platform applies the following leading-edge technologies in a novel combination:
 
 - **Large Language Models (LLMs)** — applied to domain-specific PMO classification tasks (RAID taxonomy, commitment extraction, risk signal synthesis) rather than general-purpose generation
-- **Multi-agent orchestration** — a central orchestrator routes inputs to specialist sub-agents (Meeting Intelligence, Report Generation, Resourcing, Task Management), each with defined scope, confidence thresholds, and escalation rules
+- **Multi-agent orchestration** — a central orchestrator routes inputs to specialist sub-agents (Meeting Intelligence, Report Generation, Governance Monitoring, Stakeholder Communications), each with defined scope, confidence thresholds, and escalation rules
 - **Governed agentic AI** — a novel architectural pattern in which AI autonomy levels are explicitly defined and enforced (from fully agentic to human-only) at the workflow level, not as a post-hoc safety layer. This is particularly relevant in regulated financial services environments where AI governance is a compliance requirement
 - **Cross-source signal synthesis** — combining structured data (JIRA, MS Project, SharePoint) with unstructured data (meeting transcripts, emails) to identify emerging risks before they are raised by humans
 - **Microsoft Graph API + JIRA REST API integration** — enabling real-time, bidirectional data flows between AI outputs and enterprise project management systems
@@ -83,8 +83,8 @@ The project represents end-to-end digital process innovation across four core PM
 
 - **Meeting-to-governance pipeline:** Transforms an entirely manual, error-prone process (listening → noting → classifying → logging → updating) into an automated, governed digital workflow triggered by a meeting transcript
 - **Automated multi-audience reporting:** Eliminates manual data extraction and report formatting; a single data pull generates multiple audience-adapted outputs automatically
-- **Proactive resource intelligence:** Shifts resource management from reactive (manual checking of spreadsheets) to proactive (continuous monitoring with automated gap alerts)
-- **Unified task consolidation:** Replaces fragmented personal task management across email, calendar, and project tools with a single AI-consolidated daily task list
+- **Continuous governance assurance:** Replaces periodic, inconsistent manual governance reviews with automated, standards-based checking across the full project portfolio every week
+- **Event-driven stakeholder communications:** Replaces reactive, from-scratch drafting with AI-triggered communications that draw on live project context — drafted automatically when a RAG changes, a milestone slips, or a risk escalates
 
 The innovation is not incremental — it removes entire manual steps from PMO workflows rather than making existing steps marginally faster.
 
@@ -114,9 +114,11 @@ The innovation is not incremental — it removes entire manual steps from PMO wo
 |---|---|
 | Meeting Intelligence | ~$18,000 |
 | Status Reports | ~$26,250 |
-| Personal Task Management | ~$8,250 |
-| Strategic Resourcing | Qualitative (one avoided wrong placement = weeks of rework) |
-| **Total (quantifiable)** | **~$52,500 per PMO** |
+| Governance Monitoring | Qualitative (one avoided audit finding or governance failure = significant rework and reputational cost) |
+| Stakeholder Communications | ~$6,000 (est. — drafting time eliminated across escalations, steering packs, milestone notices) |
+| **Total (quantifiable)** | **~$50,250 per PMO** |
+| Personal Task Management *(Wave 3)* | ~$8,250 |
+| Strategic Resourcing *(Wave 3)* | Qualitative (one avoided wrong placement = weeks of rework) |
 
 At scale across a portfolio PMO function (10+ PMOs), the annual value exceeds $500,000 — making a subscription or licensing model commercially viable.
 
@@ -195,7 +197,7 @@ Survey data shows all respondents either agreed or strongly agreed that AI could
 
 ### Q16. Client value proposition ✅
 
-> *"We give your PMOs back the time they spend on things that shouldn't need them — meeting follow-up, status reporting, resource tracking, and personal task overload — so they can focus on stakeholder management, governance, and strategic decision support."*
+> *"We give your PMOs back the time they spend on things that shouldn't need them — meeting follow-up, status reporting, governance checking, and stakeholder communications — so they can focus on the decisions and relationships that only a PMO can handle."*
 
 Specific value delivered:
 
@@ -249,8 +251,8 @@ Delivery follows a phased wave approach:
 | Wave | Capabilities | Rationale |
 |---|---|---|
 | Wave 1 | Meeting Intelligence | Highest value; builds the data and integration foundation (Teams/Zoom, JIRA, SharePoint) |
-| Wave 2 | Status Reports + Personal Task Management + Strategic Resourcing | Leverage Wave 1 outputs; can run in parallel |
-| Wave 3 | Governance Monitoring + Stakeholder Communications + Proactive Risk Monitoring + Change Request Management | Require Wave 1–2 data foundations |
+| Wave 2 | Status Reports + Governance Monitoring + Stakeholder Communications | Leverage Wave 1 outputs; governance checks and comms drafting depend on structured project data Wave 1 generates |
+| Wave 3 | Personal Task Management + Strategic Resourcing + Proactive Risk Monitoring + Change Request Management | Require mature data foundations and richer AI context from Waves 1–2 |
 | Wave 4 | Lessons Learned + Dependency Tracking | Require mature data across the full portfolio |
 
 Each wave will include: requirements validation with client PMOs, agent development and testing against labelled sample data, human-in-the-loop integration, and PMO training. Accuracy targets (≥85% RAID classification, ≥95% capture rate) will be validated before each wave is released to production.

@@ -136,10 +136,10 @@ The following are out of scope for this document. Confirmed future waves are not
 | Item | Status |
 |---|---|
 | Status report generation and distribution | Wave 2 — confirmed |
-| Personal task management and email scanning | Wave 2 — confirmed |
-| Strategic resourcing gap detection and matching | Wave 2 — confirmed |
-| Governance monitoring and compliance checking | Wave 3 — confirmed |
-| Stakeholder communications drafting | Wave 3 — confirmed |
+| Governance monitoring and compliance checking | Wave 2 — confirmed |
+| Stakeholder communications drafting | Wave 2 — confirmed |
+| Personal task management and email scanning | Wave 3 — confirmed |
+| Strategic resourcing gap detection and matching | Wave 3 — confirmed |
 | Proactive risk monitoring from project data signals | Wave 3 — confirmed |
 | Change request management and impact assessment | Wave 3 — confirmed |
 | Lessons learned and knowledge capture | Wave 4 — confirmed, high priority |
