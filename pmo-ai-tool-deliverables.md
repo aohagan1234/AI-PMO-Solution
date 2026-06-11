@@ -56,21 +56,24 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 | Proactive Risk Monitoring | 4 | 5 | 20 | Wave 3 |
 | Governance Monitoring | 4 | 5 | 20 | ★ Wave 2 |
 | Status Reports | 4 | 4 | 16 | ★ Wave 2 |
-| Change Request Management | 4 | 4 | 16 | Wave 3 |
+| **Change Request Management** | **4** | **4** | **16** | **★ Wave 2** |
 | Stakeholder Communications | 4 | 4 | 16 | ★ Wave 2 |
 | Lessons Learned | 3 | 5 | 15 | Wave 4 *(high priority)* |
 | Strategic Resourcing | 3 | 4 | 12 | Wave 3 |
+| Benefits Tracking | 3 | 4 | 12 | Wave 3 *(new)* |
 | Dependency Tracking | 3 | 4 | 12 | Wave 4 |
+| Project Mobilisation / PID | 2 | 3 | — | Wave 4 *(new)* |
 | Onboarding Access | 3 | 2 | 6 | RPA/Hybrid |
 
 ---
 
-### Recommended Four Work Streams (Initial Focus)
+### Recommended Five Work Streams (Initial Focus)
 
 1. **Meeting Intelligence** — RAID extraction, JIRA updates, meeting notes to all invitees *(PRIMARY)*
-2. **Status Reports & Scorecards** — synthesis and generation
+2. **Status Reports & Scorecards** — synthesis, milestone health monitoring, and generation
 3. **Governance Monitoring** — continuous compliance checking and scorecard generation
 4. **Stakeholder Communications** — trigger-aware comms drafting and governed distribution
+5. **Change Request Management** — impact assessment drafting, approval routing, and status tracking
 
 ---
 
@@ -291,7 +294,19 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 | Audience adaptation | M | L | M | H | M | Human-Led + Support |
 | Communication send | H | H | H | L | H | Human Only |
 
-#### Stream 5: Strategic Resourcing (Wave 3)
+#### Stream 5: Change Request Management
+
+| Task | Input | Det. | Tools | Except. | Risk | Archetype |
+|---|---|---|---|---|---|---|
+| Trigger detection | H | M | H | M | M | Agent-Led + Oversight |
+| Impact assessment draft | L | L | M | H | H | Human-Led + Support |
+| Approval routing | H | H | H | L | M | Agent-Led + Oversight |
+| Status tracking | H | H | H | L | L | Fully Agentic |
+| RAID update proposal | M | L | M | H | H | Human-Led + Support |
+| Closure notification draft | L | L | M | H | M | Human-Led + Support |
+| Communication send | H | H | H | L | H | Human Only |
+
+#### Stream 6: Strategic Resourcing (Wave 3)
 
 | Task | Input | Det. | Tools | Except. | Risk | Archetype |
 |---|---|---|---|---|---|---|
@@ -301,7 +316,7 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 | Match recommend | M | L | M | H | H | Human-Led + Support |
 | Resource commit | L | L | M | H | H | Human Only |
 
-#### Stream 6: Personal Task Management (Wave 3)
+#### Stream 7: Personal Task Management (Wave 3)
 
 | Task | Input | Det. | Tools | Except. | Risk | Archetype |
 |---|---|---|---|---|---|---|
@@ -366,12 +381,14 @@ RAID classification requires reasoning (not rules). Patterns exist. APIs availab
 | 3. Proactive Risk Monitoring | 4 | 5 | 20 | Wave 3 | Synthesising weak signals requires judgment — deferred pending data quality |
 | 4. Governance Monitoring | 4 | 5 | 20 | ★ Wave 2 | Evidence-based checks use Wave 1 RAID outputs; addresses directly-cited governance inconsistency |
 | 5. Status Reports | 4 | 4 | 16 | ★ Wave 2 | High volume; narrative synthesis, financial analysis + audience adaptation |
-| 6. Change Request Mgmt | 4 | 4 | 16 | Wave 3 | Frequent; multi-factor impact assessment is judgment-intensive |
+| 6. **Change Request Mgmt** | **4** | **4** | **16** | **★ Wave 2** | **Present in 100% of PMO role specifications reviewed; same score as Status Reports and Stakeholder Comms; original deferral reason (no stakeholder quote) negated by job spec evidence** |
 | 7. Stakeholder Communications | 4 | 4 | 16 | ★ Wave 2 | Builds on Wave 1 + 2 context; trigger-detection and drafting under pressure is high-pain |
 | 8. Lessons Learned | 3 | 5 | 15 | Wave 4 | Lower volume; pattern recognition across projects is highly non-deterministic |
-| 9. Strategic Resourcing | 3 | 4 | 12 | Wave 3 | Trade-off analysis; deferred pending data quality pre-condition |
-| 10. Dependency Tracking | 3 | 4 | 12 | Wave 4 | Cross-project impact assessment; medium volume |
-| 11. Onboarding Access | 3 | 2 | 6 | RPA | Mostly rule-based; RPA handles the majority |
+| 9. Strategic Resourcing | 3 | 4 | 12 | Wave 3 | Trade-off analysis; deferred pending data quality pre-condition; split into admin (RPA-adjacent) and strategic matching components |
+| 10. Benefits Tracking | 3 | 4 | 12 | Wave 3 | Present in 83% of PMO role specifications; depends on structured project data from earlier waves |
+| 11. Dependency Tracking | 3 | 4 | 12 | Wave 4 | Cross-project impact assessment; medium volume |
+| 12. Project Mobilisation / PID | 2 | 3 | — | Wave 4 | PID in 67% of specs; Project Drive org in 100%; one-off per project; templates from earlier waves required |
+| 13. Onboarding Access | 3 | 2 | 6 | RPA | Mostly rule-based; RPA handles the majority |
 
 ---
 
@@ -404,9 +421,9 @@ NON-DETERMINISM
 
 ---
 
-### Top 4 Selected — Reasoning
+### Top 5 Selected — Reasoning
 
-**Why these four?**
+**Why these five?**
 
 | Stream | Score | Reason for Selection |
 |---|---|---|
@@ -414,24 +431,26 @@ NON-DETERMINISM
 | Status Reports | 16 | Universal PMO pain; immediately demonstrable; self-contained — works without other streams; directly stakeholder-quoted |
 | Governance Monitoring | 20 | Wave 1 generates the RAID logs and decision records needed as evidence; addresses directly-cited governance inconsistency problem; no generic tool does this |
 | Stakeholder Communications | 16 | Builds directly on Wave 1 and Wave 2 outputs for context; drafting under pressure is a high-pain PMO task; stakeholder management explicitly cited |
+| Change Request Management | 16 | Present in 100% of real PMO role specifications reviewed (6/6 AIB roles); same score as Status Reports and Stakeholder Communications; original deferral reason (no stakeholder quote) was negated by job spec evidence confirming it is a core daily PMO task, not an occasional one |
 
-**All four are grounded in stakeholder evidence and build logically on each other.**
+**All five are grounded in direct evidence and build logically on each other.**
 
-**Why Personal Task Management and Strategic Resourcing moved to Wave 3:**
+**Why Personal Task Management and Strategic Resourcing remain in Wave 3:**
 
 | Stream | Score | Why Deferred to Wave 3 |
 |---|---|---|
 | Personal Task Management | 20 | Email commitment extraction (distinguishing hard vs soft commitments) requires complex NLP. Completion detection via sent folder monitoring is fragile. Better once Wave 1–2 RAID context is mature. |
-| Strategic Resourcing | 12 | Matching recommendations depend entirely on a clean, current skills inventory — a data quality pre-condition that is often not met on day one. Wave 3 once data foundations are in place. |
+| Strategic Resourcing | 12 | Matching recommendations depend entirely on a clean, current skills inventory — a data quality pre-condition that is often not met on day one. Wave 3 once data foundations are in place. Routine resource admin (onboarding/offboarding tracking) is a separate, simpler component that may be addressed via RPA/Hybrid earlier. |
+| Benefits Tracking | 12 | Requires structured benefits baseline data from PIDs and a body of project records from earlier waves. Wave 3 once data quality is established. |
 
 **Why not the others in Waves 1–2?**
 
 | Stream | Score | Why Deferred |
 |---|---|---|
 | Proactive Risk Monitoring | 20 | Dependent on project data being clean and current. No stakeholder quote. Wave 3 once data foundations are established. |
-| Change Request Management | 16 | No stakeholder quote — identified through analysis. Requires change management process maturity. Wave 3. |
 | Lessons Learned | 15 | Needs a body of structured data from earlier streams. **High-priority Wave 4** — explicitly called out in Problem Statement as a core pain (knowledge loss when PMs rotate). |
 | Dependency Tracking | 12 | Requires a mature, connected data model across projects. Wave 4. |
+| Project Mobilisation / PID | — | One-off per project; meaningful quality depends on established templates from earlier waves. Wave 4. |
 | Onboarding Access | 6 | Core work handled by RPA. AI adds value only at the exception margin. |
 
 ---
@@ -444,10 +463,11 @@ NON-DETERMINISM
 | Status report time freed | 50 reports/mo × 35 min saved × 12 × $75/hr | ~$26,250 |
 | Governance monitoring (audit findings avoided) | Qualitative — one avoided audit finding or escalation failure is significant | TBD |
 | Stakeholder communications drafting | 20 comms/mo × 30 min saved × 12 × $75/hr | ~$4,500 est. |
+| Change request impact assessment | 10 CRs/mo × 40 min saved × 12 × $75/hr | ~$6,000 est. |
 | Personal task management *(Wave 3)* | 1 hr/day × 50% × 220 days × $75 | ~$8,250 |
 | Strategic resourcing *(Wave 3)* | Qualitative — cost of one wrong placement | TBD |
 | Reduced dropped items / decision disputes | Qualitative | TBD |
-| **Quantifiable total (Wave 1–2)** | | **~$48,750** |
+| **Quantifiable total (Wave 1–2)** | | **~$54,750** |
 
 ---
 
@@ -456,9 +476,9 @@ NON-DETERMINISM
 | Wave | Streams | Rationale |
 |---|---|---|
 | 1 | Meeting Intelligence | Highest score; builds the data and integration foundation all subsequent waves depend on |
-| 2 | Status Reports + Governance Monitoring + Stakeholder Communications | Leverage Wave 1 RAID and decision outputs; governance checks and comms drafting are most valuable once structured project data exists |
-| 3 | Personal Task Management + Strategic Resourcing + Proactive Risk Monitoring + Change Request Management | Require mature data foundations and richer AI context from Waves 1–2 |
-| 4 | Lessons Learned + Dependency Tracking | Require mature data across the full portfolio; Lessons Learned is high priority within this wave |
+| 2 | Status Reports + Governance Monitoring + Stakeholder Communications + Change Request Management | Leverage Wave 1 RAID and decision outputs; governance checks, comms drafting, and change impact assessment are most valuable once structured project data exists; Change Request Management confirmed as universal PMO task (100% of role specifications) |
+| 3 | Personal Task Management + Strategic Resourcing + Proactive Risk Monitoring + Benefits Tracking | Require mature data foundations and richer AI context from Waves 1–2 |
+| 4 | Lessons Learned + Dependency Tracking + Project Mobilisation / PID | Require mature data across the full portfolio; Lessons Learned is high priority within this wave |
 
 ---
 

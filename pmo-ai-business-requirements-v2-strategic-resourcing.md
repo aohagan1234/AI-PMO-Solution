@@ -1,11 +1,15 @@
-# PMO AI Tool — Business Requirements: Strategic Resourcing (Wave 2)
+# PMO AI Tool — Business Requirements: Strategic Resourcing (Wave 3)
 
-**Scope:** Strategic Resourcing
-**Version:** v0.1 — draft for review
+**Scope:** Strategic Resourcing — Strategic Matching Component
+**Version:** v0.2 — updated 2026-06-11: workstream reassigned from Wave 2 to Wave 3; scope split clarified (see note below)
 **Status:** Pending stakeholder validation
 **Depends on:** Wave 1 (Meeting Intelligence) outputs — resource-related decisions and RAID items from meetings provide context for resourcing recommendations
 
-> This document covers Wave 2 requirements for the Strategic Resourcing workstream only. See `pmo-ai-business-requirements-v1.md` for Wave 1 (Meeting Intelligence).
+> **Wave assignment note:** Strategic Resourcing was previously labelled Wave 2 in earlier versions of this document. It has been reassigned to Wave 3. Wave 2 now comprises: Status Reports, Governance Monitoring, Stakeholder Communications, and Change Request Management. Strategic Resourcing is deferred to Wave 3 because matching recommendations depend on a clean, current skills inventory and resource availability data — a data quality pre-condition not reliably met on day one.
+
+> **Scope split note:** Resource Maintenance/Management in PMO roles covers two distinct activities. This document covers the **strategic matching component** only (gap detection, skills matching, forward planning — the judgment-intensive work). **Routine resource admin** (onboarding, offboarding, system access tracking, contract management) is rules-based and closer to an RPA/Hybrid workflow — it is not covered here and should be addressed through the Onboarding Access workstream or a dedicated resource admin automation track.
+
+> This document covers Wave 3 requirements for the Strategic Resourcing (matching) workstream only. See `pmo-ai-business-requirements-v1.md` for Wave 1 (Meeting Intelligence).
 >
 > **Platform note:** The PMO AI Platform is an **EPAM-built, browser-based web application** hosted on Azure and managed by EPAM. SharePoint, MS Project, and HR systems are data integrations only — the platform reads from them and writes approved outputs back. The resource alert and approval interface is accessed via browser.
 
@@ -102,7 +106,7 @@
 
 ---
 
-## 9. Out of Scope (Wave 2 — Strategic Resourcing)
+## 9. Out of Scope (Wave 3 — Strategic Resourcing)
 
 | Item | Status |
 |---|---|

@@ -53,7 +53,7 @@ The next morning — or whenever they next open the tool — the first thing the
 
 ---
 
-## The Four Core Interactions
+## The Five Core Interactions
 
 ---
 
@@ -181,6 +181,44 @@ The tool knows the project context, the risk that triggered the change, and who 
 
 ---
 
+### 5. Change Request Review
+
+A change request has come in on Project Apex — scope extension to cover an additional workstream. Before the PMO has looked at it, the tool has cross-referenced the project plan, RAID log, and financial position to assemble a draft impact assessment.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Change Request  ·  CR-017  ·  Project Apex              │
+│  Received: 10 Jun 2026  ·  Submitted by: James Chen      │
+├──────────────────────────────────────────────────────────┤
+│  Request: Add Workstream 4 — Data Migration              │
+│                                                          │
+│  AI Impact Assessment                                    │
+│                                                          │
+│  Schedule:  🔴 HIGH IMPACT                               │
+│    Integration milestone at risk — current plan has no   │
+│    float. Adding scope without extending the deadline    │
+│    creates a direct conflict with the 15 Jun milestone.  │
+│                                                          │
+│  Budget:    🟡 MEDIUM IMPACT                             │
+│    Estimated +£45K based on similar workstream size.     │
+│    Budget reserve at +2% — will require CCD approval.   │
+│                                                          │
+│  Risk:      Open risk R-003 (vendor capacity) is         │
+│    directly relevant — adding scope to an already        │
+│    constrained delivery window increases likelihood.     │
+│                                                          │
+│  Proposed approver: Programme Director (per CR policy)  │
+│                                                          │
+│  [✏ Edit Assessment]   [→ Route for Approval]   [✗ Reject]│
+└──────────────────────────────────────────────────────────┘
+```
+
+The PMO reads the assessment, adds a sentence about the timeline risk, and routes it to the programme director for approval in under three minutes.
+
+**What happens without the tool:** The PMO manually looks up the project plan, checks the RAID log for open risks, refers to the financial summary, writes up the impact assessment — typically 30–60 minutes of cross-referencing before the change can even be reviewed.
+
+---
+
 ## What the Morning Looks Like
 
 | Task | Without the Tool | With the Tool |
@@ -189,8 +227,11 @@ The tool knows the project context, the risk that triggered the change, and who 
 | RAID log updated | Later that day, or never | Same day if reviewed promptly, or first thing next morning |
 | JIRA updated | Manual, often forgotten | Automatic on approval |
 | Meeting notes sent to all invitees | Written from scratch, often delayed, often sent only to attendees | Draft ready, sent to all invited participants in 2 minutes |
+| Milestone slippage | Spotted at report time, often too late | Flagged continuously; at-risk milestones surfaced before the reporting cycle |
 | Governance gaps | Found in audits or escalations, too late | Every project checked weekly; gaps flagged automatically |
+| Change request impact assessment | 30–60 min cross-referencing plan, RAID, and financials | AI-assembled assessment ready to review in under 5 minutes |
 | Escalation notices | Written from scratch under pressure | Drafted automatically on trigger; PMO reviews and sends |
+| Steering committee packs | Assembled manually from multiple sources each cycle | Draft generated from current project data; ready to review |
 | Status report | 45 min to write, multiple manual versions | 10 min to review and approve |
 
 ---
@@ -205,4 +246,4 @@ What changes is everything around those decisions. The tool handles the gatherin
 
 ---
 
-*Version: v1.0 | Relates to: pmo-ai-workflows-explained.md, pmo-ai-business-requirements-v1.md*
+*Version: v1.1 | Updated: 2026-06-11 — Change Request Review added as Interaction 5; morning summary table updated with milestone monitoring, change requests, and steering packs. | Relates to: pmo-ai-workflows-explained.md, pmo-ai-business-requirements-v1.md*

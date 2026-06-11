@@ -1,7 +1,7 @@
 # PMO AI Tool — Business Requirements: Status Reports & Scorecards (Wave 2)
 
 **Scope:** Status Reports & Scorecards
-**Version:** v0.1 — draft for review
+**Version:** v0.2 — updated 2026-06-11: Section 3 (Milestone Health Monitoring) added with requirements BR-SR-08a through BR-SR-08e; remaining sections renumbered
 **Status:** Pending stakeholder validation
 **Depends on:** Wave 1 (Meeting Intelligence) outputs — RAID items, decisions, and meeting summaries feed into report narratives
 
@@ -33,7 +33,19 @@
 
 ---
 
-## 3. RAG Status Calculation
+## 3. Milestone Health Monitoring
+
+| # | Requirement | Why |
+|---|---|---|
+| BR-SR-08a | The system must monitor all active milestones across the portfolio on a continuous basis and flag any milestone at risk of slipping *before* the next scheduled reporting cycle. | Plan/Milestone Maintenance is a core ongoing PMO task confirmed in 100% of PMO role specifications reviewed. Identifying slippage only at report-generation time is too late — the PMO needs early warning to take preventive action. |
+| BR-SR-08b | A milestone must be flagged as at risk when any of the following conditions are met: the milestone is overdue, the milestone is due within a configurable near-term window (default: 14 days) and has no confirmed completion signal, or a dependency of the milestone has slipped. | Different types of at-risk conditions require different PMO responses. An overdue milestone needs immediate action; a milestone due in two weeks with a blocked dependency needs monitoring. The system must distinguish between these. |
+| BR-SR-08c | When a milestone is flagged as at risk, the system must notify the PMO with: the milestone name, project, current status, original due date, flagged risk reason, and the action owner. | A notification without this context requires the PMO to look up the milestone before deciding what to do. All relevant information must be in the notification. |
+| BR-SR-08d | Milestone health status must be included in the project's status report and RAG calculation as a distinct dimension. | Milestone performance is a primary driver of schedule RAG. It must be visible as its own dimension in the status report, not buried in a general schedule field. |
+| BR-SR-08e | The system must not generate duplicate milestone risk alerts for the same milestone — a flagged milestone must persist as a single record until resolved or dismissed by the PMO. | Repeated alerts for the same milestone create noise and desensitise the PMO. One persistent flag per at-risk milestone, aged in place, is more useful. |
+
+---
+
+## 4. RAG Status Calculation
 
 | # | Requirement | Why |
 |---|---|---|
@@ -44,7 +56,7 @@
 
 ---
 
-## 4. Cross-Source Data Reconciliation
+## 5. Cross-Source Data Reconciliation
 
 | # | Requirement | Why |
 |---|---|---|
@@ -54,7 +66,7 @@
 
 ---
 
-## 5. Narrative Generation
+## 6. Narrative Generation
 
 | # | Requirement | Why |
 |---|---|---|
@@ -65,7 +77,7 @@
 
 ---
 
-## 6. Audience-Adapted Output
+## 7. Audience-Adapted Output
 
 | # | Requirement | Why |
 |---|---|---|
@@ -76,7 +88,7 @@
 
 ---
 
-## 7. Approval & Distribution
+## 8. Approval & Distribution
 
 | # | Requirement | Why |
 |---|---|---|
@@ -87,7 +99,7 @@
 
 ---
 
-## 8. Integrations
+## 9. Integrations
 
 > These are data integrations — the EPAM platform connects to client tools as data sources. JIRA, SharePoint, MS Project, and Outlook are not the platform; they are systems the platform reads from and writes approved outputs to.
 
@@ -102,7 +114,7 @@
 
 ---
 
-## 9. Accuracy & Performance Targets
+## 10. Accuracy & Performance Targets
 
 | # | Requirement | Target | Why |
 |---|---|---|---|
@@ -114,7 +126,7 @@
 
 ---
 
-## 10. Governance & Compliance
+## 11. Governance & Compliance
 
 | # | Requirement | Why |
 |---|---|---|
@@ -126,7 +138,7 @@
 
 ---
 
-## 11. Out of Scope (Wave 2 — Status Reports)
+## 12. Out of Scope (Wave 2 — Status Reports)
 
 | Item | Status |
 |---|---|
@@ -137,7 +149,7 @@
 
 ---
 
-## Open Items — Requires Stakeholder Input
+## 13. Open Items — Requires Stakeholder Input
 
 | # | Question | Impact if Unresolved |
 |---|---|---|

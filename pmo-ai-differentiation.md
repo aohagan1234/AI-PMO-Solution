@@ -193,11 +193,12 @@ No communication is sent without explicit PMO approval. The draft is presented f
 | Stream | Wave | What existing tools give you | What the EPAM platform adds |
 |---|---|---|---|
 | Meeting Intelligence | 1 | Better notes and action lists (Copilot) | RAID classification, system write-back, structured minutes to all invitees, approval workflow, full audit trail |
-| Status Reports | 2 | Data dashboards and narrative drafts (Power BI + Copilot) | Cross-source reconciliation, meeting-informed narrative, financial variance analysis, governed distribution |
+| Status Reports | 2 | Data dashboards and narrative drafts (Power BI + Copilot) | Cross-source reconciliation, proactive milestone health monitoring, meeting-informed narrative, financial variance analysis, governed distribution |
 | Governance Monitoring | 2 | Periodic manual reviews, document storage (SharePoint) | Continuous automated checking against governance standards, evidence-based gap detection, portfolio scorecard |
-| Stakeholder Communications | 2 | Email drafting tools that require manual prompting (Copilot) | Trigger-aware drafting from live project data, audience adaptation, approval-gated sending |
+| Stakeholder Communications | 2 | Email drafting tools that require manual prompting (Copilot) | Trigger-aware drafting from live project data, audience adaptation, steering committee pack generation, approval-gated sending |
+| Change Request Management | 2 | Impact assessment done manually across JIRA, plan, and RAID log | AI-assembled impact assessment from live project data, approval routing, status tracking, RAID update proposals — all governed and human-approved |
 
-**Wave 3 (planned):** Personal Task Management (automatic cross-source commitment consolidation) and Strategic Resourcing (proactive gap alerts with match recommendations) extend the platform further once the Wave 1–2 data foundations are in place.
+**Wave 3 (planned):** Personal Task Management (automatic cross-source commitment consolidation), Strategic Resourcing (proactive gap alerts with match recommendations), and Benefits Tracking (benefits register monitoring and realisation reporting) extend the platform further once the Wave 1–2 data foundations are in place.
 
 **The common thread:** existing tools produce output. The EPAM PMO AI Platform produces *governed outcomes* — with human approval built into every step that matters, delivered as an EPAM-owned, EPAM-hosted product that no Microsoft update can replace.
 
@@ -239,4 +240,4 @@ This is an important nuance for the pitch: the tool is positioned as freeing PMO
 
 ---
 
-*Version: v1.1 | Relates to: pmo-ai-workflows-explained.md, pmo-ai-tool-deliverables.md*
+*Version: v1.2 | Updated: 2026-06-11 — Change Request Management added to Wave 2; steering committee packs confirmed in Stakeholder Communications scope; Benefits Tracking added to Wave 3 summary; milestone health monitoring added to Status Reports description. | Relates to: pmo-ai-workflows-explained.md, pmo-ai-tool-deliverables.md*

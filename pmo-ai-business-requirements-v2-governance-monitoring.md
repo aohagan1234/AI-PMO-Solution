@@ -1,7 +1,7 @@
 # PMO AI Tool — Business Requirements: Governance Monitoring (Wave 2)
 
 **Scope:** Governance Monitoring
-**Version:** v0.1 — draft for review
+**Version:** v0.2 — updated 2026-06-11: regulatory compliance checking reframed as client onboarding config (not Wave 3+ deferral); OI-GM-05 updated to reflect regulatory programmes in immediate pipeline
 **Status:** Pending stakeholder validation
 **Depends on:** Wave 1 (Meeting Intelligence) outputs — RAID logs, decision records, and meeting summaries are the primary evidence source for governance checks
 
@@ -126,7 +126,7 @@
 | Item | Status |
 |---|---|
 | Automated gap remediation — the system resolving governance gaps without PMO action | Out of scope permanently — all resolution requires human action |
-| Regulatory compliance checking (e.g. DORA, MiFID II specific rule sets) | Wave 3+ — requires specialist legal/compliance input to define rules correctly |
+| Regulatory compliance checking (e.g. DORA, MiFID II, FCA-specific rule sets) | The governance check *engine* is in scope for Wave 2. Defining the specific regulatory rule sets requires specialist legal/compliance input and must be completed as a client onboarding activity before Wave 2 goes live — not deferred until Wave 3. EPAM will work with each client's compliance team to configure rules at onboarding. Default configuration will not include regulatory rules until confirmed by the client. |
 | Real-time (sub-hourly) governance monitoring | Out of scope for Wave 2 — weekly scheduled assessment is sufficient |
 | External audit portal or read-only auditor access | Future consideration — out of scope for Wave 2 |
 | Governance monitoring for non-project processes (e.g. team or operational governance) | Out of scope — this workstream covers project governance only |
@@ -141,7 +141,7 @@
 | OI-GM-02 | What is the authoritative evidence source for each governance check — SharePoint only, or also JIRA, email, or manual confirmation? | Evidence source determines whether a check can be automated or requires PMO input |
 | OI-GM-03 | Who has authority to define and update governance standards — PMO Lead, client governance team, or both? | Determines the approval process for standard configuration and changes |
 | OI-GM-04 | What is the current governance review cadence in practice — weekly, per milestone, or ad hoc? | Determines the default assessment schedule |
-| OI-GM-05 | Are there client-specific regulatory requirements (e.g. DORA, MiFID II, FCA) that must be reflected in governance standards? | Regulatory requirements may require specialist input and may affect liability if incorrectly implemented |
+| OI-GM-05 | What are the client-specific regulatory requirements (e.g. DORA, MiFID II, FCA, AIB Change Methodology) that must be reflected in governance standards, and who in the client compliance team will define and sign off the rule configurations? | Regulatory rule definitions must be confirmed by the client compliance team as a Wave 2 onboarding deliverable. Three of the first six AIB roles reviewed are in regulated programmes (IRB, AML, SEPA) with hard compliance deadlines — regulatory governance is a live Wave 2 requirement, not a Wave 3+ consideration. |
 | OI-GM-06 | Should governance scorecards be automatically distributed to sponsors or steering committees, or only available on demand? | Affects the distribution workflow design — automated scorecard distribution has different implications from distributing status reports |
 
 ---

@@ -49,19 +49,22 @@ The platform will develop an orchestrator-agent architecture that routes unstruc
 
 ### Q4. Product or process development and improvements ✅
 
-The platform directly improves the following PMO processes, each validated through surveys and interviews with PMOs at financial services clients:
+The platform directly improves the following PMO processes, each validated through surveys and interviews with PMOs at financial services clients and confirmed through review of real PMO role specifications from AIB:
 
 **Meeting follow-up (currently: 20–30 min per meeting / ~80 meetings/month)**
 AI agents extract and classify RAID items, propose JIRA updates, and draft follow-up emails. Follow-up time reduces from ~30 minutes to under 5 minutes. All outputs require PMO approval before any system is updated.
 
 **Status reporting (currently: ~45 min per report / ~50 reports/month)**
-AI agents pull data from JIRA, SharePoint, and MS Project; reconcile inconsistencies; analyse budget variance; and generate audience-adapted narratives for executives, steering groups, and project teams — from a single data source.
+AI agents pull data from JIRA, SharePoint, and MS Project; reconcile inconsistencies; monitor milestone health proactively; analyse budget variance; and generate audience-adapted narratives for executives, steering groups, and project teams — from a single data source.
 
 **Governance monitoring (currently: inconsistent, audit-driven, often too late)**
 AI agents continuously check every project against defined governance standards — documentation, approvals, and gate criteria — generating per-project scorecards and flagging gaps before they become audit findings or escalations.
 
 **Stakeholder communications (currently: written from scratch, under pressure, inconsistently)**
-AI agents detect trigger events (RAG changes, milestone slips, risk escalations) and draft tailored communications for the appropriate audience — escalation notices, steering committee briefings, milestone announcements — drawing on live project context from meeting intelligence and status reports.
+AI agents detect trigger events (RAG changes, milestone slips, risk escalations) and draft tailored communications for the appropriate audience — escalation notices, steering committee briefings, milestone announcements, and steering committee packs — drawing on live project context from meeting intelligence and status reports.
+
+**Change request management (currently: impact assessed manually by cross-referencing plan, RAID, and financials)**
+AI agents assemble impact assessments automatically from live project data when a change request is received; draft the assessment covering schedule, cost, and risk; route it to the correct approver; and track it through to closure. Change Control appears in 100% of real PMO role specifications reviewed — it is a core daily task, not an occasional one.
 
 ---
 
@@ -79,12 +82,13 @@ The platform applies the following leading-edge technologies in a novel combinat
 
 ### Q6. Digital Process Innovation ✅
 
-The project represents end-to-end digital process innovation across four core PMO workflows:
+The project represents end-to-end digital process innovation across five core PMO workflows:
 
 - **Meeting-to-governance pipeline:** Transforms an entirely manual, error-prone process (listening → noting → classifying → logging → updating) into an automated, governed digital workflow triggered by a meeting transcript
-- **Automated multi-audience reporting:** Eliminates manual data extraction and report formatting; a single data pull generates multiple audience-adapted outputs automatically
+- **Automated multi-audience reporting:** Eliminates manual data extraction and report formatting; continuous milestone health monitoring runs between reporting cycles; a single data pull generates multiple audience-adapted outputs automatically
 - **Continuous governance assurance:** Replaces periodic, inconsistent manual governance reviews with automated, standards-based checking across the full project portfolio every week
-- **Event-driven stakeholder communications:** Replaces reactive, from-scratch drafting with AI-triggered communications that draw on live project context — drafted automatically when a RAG changes, a milestone slips, or a risk escalates
+- **Event-driven stakeholder communications:** Replaces reactive, from-scratch drafting with AI-triggered communications that draw on live project context — drafted automatically when a RAG changes, a milestone slips, or a risk escalates; includes steering committee pack generation
+- **Change request management pipeline:** Replaces manual cross-referencing of plan, RAID, and financial data with an automated impact assessment workflow — triggered when a change request is received, assembled from live project data, and routed through a governed approval process
 
 The innovation is not incremental — it removes entire manual steps from PMO workflows rather than making existing steps marginally faster.
 
@@ -110,15 +114,17 @@ The innovation is not incremental — it removes entire manual steps from PMO wo
 
 **Quantified time savings (per PMO, annually):**
 
-| Workstream | Estimated Annual Saving |
-|---|---|
-| Meeting Intelligence | ~$18,000 |
-| Status Reports | ~$26,250 |
-| Governance Monitoring | Qualitative (one avoided audit finding or governance failure = significant rework and reputational cost) |
-| Stakeholder Communications | ~$6,000 (est. — drafting time eliminated across escalations, steering packs, milestone notices) |
-| **Total (quantifiable)** | **~$50,250 per PMO** |
-| Personal Task Management *(Wave 3)* | ~$8,250 |
-| Strategic Resourcing *(Wave 3)* | Qualitative (one avoided wrong placement = weeks of rework) |
+| Workstream | Wave | Estimated Annual Saving |
+|---|---|---|
+| Meeting Intelligence | 1 | ~$18,000 |
+| Status Reports | 2 | ~$26,250 |
+| Governance Monitoring | 2 | Qualitative (one avoided audit finding or governance failure = significant rework and reputational cost) |
+| Stakeholder Communications | 2 | ~$4,500 (est. — drafting time eliminated across escalations, milestone notices) |
+| Change Request Management | 2 | ~$6,000 (est. — impact assessment drafting and approval routing across ~10 CRs/month) |
+| **Total (quantifiable, Wave 1–2)** | | **~$54,750 per PMO** |
+| Personal Task Management *(Wave 3)* | 3 | ~$8,250 |
+| Strategic Resourcing *(Wave 3)* | 3 | Qualitative (one avoided wrong placement = weeks of rework) |
+| Benefits Tracking *(Wave 3)* | 3 | Qualitative (benefits realisation visibility prevents undetected programme underdelivery) |
 
 At scale across a portfolio PMO function (10+ PMOs), the annual value exceeds $500,000 — making a subscription or licensing model commercially viable.
 
@@ -251,9 +257,9 @@ Delivery follows a phased wave approach:
 | Wave | Capabilities | Rationale |
 |---|---|---|
 | Wave 1 | Meeting Intelligence | Highest value; builds the data and integration foundation (Teams/Zoom, JIRA, SharePoint) |
-| Wave 2 | Status Reports + Governance Monitoring + Stakeholder Communications | Leverage Wave 1 outputs; governance checks and comms drafting depend on structured project data Wave 1 generates |
-| Wave 3 | Personal Task Management + Strategic Resourcing + Proactive Risk Monitoring + Change Request Management | Require mature data foundations and richer AI context from Waves 1–2 |
-| Wave 4 | Lessons Learned + Dependency Tracking | Require mature data across the full portfolio |
+| Wave 2 | Status Reports + Governance Monitoring + Stakeholder Communications + Change Request Management | Leverage Wave 1 outputs; all four confirmed as core daily PMO tasks in 100% of real role specifications reviewed; change request impact assessment draws on live RAID and plan data Wave 1 generates |
+| Wave 3 | Personal Task Management + Strategic Resourcing + Proactive Risk Monitoring + Benefits Tracking | Require mature data foundations and richer AI context from Waves 1–2 |
+| Wave 4 | Lessons Learned + Dependency Tracking + Project Mobilisation / PID | Require mature data across the full portfolio |
 
 Each wave will include: requirements validation with client PMOs, agent development and testing against labelled sample data, human-in-the-loop integration, and PMO training. Accuracy targets (≥85% RAID classification, ≥95% capture rate) will be validated before each wave is released to production.
 
@@ -335,17 +341,19 @@ The PMO AI Platform is a **browser-based web application built by EPAM**, access
 
 Notifications (new items to review, overdue tasks, resource alerts) are delivered to the user via Microsoft Teams messages and/or Outlook, directing them into the EPAM platform to take action.
 
-**The platform has five core screens:**
+**The platform has six core screens:**
 
-1. **Home Dashboard** — Single view of pending review items, today's tasks, resource alerts, and reports due. Everything requiring PMO action is surfaced here.
+1. **Home Dashboard** — Single view of pending review items, today's tasks, governance alerts, change requests pending assessment, and reports due. Everything requiring PMO action is surfaced here.
 
 2. **Meeting Review Queue** — Presents AI-proposed RAID items, JIRA updates, and follow-up email drafts from processed meetings. Each item shows the source quote from the transcript, confidence score, and proposed classification. PMO approves, modifies, or rejects each item individually.
 
-3. **Daily Task Checklist** — Consolidated task list drawn from email commitments, meeting action items, and JIRA. Ranked by priority. Tick-off interface with completion detection.
+3. **Governance & Change Request Dashboard** — Per-project governance scorecards showing compliance status, open gaps, and pending change requests. Each change request shows the AI-drafted impact assessment (schedule, cost, risk) for PMO review and approval routing.
 
-4. **Report Review & Approval** — Draft status reports presented per audience version (Executive, Steering, Team). PMO edits narrative and approves each version before automated distribution.
+4. **Report Review & Approval** — Draft status reports presented per audience version (Executive, Steering, Team). PMO edits narrative and approves each version before automated distribution. Includes milestone health alerts surfaced between reporting cycles.
 
-5. **Resource Alert Interface** — Gap alerts with lead time, role required, and ranked match recommendations with trade-off explanations. PMO confirms resource assignment.
+5. **Daily Task Checklist** *(Wave 3)* — Consolidated task list drawn from email commitments, meeting action items, and JIRA. Ranked by priority. Tick-off interface with completion detection.
+
+6. **Resource Alert Interface** *(Wave 3)* — Gap alerts with lead time, role required, and ranked match recommendations with trade-off explanations. PMO confirms resource assignment.
 
 **Primary user journeys:**
 

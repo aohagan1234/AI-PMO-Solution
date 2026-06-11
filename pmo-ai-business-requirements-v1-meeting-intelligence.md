@@ -4,7 +4,7 @@
 **Version:** v0.3
 **Status:** Pending stakeholder validation
 
-> These requirements cover Wave 1 only. The remaining confirmed workstreams — Status Reports (#2), Personal Task Management (#3), and Strategic Resourcing (#4) — are deferred to Wave 2 and will have their own requirements documents. Governance Monitoring, Stakeholder Communications, and later waves are out of scope for this document.
+> These requirements cover Wave 1 only. Wave 2 workstreams — Status Reports, Governance Monitoring, Stakeholder Communications, and Change Request Management — have their own requirements documents. Wave 3 workstreams — Personal Task Management, Strategic Resourcing, Benefits Tracking, and Proactive Risk Monitoring — and Wave 4 workstreams are out of scope for this document.
 
 > **Platform note:** The PMO AI Platform is an **EPAM-built, browser-based web application** hosted on Microsoft Azure and managed by EPAM. PMOs access it via browser using Azure AD SSO. It is not a Microsoft Teams app or Copilot plugin — it is an independent EPAM product. Microsoft tools (Teams, SharePoint, Outlook) and JIRA are data integrations only.
 >

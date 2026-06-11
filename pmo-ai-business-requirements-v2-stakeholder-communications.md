@@ -1,7 +1,7 @@
 # PMO AI Tool — Business Requirements: Stakeholder Communications (Wave 2)
 
 **Scope:** Stakeholder Communications
-**Version:** v0.1 — draft for review
+**Version:** v0.2 — updated 2026-06-11: steering committee pack confirmed in scope (BR-SC-10); OI-SC-06 closed
 **Status:** Pending stakeholder validation
 **Depends on:** Wave 1 (Meeting Intelligence) and Wave 2 (Status Reports, Governance Monitoring) outputs — project context from these workstreams informs the content of all drafted communications
 
@@ -40,7 +40,7 @@
 
 | # | Requirement | Why |
 |---|---|---|
-| BR-SC-10 | The system must generate draft communications for the following types at minimum: escalation notice (RAG change), milestone slip notification, risk or issue escalation to sponsor, governance gap notice, milestone completion announcement, and steering committee briefing. | These are the most time-consuming and pressure-sensitive communications in a PMO's week. Automating the first draft for each removes the most painful manual writing tasks. |
+| BR-SC-10 | The system must generate draft communications for the following types at minimum: escalation notice (RAG change), milestone slip notification, risk or issue escalation to sponsor, governance gap notice, milestone completion announcement, steering committee briefing, and steering committee pack. Steering committee packs are a distinct, recurring PMO deliverable confirmed present in 100% of PMO role specifications reviewed — they are in scope for Wave 2 and must not be treated as out of scope or deferred. | These are the most time-consuming and pressure-sensitive communications and deliverables in a PMO's week. Automating the first draft for each removes the most painful manual writing tasks. Steering committee packs in particular require assembling data from multiple sources (status data, RAID log, governance scorecard, financial position) — exactly the context the platform holds. |
 | BR-SC-11 | Every draft must be accurate to the current project state at the time of generation — it must not contain stale data, incorrect figures, or references to events that have since been resolved. | An inaccurate draft that the PMO sends without catching the error is a governance and relationship failure. Accuracy at the point of generation is the primary quality requirement for this workstream. |
 | BR-SC-12 | Every draft must include: the trigger event that caused it, the relevant project context, any required actions or decisions, and a clear proposed subject line. | A draft missing any of these elements is not ready to review — it is a prompt for the PMO to write the communication themselves. A complete draft should be reviewable in under two minutes. |
 | BR-SC-13 | Draft communications must not be fabricated — every factual statement in the draft must be traceable to a specific source (RAID log entry, status report data point, JIRA ticket, or meeting decision). | If the PMO cannot verify where each statement comes from, they cannot confidently send the draft. Source traceability is as important here as it is for RAID items in Wave 1. |
@@ -141,7 +141,7 @@
 | OI-SC-03 | Are there any regulatory communication requirements with specific timelines (e.g. incident reporting obligations under DORA or FCA requirements)? | Regulatory timelines require hard triggers and guaranteed delivery — different from discretionary communications |
 | OI-SC-04 | Should sent communications be written to SharePoint project records, or is the tool's own audit log sufficient? | Affects the SharePoint integration scope for this workstream |
 | OI-SC-05 | Are there client-specific tone, style, or format requirements for different communication types? | Templates must reflect actual client conventions to produce drafts that do not need reformatting |
-| OI-SC-06 | Is steering committee pack preparation in scope for Wave 2, or deferred — it is a significant PMO effort item but requires a more complex template than escalation notices? | Affects the communication type scope and build complexity for Wave 2 |
+| ~~OI-SC-06~~ | ~~Is steering committee pack preparation in scope for Wave 2, or deferred?~~ **Closed — confirmed in scope for Wave 2.** Steering committee packs appear as a named deliverable in 100% of PMO role specifications reviewed (6/6 AIB roles). This is a core PMO task, not an edge case. Requirements addressed in BR-SC-10. | Resolved — no longer open. |
 
 ---
 

@@ -1,11 +1,13 @@
-# PMO AI Tool — Business Requirements: Personal Task Management (Wave 2)
+# PMO AI Tool — Business Requirements: Personal Task Management (Wave 3)
 
 **Scope:** Personal Task Management
-**Version:** v0.1 — draft for review
+**Version:** v0.2 — updated 2026-06-11: workstream reassigned from Wave 2 to Wave 3 (see note below)
 **Status:** Pending stakeholder validation
 **Depends on:** Wave 1 (Meeting Intelligence) outputs — action items from meetings feed directly into the consolidated task list
 
-> This document covers Wave 2 requirements for the Personal Task Management workstream only. See `pmo-ai-business-requirements-v1.md` for Wave 1 (Meeting Intelligence).
+> **Wave assignment note:** Personal Task Management was previously labelled Wave 2 in earlier versions of this document. It has been reassigned to Wave 3. Wave 2 now comprises: Status Reports, Governance Monitoring, Stakeholder Communications, and Change Request Management. Personal Task Management is deferred to Wave 3 due to the complexity of email commitment extraction (distinguishing hard vs soft commitments) and completion detection — both are more reliable once the Wave 1–2 RAID and project data context is mature.
+
+> This document covers Wave 3 requirements for the Personal Task Management workstream only. See `pmo-ai-business-requirements-v1.md` for Wave 1 (Meeting Intelligence).
 >
 > **Platform note:** The PMO AI Platform is an **EPAM-built, browser-based web application** hosted on Azure and managed by EPAM. Outlook, JIRA, and Microsoft Teams are data integrations only — the platform itself runs independently on EPAM infrastructure. Notifications are delivered via Teams/Outlook; the task interface is accessed via browser.
 
@@ -114,7 +116,7 @@
 
 ---
 
-## 10. Out of Scope (Wave 2 — Personal Task Management)
+## 10. Out of Scope (Wave 3 — Personal Task Management)
 
 | Item | Status |
 |---|---|

@@ -6,7 +6,7 @@ A plain-English guide to what the AI does, why it works that way, and what value
 
 ## Overview
 
-Eleven workstreams were assessed across surveys, interviews, and the Problem Statement. Four are selected for the initial focus — all four are grounded in direct stakeholder quotes, all four are deliverable without significant pre-conditions, and together they cover the full breadth of a PMO's week.
+Thirteen workstreams have been assessed and mapped across surveys, interviews, the Problem Statement, and real-world PMO job specifications from financial services clients (AIB). Five are selected for the initial focus — all five are grounded in direct evidence (stakeholder quotes and/or confirmed presence in 100% of PMO role specifications reviewed), all are deliverable without significant pre-conditions, and together they cover the full breadth of a PMO's week.
 
 The **EPAM PMO AI Platform** is a browser-based web application built, hosted, and managed by EPAM. PMOs access it via any browser using their existing organisational credentials (Azure AD SSO). It is not a Microsoft Teams app, Copilot extension, or plugin — it is an independent EPAM product that integrates with Microsoft tools and JIRA as data sources.
 
@@ -18,13 +18,15 @@ The platform is built as an **orchestrated multi-agent system**: a central agent
 | 2 | **Status Reports & Scorecards** | 16 | ★ Wave 2 |
 | 3 | **Governance Monitoring** | 20 | ★ Wave 2 |
 | 4 | **Stakeholder Communications** | 16 | ★ Wave 2 |
-| 5 | Proactive Risk Monitoring | 20 | Wave 3 |
-| 6 | Personal Task Management | 20 | Wave 3 |
-| 7 | Strategic Resourcing | 12 | Wave 3 |
-| 8 | Change Request Management | 16 | Wave 3 |
-| 9 | Lessons Learned & Knowledge Capture | 15 | Wave 4 — high priority |
-| 10 | Dependency Tracking | 12 | Wave 4 |
-| 11 | Onboarding Access | 6 | RPA — not AI-first |
+| 5 | **Change Request Management** | 16 | ★ Wave 2 |
+| 6 | Proactive Risk Monitoring | 20 | Wave 3 |
+| 7 | Personal Task Management | 20 | Wave 3 |
+| 8 | Strategic Resourcing | 12 | Wave 3 |
+| 9 | Benefits Tracking | 12 | Wave 3 |
+| 10 | Lessons Learned & Knowledge Capture | 15 | Wave 4 — high priority |
+| 11 | Dependency Tracking | 12 | Wave 4 |
+| 12 | Project Mobilisation / PID | — | Wave 4 |
+| 13 | Onboarding Access | 6 | RPA — not AI-first |
 
 > **One rule applies across all streams:** The AI proposes, humans approve. Nothing gets written to a system or sent externally without a PMO sign-off.
 
@@ -71,6 +73,7 @@ PMOs spend significant time each week collecting data from JIRA, SharePoint, and
 | Step | What the AI Does | What the PMO Does |
 |---|---|---|
 | **Data collection** | Pulls metrics automatically from JIRA, SharePoint, MS Project via API | Nothing — fully automated |
+| **Milestone health monitoring** | Checks all active milestones against plan; flags any at risk of slipping *before* the next reporting cycle — not just at report time | Reviews flagged milestones; confirms owner and action |
 | **Financial analysis** | Analyses budget vs actuals, spend trends, and variance; flags projects with deteriorating financial health | Reviews analysis |
 | **RAG calculation** | Applies the formula to produce Red/Amber/Green scores | Reviews the output |
 | **Reconciliation** | Flags inconsistencies across data sources | Resolves conflicts |
@@ -140,6 +143,33 @@ Drafting escalation notices, steering committee packs, milestone announcements, 
 
 ---
 
+## Work Stream 5: Change Request Management *(Score: 16)*
+
+*"Impact assessed, routed for approval — without the PMO having to start from scratch."*
+
+### The Problem
+
+When a change request comes in, a PMO must cross-reference the project plan, RAID log, open actions, and financial position to understand the impact before it can be assessed. This takes time and requires the PMO to hold a lot of context simultaneously. Change Control appears in every PMO role specification reviewed — it is a core, ongoing task that occurs throughout a project's lifecycle, not an occasional activity.
+
+### How It Works
+
+| Step | What the AI Does | What the PMO Does |
+|---|---|---|
+| **Trigger detection** | Identifies a new change request submitted via JIRA, SharePoint, or a meeting decision | Reviews the flagged request |
+| **Impact assessment draft** | Cross-references the project plan, RAID log, open actions, and financial data to draft an impact assessment covering schedule, cost, and risk | Reviews, refines, and confirms the assessment |
+| **Routing** | Identifies the correct approver based on change type and scale; prepares the approval package | Confirms routing and approver before submission |
+| **Status tracking** | Monitors the change through the approval process; flags overdue approvals for PMO follow-up | Reviews status; chases approvals as needed |
+| **RAID update proposal** | Proposes new or updated RAID entries if the change introduces risks or issues | Approves before any RAID update is written |
+| **Closure notification** | Drafts a notification to relevant stakeholders when a change is approved or rejected | Reviews and sends via Stakeholder Communications workflow |
+
+**Why it is in Wave 2:** Change Control was originally deferred to Wave 3 on the basis of no direct stakeholder quote. Review of real PMO role specifications across six AIB programmes confirmed it appears in 100% of roles — tied with RAID management and Status Reporting as the most universal PMO task. It also scored 16 (identical to Status Reports and Stakeholder Communications). The original deferral rationale no longer holds.
+
+**What the evidence shows:** Change Control/Maintenance/Management is listed as a required task in every PMO demand form reviewed — across regulatory programmes (IRB, AML, SEPA), operational programmes (ESASS), and transformation programmes (CLMP). It is a daily task, not an occasional one.
+
+**Value:** Impact assessments that currently take 30–60 minutes of cross-referencing are drafted in under 5 minutes. Change requests are tracked consistently, approvals are chased automatically, and the RAID log stays current. Governance of changes is documented end-to-end.
+
+---
+
 ## Work Streams Deferred to Later Waves
 
 These were assessed and validated but require the data foundations that earlier waves build, or have pre-conditions not in place on day one.
@@ -158,11 +188,25 @@ These were assessed and validated but require the data foundations that earlier 
 
 ### Strategic Resourcing *(Score: 12 — Wave 3)*
 
-**The problem:** PMOs often find out a resource is finishing a project too late to find a suitable replacement. Matching the right person requires knowing availability, skills, project priority, and context — information that currently lives in different spreadsheets, SharePoint lists, and people's heads.
+**The problem:** PMOs often find out a resource is finishing a project too late to find a suitable replacement. Matching the right person requires knowing availability, skills, project priority, and context — information that currently lives in different spreadsheets, SharePoint lists, and people's heads. Resource Maintenance/Management appears in 83% of PMO role specifications reviewed and covers two distinct activities that should be treated separately:
 
-**What AI would do:** Monitor project end dates, flag gaps 4–6 weeks out, and recommend the best-fit resource with a trade-off explanation. Resource commitments always remain human-only.
+**Component A — Routine Resource Admin** (onboarding, offboarding, system access tracking, contract management): Administrative, repetitive, and largely rules-based. Closely related to the Onboarding Access workstream (RPA/Hybrid). Can be automated earlier than Component B.
+
+**Component B — Strategic Resourcing** (skills matching, forward gap analysis, availability planning): The original Wave 3 design. Depends on structured data quality from earlier waves.
+
+**What AI would do (Component B):** Monitor project end dates, flag gaps 4–6 weeks out, and recommend the best-fit resource with a trade-off explanation. Resource commitments always remain human-only.
 
 **Why deferred:** The matching recommendations depend entirely on a clean, current skills inventory and resource availability data — a data quality pre-condition that is not reliably in place on day one. Most valuable in Wave 3 once structured project data from earlier waves improves the underlying information quality.
+
+---
+
+### Benefits Tracking *(Score: 12 — Wave 3)*
+
+**The problem:** Benefits Maintenance/Management appears in 83% of PMO role specifications reviewed but is not addressed by any existing workstream. Benefits realisation is a recurring PMO task — tracking whether planned benefits are being achieved, reporting deviations to governance forums, and keeping the benefits register current throughout the project lifecycle.
+
+**What AI would do:** Monitor the benefits register against the baseline defined in the PID/business case; flag deviations between planned and realised benefits; generate benefits realisation reports for steering committees as part of the status reporting cycle; draft escalations when benefits are at risk.
+
+**Why deferred:** Benefits data depends on structured project records from earlier waves (RAID logs for risks to benefit delivery, status reports for progress tracking) and requires the benefits baseline to be clearly defined at project initiation. Wave 3 once data quality from earlier waves is established.
 
 ---
 
@@ -174,13 +218,6 @@ These were assessed and validated but require the data foundations that earlier 
 
 ---
 
-### Change Request Management *(Score: 16 — Wave 3)*
-
-**The concept:** When a change request comes in, the AI cross-references the project plan, RAID log, and open actions to draft an impact assessment and route it for approval.
-
-**Why deferred:** No direct stakeholder quote. Requires change management processes to be mature. Strong Wave 3 addition.
-
----
 
 ### Lessons Learned & Knowledge Capture *(Score: 15 — Wave 4, High Priority)*
 
@@ -202,6 +239,16 @@ These were assessed and validated but require the data foundations that earlier 
 
 ---
 
+### Project Mobilisation / PID *(Wave 4)*
+
+**The problem:** PID (Project Initiation Document) preparation appears in 67% of PMO role specifications reviewed. Project Drive/SharePoint organisation (setting up document structures, folder hierarchies, and governance templates at project start) appears in 100%. Neither is currently addressed by any workstream. Getting a new project set up correctly from day one — with the right governance framework, document structure, and communication templates in place — is time-consuming, inconsistent, and often done differently by each PMO.
+
+**What AI would do:** Generate a draft PID using project context provided at initiation; create a standard SharePoint project folder structure from a configured template; pre-populate governance document templates; set up the RAID log schema and initial communication templates for the project. The PMO reviews and approves all outputs before use.
+
+**Why deferred:** Project mobilisation is a one-off activity per project rather than a recurring workflow, and meaningful draft quality depends on having established templates and governance standards from earlier waves. Suited to Wave 4 alongside Lessons Learned.
+
+---
+
 ### Onboarding Access *(Score: 6 — RPA/Hybrid)*
 
 **The concept:** Check that new joiners have been set up with access to all required tools and systems.
@@ -217,16 +264,21 @@ These were assessed and validated but require the data foundations that earlier 
 | 30 min writing up meeting notes | Draft ready automatically after the meeting |
 | RAID items lost or forgotten | Processed within 30 min of transcript; in the log after PMO approval |
 | JIRA updated manually (or not at all) | Updates proposed automatically after each meeting |
+| Milestone slippage spotted at report time, not before | Milestone health checked continuously; at-risk milestones flagged before the reporting cycle |
 | Status reports take 45 min each, multiple manual versions | One data pull; AI generates audience-adapted versions in 10 min |
 | Financial analysis done separately in Excel | Variance analysis and budget health built into every report |
 | Governance gaps found too late — in audits or escalations | Every project checked against governance standards every week |
+| Change impact assessed manually by cross-referencing plan, RAID, and financials | Impact assessment drafted automatically from live project data; routed for approval (Wave 2) |
+| Steering committee packs written from scratch each cycle | Draft generated from current project data, ready to review and send (Wave 2) |
 | Escalation emails written from scratch under pressure | Triggered automatically on RAG change or risk escalation; draft ready to review |
+| Benefits realisation tracked in a spreadsheet, updated manually | Benefits register monitored continuously; deviations flagged automatically (Wave 3) |
 | Commitments missed across email and meetings | One consolidated daily task list (Wave 3) |
 | Resource gaps spotted too late | Flagged weeks in advance with a match recommendation ready (Wave 3) |
+| New project setup inconsistent; PID and folder structure done differently each time | Standard PID and project folder structure generated from templates at initiation (Wave 4) |
 | Institutional knowledge lost when PMs leave | Captured, structured, and surfaced automatically (Wave 4) |
 
 **The AI handles the repetitive and analytical work. The PMO retains control over everything that matters.**
 
 ---
 
-*Document version: v4.0 | Relates to: pmo-ai-tool-deliverables.md, pmo-ai-differentiation.md*
+*Document version: v5.0 | Updated: 2026-06-11 — Change Request Management elevated to Wave 2; Benefits Tracking and Project Mobilisation / PID added; Plan/Milestone Monitoring added to Status Reports; Strategic Resourcing split clarified. Changes driven by review of 6 real PMO role specifications (AIB). | Relates to: pmo-ai-tool-deliverables.md, pmo-ai-differentiation.md*
