@@ -95,14 +95,15 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ---
 
-### The Four Priority Work Streams
+### The Five Priority Work Streams
 
-| Stream | Description | Volume | Time | Stakeholder Quote |
+| Stream | Description | Volume | Time | Evidence |
 |---|---|---|---|---|
-| 1. Meeting Intelligence | RAID extraction, JIRA updates, meeting notes to all invitees | ~80/mo | ~30 min/mtg | "Raw meeting notes," "action items," "RAID logs" |
-| 2. Status Reports | Synthesis, scorecards | ~50/mo | ~45 min/rpt | "Automate reports, automate scorecards" |
-| 3. Governance Monitoring | Continuous compliance checking, scorecard generation | Weekly per project | ~2 hrs/manual review | "Inconsistent governance" — Problem Statement |
-| 4. Stakeholder Communications | Trigger-aware comms drafting, governed distribution | Event-driven | ~30–60 min/communication | "A key aspect of the PMO role is stakeholder management" |
+| 1. Meeting Intelligence | RAID extraction, JIRA updates, meeting notes to all invitees | ~80/mo | ~30 min/mtg | "Raw meeting notes," "action items," "RAID logs" — stakeholder-quoted |
+| 2. Status Reports | Synthesis, milestone health monitoring, scorecards | ~50/mo | ~45 min/rpt | "Automate reports, automate scorecards" — stakeholder-quoted |
+| 3. Governance Monitoring | Continuous compliance checking, scorecard generation | Weekly per project | ~2 hrs/manual review | "Inconsistent governance" — Problem Statement; validated by regulated programme pipeline (IRB, AML, SEPA) |
+| 4. Stakeholder Communications | Trigger-aware comms drafting, governed distribution | Event-driven | ~30–60 min/communication | "A key aspect of the PMO role is stakeholder management" — stakeholder-quoted |
+| 5. Change Request Management | Impact assessment drafting, approval routing, status tracking | Per change request | ~30–60 min/CR | Confirmed in 100% of PMO role specifications reviewed (6/6 AIB roles) |
 
 ---
 
