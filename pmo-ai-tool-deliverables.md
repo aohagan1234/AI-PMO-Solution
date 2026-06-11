@@ -212,24 +212,6 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ---
 
-### Stream 7 (Wave 3): Personal Task Management — Summary Decomposition
-
-> *Personal Task Management was reassigned to Wave 3. Wave 2 now comprises Streams 1–5: Meeting Intelligence, Status Reports, Governance Monitoring, Stakeholder Communications, and Change Request Management.*
-
-**Job to be Done**
-
-> JtD-PERSONAL: Consolidate all commitments (emails, meetings, messages) into a single actionable task list, track completion, and provide reminders.
-
-**Micro-Tasks**
-
-- **[7.1] Email Intelligence** — Scan inbox (3-day window), extract commitments and requests, identify deadlines
-- **[7.2] Cross-Source Consolidation** — Aggregate from email + meetings + JIRA, deduplicate, reconcile conflicts
-- **[7.3] Prioritisation** — Apply due date urgency, requester importance, project priority; surface overdue items
-- **[7.4] Completion Detection** — Monitor sent folder, JIRA changes; confirm with user if uncertain
-- **[7.5] Reminder Generation** — Calculate timing, generate content, deliver via preferred channel
-- **[7.6] Checklist Interface** — Present daily list, allow tick-off, track completion rate
-
----
 
 ### Cognitive Zones & Breakpoints
 
