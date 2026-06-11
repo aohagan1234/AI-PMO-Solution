@@ -144,6 +144,25 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ---
 
+### Stream 2 (Wave 2): Status Reports & Scorecards — Summary Decomposition
+
+**Job to be Done**
+
+> JtD-STATUS: Automatically collect project data from all configured sources, monitor milestone health proactively between reporting cycles, calculate RAG status, reconcile data conflicts, generate audience-adapted narrative reports informed by Wave 1 RAID and decision outputs, and distribute approved reports to the right stakeholders — replacing manual data extraction and multi-version report writing.
+
+**Micro-Tasks**
+
+- **[2.1] Data Collection** — Pull metrics from JIRA, SharePoint, and MS Project via API on a scheduled or on-demand basis; record data pull timestamp
+- **[2.2] Milestone Health Monitoring** — Check all active milestones against plan on a continuous basis; flag milestones at risk of slipping before the next reporting cycle; notify PMO immediately for any overdue or dependency-blocked milestone
+- **[2.3] Financial Analysis** — Calculate budget vs actuals, spend variance, and burn rate trend; flag projects where current trajectory exhausts budget before completion
+- **[2.4] RAG Calculation** — Apply configured criteria across schedule, budget, risk, and resource dimensions; flag deteriorations prominently for PMO review before report is finalised
+- **[2.5] Cross-Source Reconciliation** — Detect and surface conflicts between data sources (e.g. JIRA vs MS Project); block report generation for unresolved conflicts in RAG-affecting fields
+- **[2.6] Narrative Generation** — Draft "so what" explanation of the numbers, informed by Wave 1 RAID items, decisions, and risks; indicate where no material change occurred
+- **[2.7] Audience Adaptation** — Generate separate versions for Board/Executive, Steering Group, and Project Team from a single data pull
+- **[2.8] Approval & Distribution** — Present all versions for PMO review; distribute approved versions via Outlook to configured recipient lists; log approving user and timestamp
+
+---
+
 ### Stream 3 (Wave 2): Governance Monitoring — Summary Decomposition
 
 **Job to be Done**
@@ -176,9 +195,26 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 ---
 
-### Stream 5 (Wave 3): Personal Task Management — Full Decomposition
+### Stream 5 (Wave 2): Change Request Management — Summary Decomposition
 
-> *Note: Personal Task Management was reassigned from Wave 2 to Wave 3. Governance Monitoring and Stakeholder Communications are now the Wave 2 priority workstreams alongside Status Reports. The decomposition below is retained for Wave 3 planning.*
+**Job to be Done**
+
+> JtD-CHANGE: When a change request is received, automatically assemble a draft impact assessment from live project data — cross-referencing the plan, RAID log, and financials — route it to the correct approver, track it through to closure, and keep the RAID log and stakeholders updated throughout. Confirmed present in 100% of PMO role specifications reviewed.
+
+**Micro-Tasks**
+
+- **[5.1] Trigger Detection** — Identify a new change request submitted via JIRA, SharePoint, or a meeting decision; link to the relevant project context
+- **[5.2] Impact Assessment Draft** — Cross-reference the project plan, RAID log, open actions, and financial position to draft an assessment covering schedule impact, cost impact, and risk implications
+- **[5.3] Approval Routing** — Identify the correct approver based on change type and scale; prepare the approval package; flag high-impact changes for escalated review
+- **[5.4] Status Tracking** — Monitor the change through the approval process; flag overdue approvals for PMO follow-up; never close a change without explicit PMO confirmation
+- **[5.5] RAID Update Proposal** — Propose new or updated RAID entries where the change introduces risks or issues; route all proposals for PMO approval
+- **[5.6] Closure Notification** — Draft a notification to relevant stakeholders when a change is approved or rejected; route through Stakeholder Communications workflow for PMO review and send
+
+---
+
+### Stream 7 (Wave 3): Personal Task Management — Summary Decomposition
+
+> *Personal Task Management was reassigned to Wave 3. Wave 2 now comprises Streams 1–5: Meeting Intelligence, Status Reports, Governance Monitoring, Stakeholder Communications, and Change Request Management.*
 
 **Job to be Done**
 
@@ -186,12 +222,12 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 **Micro-Tasks**
 
-- **4.1 Email Intelligence:** Scan inbox (3-day window), extract commitments and requests, identify deadlines
-- **4.2 Cross-Source Consolidation:** Aggregate from email + meetings + JIRA, deduplicate, reconcile conflicts
-- **4.3 Prioritization:** Apply due date urgency, requester importance, project priority; surface overdue items
-- **4.4 Completion Detection:** Monitor sent folder, JIRA changes; confirm with user if uncertain
-- **4.5 Reminder Generation:** Calculate timing, generate content, deliver via preferred channel
-- **4.6 Checklist Interface:** Present daily list, allow tick-off, track completion rate
+- **[7.1] Email Intelligence** — Scan inbox (3-day window), extract commitments and requests, identify deadlines
+- **[7.2] Cross-Source Consolidation** — Aggregate from email + meetings + JIRA, deduplicate, reconcile conflicts
+- **[7.3] Prioritisation** — Apply due date urgency, requester importance, project priority; surface overdue items
+- **[7.4] Completion Detection** — Monitor sent folder, JIRA changes; confirm with user if uncertain
+- **[7.5] Reminder Generation** — Calculate timing, generate content, deliver via preferred channel
+- **[7.6] Checklist Interface** — Present daily list, allow tick-off, track completion rate
 
 ---
 
