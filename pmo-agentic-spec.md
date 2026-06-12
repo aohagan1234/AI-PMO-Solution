@@ -257,6 +257,109 @@ The platform is an EPAM-built, browser-based web application hosted on Microsoft
 
 ---
 
+---
+
+## Entity Definitions
+
+### Entity: RAID Entry
+
+| Attribute | Type | Constraints | Notes |
+|---|---|---|---|
+| `entry_id` | UUID | Primary key, immutable, generated on creation | |
+| `meeting_id` | UUID | Foreign key → Meeting, required; ON DELETE RESTRICT | Source meeting reference |
+| `raid_type` | enum | [RISK, ACTION, ISSUE, DECISION], required | |
+| `title` | string | Max 200 chars, required | Brief description |
+| `description` | string | Max 2000 chars, required | Full details |
+| `severity` | enum | [LOW, MEDIUM, HIGH, CRITICAL], required for RISK and ISSUE; null for ACTION and DECISION | |
+| `status` | enum | [OPEN, IN_PROGRESS, CLOSED], required, default OPEN | |
+| `owner_name` | string | Max 200 chars, required for ACTION; nullable for others | |
+| `owner_email` | string | RFC 5322 format, nullable | |
+| `due_date` | date | ISO 8601, required for ACTION; nullable for others | |
+| `date_inferred` | boolean | Required, default false | True if due date was inferred from relative language |
+| `decision_maker` | string | Max 200 chars, required for DECISION; null for others | |
+| `source_quote` | string | Max 1000 chars, required | Verbatim text from transcript that triggered this item |
+| `source_timestamp` | string | Max 20 chars, nullable | Position in transcript (e.g., "23:14") |
+| `source_speaker` | string | Max 200 chars, nullable | Speaker name if identifiable |
+| `confidence_score` | decimal | 0.00–1.00, required | Extraction confidence |
+| `agent_proposed` | boolean | Required, immutable | True if proposed by agent; false if human-created |
+| `pmo_decision` | enum | [APPROVED, MODIFIED, REJECTED], nullable | Set when PMO acts on proposal |
+| `pmo_user_id` | UUID | Foreign key → User, nullable | PMO who approved/rejected |
+| `created_at` | timestamp | ISO 8601 UTC, immutable | |
+| `approved_at` | timestamp | ISO 8601 UTC, nullable | When PMO approved |
+| `sharepoint_item_id` | string | Max 100 chars, nullable | ID of written SharePoint list item |
+| `jira_ticket_key` | string | Max 20 chars, nullable | Associated JIRA ticket if any |
+
+**State Machine — RAID Entry proposal lifecycle:**
+```
+PROPOSED → PMO_REVIEW → APPROVED → WRITTEN_TO_SHAREPOINT → CLOSED
+                     → MODIFIED → APPROVED → WRITTEN_TO_SHAREPOINT → CLOSED
+                     → REJECTED → CLOSED
+```
+
+**Constraints:**
+- `pmo_decision` must not be set without `pmo_user_id`
+- `sharepoint_item_id` must be null until `pmo_decision = APPROVED` and write succeeds
+- Once `pmo_decision` is set, `raid_type`, `source_quote`, `confidence_score`, and `agent_proposed` are immutable
+- `date_inferred = true` requires `due_date` to be set AND the original relative text to be stored in `description`
+
+---
+
+### Entity: Meeting Record
+
+| Attribute | Type | Constraints | Notes |
+|---|---|---|---|
+| `meeting_id` | UUID | Primary key, immutable, generated on upload | |
+| `project_id` | UUID | Foreign key → Project, required; ON DELETE RESTRICT | Selected by PMO at upload |
+| `series_id` | UUID | Foreign key → MeetingSeries, nullable; ON DELETE SET NULL | If part of a recurring series |
+| `transcript_filename` | string | Max 255 chars, required | Original filename |
+| `transcript_format` | enum | [VTT, TXT, DOCX], required | |
+| `transcript_word_count` | integer | ≥ 0, required | Calculated on ingest |
+| `upload_mode` | enum | [MANUAL_UPLOAD, GRAPH_API], required | |
+| `uploaded_by` | UUID | Foreign key → User, required, immutable | |
+| `uploaded_at` | timestamp | ISO 8601 UTC, immutable | |
+| `status` | enum | See state machine below, required | |
+| `processing_started_at` | timestamp | ISO 8601 UTC, nullable | |
+| `proposals_ready_at` | timestamp | ISO 8601 UTC, nullable | |
+| `review_started_at` | timestamp | ISO 8601 UTC, nullable | |
+| `approved_at` | timestamp | ISO 8601 UTC, nullable | |
+| `distributed_at` | timestamp | ISO 8601 UTC, nullable | |
+| `distribution_list_confirmed` | boolean | Required, default false | PMO must confirm before send |
+| `notes_draft` | text | Max 50KB, nullable | Agent-generated meeting notes |
+| `notes_approved_content` | text | Max 50KB, nullable | Final approved version |
+| `processing_error` | string | Max 500 chars, nullable | Error message if processing failed |
+| `created_at` | timestamp | ISO 8601 UTC, immutable | |
+| `updated_at` | timestamp | ISO 8601 UTC | |
+
+**State Machine — Meeting Record:**
+
+```
+UPLOADED → PROCESSING → PROPOSALS_READY → IN_REVIEW → PARTIALLY_APPROVED → APPROVED → DISTRIBUTED → CLOSED
+                     → FAILED (terminal)
+```
+
+**Full Transition Table:**
+
+| From | To | Trigger | Prerequisites |
+|---|---|---|---|
+| UPLOADED | PROCESSING | Agent begins extraction | transcript_word_count > 0 |
+| PROCESSING | PROPOSALS_READY | Extraction complete | At least 0 proposals generated; processing_error IS NULL |
+| PROCESSING | FAILED | Unrecoverable error | All retry attempts exhausted |
+| PROPOSALS_READY | IN_REVIEW | PMO opens review interface | |
+| IN_REVIEW | PARTIALLY_APPROVED | PMO acts on some items | ≥1 item approved or rejected; ≥1 item still pending |
+| IN_REVIEW | APPROVED | PMO resolves all items | All proposals in [APPROVED, MODIFIED, REJECTED]; notes_approved_content IS NOT NULL; distribution_list_confirmed = true |
+| PARTIALLY_APPROVED | APPROVED | PMO resolves remaining items | Same prerequisites as IN_REVIEW → APPROVED |
+| APPROVED | DISTRIBUTED | Distribution executed | acknowledged_at IS NOT NULL; all approved RAID entries written |
+| DISTRIBUTED | CLOSED | Audit record finalised | All write operations confirmed |
+| Any | FAILED | Unrecoverable processing error | — |
+
+**Constraints:**
+- DISTRIBUTED state requires `distribution_list_confirmed = true` — enforced at API layer
+- APPROVED state requires `notes_approved_content IS NOT NULL` — cannot approve without notes
+- FAILED is terminal; no transition out of FAILED
+- `notes_draft` is set only by the agent; `notes_approved_content` is set only on PMO approval
+
+---
+
 ## Sub-Agent 1: Meeting Intelligence Agent
 
 ### Purpose
@@ -356,24 +459,193 @@ Transform a PMO-uploaded meeting transcript into: structured RAID proposals (R/A
 
 ### Integration Contracts
 
-**SharePoint RAID Log (Microsoft Graph API)**
-- Auth: OAuth 2.0, Azure AD delegated permissions: `Sites.ReadWrite.All`
-- Read: `GET /sites/{siteId}/lists/{raidListId}/items` — retrieve existing entries for duplicate check
-- Write (approved entries only): `POST /sites/{siteId}/lists/{raidListId}/items` — body contains full RAID schema; `agent_proposed: true`; `created_by: {pmo_user_id}`
-- Scope-out: Exact RAID list schema (field names, column IDs) must be confirmed per client before build — see Assumptions file
+#### SharePoint RAID Log (Microsoft Graph API)
 
-**JIRA REST API**
-- Auth: API Token, OAuth 2.0
-- Read: `GET /rest/api/3/search?jql=project={key}+AND+status!=Done` — retrieve open tickets for matching
-- Comment (approved): `POST /rest/api/3/issue/{key}/comment`
-- Status change (approved): `POST /rest/api/3/issue/{key}/transitions`
-- Create (approved): `POST /rest/api/3/issue`
-- Scope-out: Per-project field mappings (custom fields, priority labels, status workflow) must be confirmed per client before build
+**Auth:** OAuth 2.0, Azure AD delegated permissions: `Sites.ReadWrite.All`
+**Credentials:** OAuth 2.0 client credentials stored in Azure Key Vault; secret name: `sharepoint-graph-client-secret`. Access token cached in memory; refreshed 60 seconds before expiry.
+**Base URL:** `https://graph.microsoft.com/v1.0`
+**Timeout:** 10 seconds per request
+**Rate limit:** 600 requests per minute per app registration (Microsoft throttling). IF response HTTP 429 THEN retry after `Retry-After` header value (seconds).
+**Retry logic:**
+- HTTP 200: no retry
+- HTTP 429: retry after `Retry-After` header; max 3 retries
+- HTTP 500/503: exponential backoff 2s, 4s, 8s; max 3 retries
+- HTTP 400/401/403: do not retry; log and alert PMO
+- Timeout: retry once after 5 seconds; if still timeout, log and alert PMO
+**Fallback:** If all retries exhausted → retain approved item in WRITE_PENDING queue; retry every 5 minutes for 1 hour; alert PMO after 3 consecutive failures
 
-**Outlook (Microsoft Graph API)**
-- Auth: OAuth 2.0, delegated permissions: `Mail.Send`
-- Send: `POST /me/sendMail` — body contains approved notes as HTML; recipient list from confirmed DL
-- Only executed after: PMO approval of notes content AND PMO confirmation of distribution list
+**Read existing entries (duplicate check):**
+```
+GET /sites/{siteId}/lists/{raidListId}/items?$filter=fields/SourceMeetingId eq '{meeting_id}'
+Response 200:
+{
+  "value": [
+    {
+      "id": "string",
+      "fields": {
+        "Title": "string",
+        "RaidType": "RISK|ACTION|ISSUE|DECISION",
+        "SourceMeetingId": "string"
+      }
+    }
+  ]
+}
+```
+
+**Write approved RAID entry:**
+```
+POST /sites/{siteId}/lists/{raidListId}/items
+Request body:
+{
+  "fields": {
+    "Title": "string (max 200 chars, required)",
+    "Description": "string (max 2000 chars, required)",
+    "RaidType": "RISK|ACTION|ISSUE|DECISION (required)",
+    "Severity": "LOW|MEDIUM|HIGH|CRITICAL (required for RISK/ISSUE; null otherwise)",
+    "Status": "OPEN",
+    "OwnerName": "string (required for ACTION)",
+    "DueDate": "YYYY-MM-DD (required for ACTION)",
+    "DateInferred": "true|false",
+    "SourceQuote": "string (max 1000 chars)",
+    "SourceMeetingId": "string (meeting_id)",
+    "AgentProposed": "true",
+    "ApprovedByUserId": "string (pmo_user_id)",
+    "ConfidenceScore": "decimal 0.00-1.00"
+  }
+}
+Response 201:
+{ "id": "string (sharepoint_item_id)", "fields": { ... } }
+Response 400:
+{ "error": { "code": "string", "message": "string" } }
+```
+
+**Data mapping — internal RAID Entry → SharePoint fields:**
+| Internal field | SharePoint column | Notes |
+|---|---|---|
+| `entry_id` | not stored | Platform-only ID |
+| `meeting_id` | `SourceMeetingId` | String |
+| `raid_type` | `RaidType` | Enum value |
+| `title` | `Title` | Required |
+| `description` | `Description` | Required |
+| `severity` | `Severity` | Null for ACTION/DECISION |
+| `owner_name` | `OwnerName` | |
+| `due_date` | `DueDate` | ISO 8601 |
+| `source_quote` | `SourceQuote` | |
+| `pmo_user_id` | `ApprovedByUserId` | |
+| `confidence_score` | `ConfidenceScore` | |
+
+**Scope-out:** Exact SharePoint column internal names (not display names) must be confirmed per client before build. The mapping above uses assumed column names that must be validated.
+
+---
+
+#### JIRA REST API
+
+**Auth:** OAuth 2.0 (preferred) or API Token in `Authorization: Bearer {token}` header. Credentials stored in Azure Key Vault; secret name: `jira-api-token-{client-id}`.
+**Base URL:** `https://{org}.atlassian.net/rest/api/3`
+**Timeout:** 8 seconds per request
+**Rate limit:** 1000 requests per 10-minute window (Atlassian standard). IF HTTP 429 THEN retry after `Retry-After` header value.
+**Retry logic:**
+- HTTP 200/201: no retry
+- HTTP 429: retry after `Retry-After` header; max 3 retries
+- HTTP 500/503: exponential backoff 2s, 4s; max 2 retries
+- HTTP 400/401/403/404: do not retry; log error; alert PMO if 401/403
+- Timeout: retry once after 3 seconds; if timeout again, queue and alert PMO
+
+**Read open tickets for matching:**
+```
+GET /search?jql=project={projectKey}+AND+status+not+in+(Done,Closed)&fields=summary,status,assignee,priority
+Response 200:
+{
+  "issues": [
+    {
+      "id": "string",
+      "key": "string (e.g. AP-123)",
+      "fields": {
+        "summary": "string",
+        "status": { "name": "string" },
+        "assignee": { "displayName": "string", "emailAddress": "string" },
+        "priority": { "name": "string" }
+      }
+    }
+  ]
+}
+```
+
+**Add comment (approved):**
+```
+POST /issue/{issueKey}/comment
+Request: { "body": { "type": "doc", "version": 1, "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "string" }] }] } }
+Response 201: { "id": "string", "created": "ISO8601" }
+Response 404: { "errorMessages": ["Issue not found"] }
+```
+
+**Create ticket (approved):**
+```
+POST /issue
+Request:
+{
+  "fields": {
+    "project": { "key": "string" },
+    "summary": "string (max 255 chars, required)",
+    "description": { "type": "doc", "version": 1, "content": [...] },
+    "issuetype": { "name": "Task|Bug|Story" },
+    "assignee": { "accountId": "string" },
+    "priority": { "name": "string" },
+    "duedate": "YYYY-MM-DD"
+  }
+}
+Response 201: { "id": "string", "key": "string (e.g. AP-124)" }
+Response 400: { "errors": { "field": "message" }, "errorMessages": ["string"] }
+```
+
+**Fallback:** IF JIRA API unavailable AND approved action is queued THEN queue update in WRITE_PENDING status; retry every 5 minutes for 1 hour; alert PMO after 3 failed retries. Do not discard approved actions.
+
+**Scope-out:** Per-project field mappings (custom fields, priority label values, transition IDs for status changes, issuetype names) must be confirmed per client before build. Transition IDs are not predictable — must be retrieved via `GET /issue/{key}/transitions` per project.
+
+---
+
+#### Outlook (Microsoft Graph API)
+
+**Auth:** OAuth 2.0, delegated permissions: `Mail.Send`. Access token scoped to the PMO user's identity via delegated flow — agent sends on behalf of the authenticated PMO user, not as a service account.
+**Credentials:** OAuth 2.0 client ID and secret stored in Azure Key Vault; secret name: `outlook-graph-client-secret`.
+**Base URL:** `https://graph.microsoft.com/v1.0`
+**Timeout:** 10 seconds
+**Rate limit:** 10,000 requests per 10 minutes per user. No burst concern at PMO volumes.
+**Retry logic:**
+- HTTP 202: success; no retry
+- HTTP 429: retry after `Retry-After`; max 2 retries
+- HTTP 500/503: retry once after 5 seconds; if still failing, alert PMO with full recipient list and approved content for manual send
+- HTTP 400/401: do not retry; log and alert PMO immediately (likely auth or content error)
+
+**Send approved meeting notes:**
+```
+POST /me/sendMail
+Request:
+{
+  "message": {
+    "subject": "string (max 255 chars — e.g. 'Meeting Notes: {meeting series name} — {date}')",
+    "body": {
+      "contentType": "HTML",
+      "content": "string (approved notes HTML — max 1MB)"
+    },
+    "toRecipients": [
+      { "emailAddress": { "address": "string", "name": "string" } }
+    ]
+  },
+  "saveToSentItems": true
+}
+Response 202: (no body — accepted for delivery)
+Response 400: { "error": { "code": "string", "message": "string" } }
+```
+
+**Guardrail — enforced before send call is made:**
+- `toRecipients` list must have ≥1 entry
+- `toRecipients` list must be confirmed by PMO (`distribution_list_confirmed = true`)
+- `pmo_decision` on notes draft must be APPROVED
+- PMO approval event must exist in audit log with matching `meeting_id` and `event_type = NOTES_APPROVED`
+- IF any guardrail fails THEN abort send; log `SEND_BLOCKED` event with specific reason; alert PMO
+
+**Fallback:** If send fails after retries → alert PMO with full approved content and recipient list; PMO can forward manually from their Outlook client. Set meeting status to SEND_FAILED (not DISTRIBUTED). Retry resumes when PMO triggers manual retry from platform UI.
 
 ### State Model
 
@@ -581,6 +853,162 @@ Detect new change requests, assemble impact assessment data from live project so
 
 ---
 
+# PMO AI Platform — Economics Alignment
+
+---
+
+## Operation Cost Classification
+
+| Operation | Type | Cost Level | Frequency | Notes |
+|---|---|---|---|---|
+| Transcript upload validation | Check | Cheap | Per meeting upload | Format and size validation only |
+| Speaker label parsing | Validate | Cheap | Per meeting | Deterministic text parsing |
+| RAID item extraction (LLM call) | Generate | Moderate | Per meeting | One LLM call per transcript; primary cost driver in Wave 1 |
+| Confidence scoring | Validate | Cheap | Per extracted item | Deterministic scoring against extraction result |
+| JIRA ticket matching | Coordinate | Expensive | Per action item | External API call per potential match; batch where possible |
+| SharePoint RAID read (duplicate check) | Coordinate | Expensive | Per meeting | One API call per meeting |
+| SharePoint RAID write | Coordinate | Expensive | Per approved item | One API call per item; batched where API supports |
+| Outlook send | Coordinate | Expensive | Per meeting (once approved) | One API call; not repeatable without PMO action |
+| Status report data collection (JIRA + SharePoint + MS Project) | Coordinate | Very Expensive | Per report cycle | 3 external API calls minimum per project per report |
+| Report narrative generation (LLM call) | Generate | Moderate | Per report per audience | 3 LLM calls per project (3 audience versions) |
+| Governance standards assessment (SharePoint scan) | Coordinate | Expensive | Weekly per project | N API calls per project where N = number of evidence sources |
+| CR impact assessment draft (LLM call) | Generate | Moderate | Per CR | One LLM call per change request |
+
+---
+
+## Cost Optimisation Decisions
+
+### JIRA Ticket Matching — Batching
+**Problem:** Matching 5 action items from a meeting against an open JIRA backlog of 200 tickets would require 5 separate `GET /search` calls under a naïve approach.
+**Chosen approach:** Single bulk `GET /search` call retrieves all open tickets for the project at the start of meeting processing. Action items are matched in-memory against the cached result set. One API call per meeting, not per action item.
+**Cache TTL:** Project ticket cache expires after 1 hour. If cache is expired at meeting upload time, refresh before matching begins.
+
+### LLM Call Scope — Single Pass Extraction
+**Problem:** Calling the LLM separately for RAID extraction, summary generation, and confidence scoring would triple token costs per meeting.
+**Chosen approach:** Single LLM call with structured output prompt that returns RAID items, confidence scores, and meeting summary in one response. Prompt engineering handles all three outputs simultaneously.
+**Token budget per meeting:** Maximum 8,000 input tokens (transcript); maximum 4,000 output tokens (structured RAID + summary). Transcripts exceeding 8,000 input tokens are chunked into overlapping segments; results merged and deduplicated.
+
+### Status Report Data Collection — Scheduled Batch
+**Problem:** Report data collection for 10 projects requires 30+ API calls (3 sources × 10 projects). If triggered simultaneously, this hits rate limits.
+**Chosen approach:** Collection is staggered — one project per 30-second interval. All collections complete before narrative generation begins. If any collection fails, the report for that project is queued rather than generated from partial data.
+
+### Governance Assessment — Incremental Checking
+**Problem:** Full governance assessment for 20 active projects weekly would require checking every evidence source for every project from scratch.
+**Chosen approach:** Only projects with changes since the last assessment (detected via SharePoint `lastModifiedDateTime` comparison) are fully re-assessed. Projects with no changes receive a "no change" pass automatically. Full assessment on all projects on Monday; incremental on other days.
+
+### Circuit Breakers
+| Integration | Circuit Opens After | Reset Attempt After | Fallback During Open |
+|---|---|---|---|
+| SharePoint | 5 consecutive failures | 60 seconds | Queue writes; alert PMO |
+| JIRA | 5 consecutive failures | 60 seconds | Queue writes; alert PMO |
+| Outlook | 3 consecutive failures | 120 seconds | Alert PMO with manual send instructions |
+| MS Project (Graph) | 5 consecutive failures | 60 seconds | Queue report; alert PMO; do not generate from incomplete data |
+
+---
+
+## Token Budget Constraints
+
+| Operation | Max Input Tokens | Max Output Tokens | Action if Exceeded |
+|---|---|---|---|
+| Meeting RAID extraction | 8,000 | 4,000 | Chunk transcript; process in overlapping 6,000-token segments |
+| Status report narrative (per audience) | 4,000 | 1,500 | Summarise input context before generation; never truncate output |
+| CR impact assessment | 3,000 | 1,000 | Summarise project data inputs before generation |
+| Governance escalation draft | 2,000 | 800 | Summarise gap evidence before generation |
+
+---
+
+# PMO AI Platform — Governance
+
+---
+
+## Applicable Regulations and Compliance Context
+
+| Regulation / Standard | Applicability | Implication for Platform |
+|---|---|---|
+| GDPR (EU) / UK GDPR | Meeting transcripts contain names, roles, and project-sensitive content of identifiable individuals | PII in transcripts must be masked in debug, trace, and audit logs. Data minimisation: transcripts stored only for the duration of processing + 30 days; raw transcript content not retained in long-term logs. Right to erasure: structured RAID entries reference speaker names — if a deletion request is received, speaker references in RAID entries must be anonymised, not deleted (RAID entry is a project governance record). |
+| FCA / PRA (Financial Services) | Platform is deployed to support regulated financial services clients | Platform must not store client project data (including RAID entries, meeting content) in a way that creates regulatory reporting obligations for EPAM. Client data residency options must be documented per client. |
+| AIB Change Methodology (and equivalent client governance frameworks) | Governance Monitoring Agent enforces client-specific governance rules | Rule configurations must be client-approved before deployment. Changes to governance rules require client sign-off, not just EPAM approval. |
+| SOX (where applicable) | Some PMO clients operate in SOX-controlled environments | RAID log entries and approval workflows must produce an auditable record of who approved what, when — sufficient to satisfy change management audit requirements. |
+
+---
+
+## Audit Trail Schema
+
+Every platform action that affects external systems or produces a governed output must emit an audit event. The audit log is append-only — no deletion or modification permitted.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `log_id` | UUID | Yes | Unique per event |
+| `timestamp` | ISO 8601 UTC | Yes | Event time |
+| `event_type` | enum | Yes | See event types below |
+| `meeting_id` | UUID | Conditional | Required for Meeting Intelligence events |
+| `item_id` | UUID | Conditional | RAID entry or report ID where applicable |
+| `agent_id` | string | Yes | e.g. `meeting-intelligence-agent-v1` |
+| `pmo_user_id` | UUID | Conditional | Required for all human decision events |
+| `proposed_content` | JSON | Conditional | Agent's proposal, where applicable (max 5KB) |
+| `confidence_score` | decimal | Conditional | 0.00–1.00 where applicable |
+| `human_decision` | enum | Conditional | APPROVED / MODIFIED / REJECTED — set only on human action |
+| `final_content` | JSON | Conditional | Approved or modified content actually written (max 5KB) |
+| `target_system` | string | Conditional | SharePoint / JIRA / Outlook where a write occurred |
+| `write_status` | enum | Conditional | SUCCESS / FAILED / QUEUED |
+| `escalation_code` | string | Conditional | Escalation trigger code if applicable |
+
+**Event types:** `TRANSCRIPT_UPLOADED`, `PROCESSING_STARTED`, `RAID_ITEM_PROPOSED`, `RAID_ITEM_APPROVED`, `RAID_ITEM_MODIFIED`, `RAID_ITEM_REJECTED`, `NOTES_DRAFT_GENERATED`, `NOTES_APPROVED`, `NOTES_SEND_REQUESTED`, `NOTES_SENT`, `SEND_BLOCKED`, `RAID_ENTRY_WRITTEN`, `RAID_WRITE_FAILED`, `JIRA_UPDATE_PROPOSED`, `JIRA_UPDATE_APPLIED`, `JIRA_UPDATE_REJECTED`, `ESCALATION_TRIGGERED`, `UNAUTHORISED_WRITE_ATTEMPT`, `GOVERNANCE_GAP_DETECTED`, `GOVERNANCE_GAP_DISMISSED`, `REPORT_DISTRIBUTED`, `COMMS_DRAFT_GENERATED`, `COMMS_SENT`, `CR_IMPACT_ASSESSED`
+
+---
+
+## Retention Periods
+
+| Data Type | Retention | Basis |
+|---|---|---|
+| Audit log (all event types) | 7 years | Financial services governance audit requirement |
+| Approved RAID entries | Retained until project closure + 3 years | Client governance record retention |
+| Meeting transcript (raw) | 30 days from upload | Data minimisation; processed content retained in structured form |
+| Meeting notes (approved content) | 3 years from project closure | Governance record |
+| Debug and trace logs | 30 days | Operational troubleshooting only |
+| Access tokens | Not stored; in-memory only | Security requirement |
+| Governance gap records | 7 years | Audit evidence |
+
+---
+
+## HITL Checkpoints and SLAs
+
+| Decision | Approval Required From | Escalation if Not Actioned Within | Next Step |
+|---|---|---|---|
+| RAID entry creation | Approving PMO user | 48 hours: reminder sent to PMO | After 72 hours: alert PMO Lead; item remains in PENDING_REVIEW indefinitely until human acts |
+| Meeting notes distribution | PMO who uploaded transcript | 4 hours for High-severity meeting content; 24 hours for standard | Reminder sent at SLA; notes are never auto-sent |
+| Governance escalation notice | PMO Lead | 4 hours from High-severity gap detection | Reminder sent; escalation never auto-sent |
+| Status report distribution | Approving PMO per audience version | 4 hours from draft ready | Reminder sent; report never auto-distributed |
+| Change request routing | PMO who received the CR | 4 hours from CR detected | Reminder sent; CR never auto-routed |
+
+---
+
+## Non-Repudiation
+
+The platform must produce evidence that cannot be plausibly denied by the approving party:
+
+- Every PMO approval action records: `pmo_user_id`, `timestamp`, `session_id`, `ip_address` (hashed for privacy), `decision` (APPROVED/MODIFIED/REJECTED), `final_content_hash` (SHA-256 of the approved content)
+- The `final_content_hash` allows verification that the content now in SharePoint matches what the PMO approved — detecting any post-approval modification
+- Audit log entries are append-only and cryptographically signed (HMAC with a platform key stored in Azure Key Vault) — any tampering with the log is detectable
+- PMOs cannot access the audit log write path — they can only read audit records via the platform UI, not modify or delete them
+
+---
+
+## Data Deletion and the Right to Erasure
+
+| Request Type | Action | What Is Retained |
+|---|---|---|
+| Delete speaker reference from RAID entry | Anonymise `source_speaker` and `source_quote` fields (replace with `[REDACTED]`) | Entry remains for governance record; provenance is preserved without PII |
+| Delete meeting transcript | Raw transcript deleted from platform storage after standard 30-day window; earlier deletion on request | Structured RAID proposals and approved entries are not deleted — they are governance records |
+| Full project data deletion (end of client contract) | Raw transcripts, unprocessed drafts deleted; audit logs retained per retention schedule | Audit logs retained 7 years per governance requirement; cannot be deleted on request |
+
+**Cascade rules:**
+- Deleting a MeetingSeries does not delete Meeting Records — series reference is SET NULL
+- Deleting a Project blocks deletion if active RAID entries exist — ON DELETE RESTRICT
+- Deleting a User sets `uploaded_by` and `pmo_user_id` to a retained `[DELETED USER]` placeholder — ON DELETE SET PLACEHOLDER (to preserve governance record without live PII reference)
+
+---
+
 # PMO AI Platform — Validation Design
 
 ---
@@ -735,6 +1163,62 @@ Detect new change requests, assemble impact assessment data from live project so
 
 ---
 
+## Scenario 7: Edge Case — Empty and Null Input Handling
+
+**Scenario:** A PMO uploads a transcript that is technically valid format but contains only the meeting header (date, attendees) with no substantive discussion — e.g., a 2-minute check-in call where all participants said "nothing to add, all on track."
+
+**Acceptance criteria:**
+
+| Criterion | Pass Condition |
+|---|---|
+| No fabrication | Agent must not generate RAID proposals if no extractable content exists; `proposals` array is empty (`[]`), not omitted |
+| Processing completes | Meeting record transitions to `PROPOSALS_READY` even with zero proposals; not `FAILED` |
+| PMO notification | PMO receives notification: "No RAID items detected in this transcript" — not silently empty |
+| Notes draft still generated | Narrative summary is generated ("Short check-in; no actions, risks, or decisions raised") — even with zero RAID items |
+| Word count threshold | IF `transcript_word_count` < 50 THEN flag as LOW_CONTENT before processing; do not block, but note in proposal interface |
+
+**Failure definition:** Agent generates placeholder or filler RAID items from a content-free transcript; meeting enters `FAILED` state when no proposals exist; PMO receives no notification about empty result.
+
+---
+
+## Scenario 8: Edge Case — Boundary Values
+
+**Scenario:** Tests of specific numeric thresholds and limits.
+
+| Test | Input | Expected Outcome |
+|---|---|---|
+| Confidence exactly at threshold | Action item with confidence_score = 0.80 (exactly at threshold) | Must proceed to standard review without LOW_CONFIDENCE flag. Boundary is ≥ 0.80. |
+| Confidence just below threshold | Action item with confidence_score = 0.799 | Must be flagged LOW_CONFIDENCE; cannot proceed without PMO confirmation |
+| Transcript at word count limit | Transcript with exactly 8,000 tokens | Processed in single pass; no chunking |
+| Transcript just over limit | Transcript with 8,001 tokens | Chunked into two overlapping segments; results merged; no duplicate items |
+| Due date inferred as today | "by end of today" on a Monday | Inferred date = today's date; `date_inferred = true`; flagged for PMO confirmation |
+| Due date in the past | "we should have done this last week" | Flag as PAST_DUE_DATE escalation; do not create action item with past due date without PMO override |
+| Max field length | `source_quote` = exactly 1000 characters | Accepted without truncation |
+| Over max field length | `source_quote` = 1001 characters | Truncated to 1000 characters; truncation recorded in item description |
+
+---
+
+## Scenario 9: Edge Case — Concurrent Actions (Race Condition)
+
+**Scenario:** Two PMOs are reviewing the same meeting's proposals simultaneously in separate browser sessions. PMO A approves a RAID item. PMO B simultaneously rejects the same item.
+
+**Expected behaviour:**
+- The platform must use optimistic locking on RAID item state. Each item carries an `etag` value; the approval/rejection action must include the current `etag`.
+- IF PMO A's action commits first THEN PMO B's action must return `409 Conflict` with message: "This item was modified by another user. Please refresh."
+- The item's final state is determined by whichever action committed first.
+- No item may end up in both APPROVED and REJECTED state.
+- Both actions are logged in the audit trail regardless of which succeeded.
+
+**Acceptance criteria:**
+- Exactly one outcome (APPROVED or REJECTED) is recorded for the item
+- The losing PMO's session shows a conflict notification
+- Both PMO actions are in the audit log with their respective decisions and timestamps
+- No duplicate RAID entries are written to SharePoint
+
+**Failure definition:** Both actions succeed, creating two conflicting states; item state is indeterminate; SharePoint write occurs twice.
+
+---
+
 ## Monitoring Signals (Production)
 
 | Signal | Measurement | Alert Threshold |
@@ -768,18 +1252,18 @@ Before Wave 1 is released to production at any client site:
 
 ## Section A: Assumptions
 
-These are statements treated as true for the purpose of this specification. Each carries a stated basis and must be validated before the relevant component is built.
+These are statements treated as true for the purpose of this specification. Status: [Known] = confirmed by stakeholder or evidence; [Assumed] = reasonable inference not yet verified; [Flagged] = must be validated before the affected component is built.
 
-| ID | Assumption | Basis | Risk if Wrong |
-|---|---|---|---|
-| A-01 | Meetings are transcribed by Teams or Zoom and the PMO can export or copy the transcript file | PMO survey data confirms Teams transcription is in use; transcript export is a standard Teams feature | If clients restrict transcript export access, manual upload model is blocked — core Wave 1 dependency fails |
-| A-02 | The RAID log for each client exists as a structured list in SharePoint with consistent field names across projects within that client | Confirmed by PMO survey respondents; SharePoint is described as the RAID log location | If RAID log is per-project Excel, not a SharePoint list, write-back integration requires per-project configuration rather than a single list schema |
-| A-03 | JIRA is the primary project tracking system and PMOs have read access to the relevant project boards | Confirmed by multiple PMO survey respondents; JIRA updates explicitly cited as a pain point | If client uses Azure DevOps, Monday.com, or a different tool, JIRA integration contracts do not apply and integration scope expands |
-| A-04 | RAG criteria are definable per client — there is someone at each client who can specify what constitutes Red, Amber, and Green for schedule, budget, and risk | PMO practice implies RAG is in use; no universal standard exists | If RAG criteria are not documented and no owner is identified, the platform cannot calculate RAG without client-provided definitions — report automation is blocked |
-| A-05 | The governance standards to be checked in Wave 2 are documented at least informally and can be translated into platform-configurable rules | Problem Statement explicitly identifies inconsistent governance as a pain; implies standards exist but are not consistently applied | If governance standards do not exist in any documented form, the Governance Monitoring Agent cannot be built until standards are defined — this is a client readiness precondition, not a technical one |
-| A-06 | PMOs have the authority to approve RAID log entries and JIRA updates without requiring sign-off from a separate governance role | RAID entry creation is described as a current PMO task | If a separate compliance or governance role must approve RAID entries, the approval workflow requires a second-tier review layer not currently specified |
-| A-07 | The 80 meetings/month and 50 reports/month figures are representative of the portfolio PMO workload at target clients | Stated in Problem Statement as ~80/month and ~50/month; PMO survey-derived | If actual volumes are materially lower, the ROI case weakens; if materially higher, infrastructure sizing is insufficient |
-| A-08 | Meeting notes are currently distributed to participants (however imperfectly) — there is an established expectation that they will be received | Implied by problem statement that notes are sent "from scratch" and "often delayed" | If notes are not currently distributed at all, the workflow introduces a new communication channel rather than improving an existing one — change management implications are different |
+| ID | Assumption | Basis | Status | Risk if Wrong | Validate With | Validation Question |
+|---|---|---|---|---|---|---|
+| A-01 | Meetings are transcribed by Teams or Zoom and the PMO can export or copy the transcript file | PMO survey data confirms Teams transcription is in use; transcript export is a standard Teams feature | [Assumed] | Manual upload model is blocked — core Wave 1 dependency fails | PMO contact at each client + IT | "Can you export a .vtt transcript from a completed Teams meeting today? Can you demonstrate it?" |
+| A-02 | The RAID log for each client exists as a structured list in SharePoint with consistent field names across projects within that client | PMO survey respondents described SharePoint as the RAID log location | [Assumed] | Write-back integration fails if RAID log is per-project Excel or uses inconsistent schemas | PMO Lead at each client | "Can you share the SharePoint list schema (List Settings → Columns) for your RAID log?" |
+| A-03 | JIRA is the primary project tracking system and PMOs have read access to the relevant project boards | Multiple PMO survey respondents cited JIRA; JIRA updates explicitly named as a pain point | [Assumed] | JIRA integration contracts do not apply; integration scope expands if a different tool is used | PMO Lead + IT | "Which system does your team use for project tracking? Do PMOs currently have JIRA API access?" |
+| A-04 | RAG criteria are definable per client — there is someone who can specify what constitutes Red, Amber, and Green | PMO practice implies RAG is in use; no universal standard exists | [Flagged] | Report automation blocked if criteria cannot be defined | PMO Lead + Portfolio Director | "Can you provide your RAG thresholds in writing? Who has authority to approve the RAG configuration for this deployment?" |
+| A-05 | Governance standards to be checked are documented at least informally and can be translated into platform-configurable rules | Problem Statement identifies governance inconsistency as a pain; implies standards exist | [Flagged] | Governance Monitoring Agent cannot operate without configured rules; this is a client readiness problem | PMO Lead + Compliance | "What governance standards do your PMOs currently enforce? Where are they documented? Who owns them?" |
+| A-06 | PMOs have authority to approve RAID log entries without sign-off from a separate compliance role | RAID entry creation described as current PMO task | [Assumed] | Approval workflow requires a second-tier review layer not currently specified | PMO Lead + Compliance | "Who currently has authority to create a RAID entry? Does anyone else need to approve it?" |
+| A-07 | 80 meetings/month and 50 reports/month are representative of target client workloads | Stated as ~80/month and ~50/month per PMO survey | [Assumed] | If higher: infrastructure sizing insufficient; if lower: ROI case weakens | PMO at target clients | "How many meetings per month do you personally follow up on? How many status reports do you produce?" |
+| A-08 | Meeting notes are currently distributed to participants, creating an established expectation | Problem statement describes notes as "often delayed" implying they are sent | [Assumed] | If notes are not currently sent at all, this is a new communication channel — change management implications differ | PMO at target clients | "Do you currently send meeting notes to all invitees after every meeting? How?" |
 
 ---
 
@@ -861,20 +1345,21 @@ These must be answered before the component they affect can be built or contract
 
 ## Summary Table
 
-| ID | Type | Affects | Priority |
-|---|---|---|---|
-| A-01 | Assumption | Wave 1 input model | Validate before Wave 1 build |
-| A-02 | Assumption | Wave 1 RAID write-back | Validate before Wave 1 integration build |
-| A-03 | Assumption | Wave 1 JIRA integration | Validate before Wave 1 integration build |
-| A-04 | Assumption | Wave 2 Status Reports RAG | Validate before Wave 2 build |
-| A-05 | Assumption | Wave 2 Governance Monitoring | Validate before Wave 2 build |
-| A-06 | Assumption | Wave 1 approval workflow | Validate at client onboarding |
-| A-07 | Assumption | ROI case, infrastructure sizing | Validate before commercial proposal |
-| A-08 | Assumption | Change management approach | Validate at client onboarding |
-| U-01 | Unknown | Wave 1 input model | **Resolve before build starts** |
-| U-02 | Unknown | Wave 1 RAID write-back | **Resolve before integration build** |
-| U-03 | Unknown | Wave 2 Governance Monitoring | **Resolve before Wave 2 build** |
-| U-04 | Unknown | Owner assignment accuracy target | Resolve before UAT commitment |
-| U-05 | Unknown | Wave 2 Change Request trigger | **Resolve before Wave 2 build** |
-| U-06 | Unknown | Wave 2 milestone monitoring | **Resolve before Wave 2 build** |
+| ID | Type | Status | Affects | Validate With | Priority |
+|---|---|---|---|---|---|
+| A-01 | Assumption | [Assumed] | Wave 1 input model | PMO contact + IT per client | Before Wave 1 build |
+| A-02 | Assumption | [Assumed] | Wave 1 RAID write-back | PMO Lead per client | Before Wave 1 integration build |
+| A-03 | Assumption | [Assumed] | Wave 1 JIRA integration | PMO Lead + IT per client | Before Wave 1 integration build |
+| A-04 | Assumption | [Flagged] | Wave 2 Status Reports RAG | PMO Lead + Portfolio Director | Before Wave 2 build — **blocking** |
+| A-05 | Assumption | [Flagged] | Wave 2 Governance Monitoring | PMO Lead + Compliance | Before Wave 2 build — **blocking** |
+| A-06 | Assumption | [Assumed] | Wave 1 approval workflow | PMO Lead + Compliance | At client onboarding |
+| A-07 | Assumption | [Assumed] | ROI case, infrastructure sizing | PMOs at target clients | Before commercial proposal |
+| A-08 | Assumption | [Assumed] | Change management approach | PMOs at target clients | At client onboarding |
+| U-01 | Unknown | [Flagged] | Wave 1 input model | PMO contact + IT per client | **Resolve before Wave 1 build starts** |
+| U-02 | Unknown | [Flagged] | Wave 1 RAID write-back | PMO Lead per client | **Resolve before integration build** |
+| U-03 | Unknown | [Flagged] | Wave 2 Governance Monitoring | PMO Lead + Compliance | **Resolve before Wave 2 build** |
+| U-04 | Unknown | [Flagged] | Owner assignment accuracy target | PMOs at target clients | Resolve before UAT commitment |
+| U-05 | Unknown | [Flagged] | Wave 2 Change Request trigger | PMO Lead per client | **Resolve before Wave 2 build** |
+| U-06 | Unknown | [Flagged] | Wave 2 milestone monitoring | PMO Lead + IT per client | **Resolve before Wave 2 build** |
+| U-07 | Unknown | [Flagged] | Platform deployment model + all data | IS/DPO per client | **Resolve before client contract** |
 | U-07 | Unknown | Platform deployment model | **Resolve before client contract** |
