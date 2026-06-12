@@ -257,8 +257,6 @@ The platform is an EPAM-built, browser-based web application hosted on Microsoft
 
 ---
 
----
-
 ## Entity Definitions
 
 ### Entity: RAID Entry
@@ -289,16 +287,27 @@ The platform is an EPAM-built, browser-based web application hosted on Microsoft
 | `sharepoint_item_id` | string | Max 100 chars, nullable | ID of written SharePoint list item |
 | `jira_ticket_key` | string | Max 20 chars, nullable | Associated JIRA ticket if any |
 
-**State Machine — RAID Entry proposal lifecycle:**
-```
-PROPOSED → PMO_REVIEW → APPROVED → WRITTEN_TO_SHAREPOINT → CLOSED
-                     → MODIFIED → APPROVED → WRITTEN_TO_SHAREPOINT → CLOSED
-                     → REJECTED → CLOSED
-```
+**`proposal_status` field (add to entity schema above):**
+
+| Attribute | Type | Constraints | Notes |
+|---|---|---|---|
+| `proposal_status` | enum | [PROPOSED, PMO_REVIEW, APPROVED, WRITTEN, REJECTED, CLOSED], required, default PROPOSED | Lifecycle state of this proposal |
+
+**State Machine — RAID Entry `proposal_status`:**
+
+| From | To | Trigger | Prerequisites |
+|---|---|---|---|
+| PROPOSED | PMO_REVIEW | Meeting transitions to IN_REVIEW | |
+| PMO_REVIEW | APPROVED | PMO sets `pmo_decision = APPROVED` or `MODIFIED` | `pmo_user_id` must be set |
+| PMO_REVIEW | REJECTED | PMO sets `pmo_decision = REJECTED` | `pmo_user_id` must be set |
+| APPROVED | WRITTEN | SharePoint write succeeds | `sharepoint_item_id` is set on success |
+| APPROVED | PMO_REVIEW | SharePoint write fails after all retries | `sharepoint_item_id` remains null; PMO alerted |
+| WRITTEN | CLOSED | Meeting record transitions to CLOSED | |
+| REJECTED | CLOSED | Meeting record transitions to CLOSED | |
 
 **Constraints:**
 - `pmo_decision` must not be set without `pmo_user_id`
-- `sharepoint_item_id` must be null until `pmo_decision = APPROVED` and write succeeds
+- `proposal_status` must not advance to WRITTEN until `pmo_decision` is APPROVED or MODIFIED AND `sharepoint_item_id` is set
 - Once `pmo_decision` is set, `raid_type`, `source_quote`, `confidence_score`, and `agent_proposed` are immutable
 - `date_inferred = true` requires `due_date` to be set AND the original relative text to be stored in `description`
 
@@ -357,6 +366,72 @@ UPLOADED → PROCESSING → PROPOSALS_READY → IN_REVIEW → PARTIALLY_APPROVED
 - APPROVED state requires `notes_approved_content IS NOT NULL` — cannot approve without notes
 - FAILED is terminal; no transition out of FAILED
 - `notes_draft` is set only by the agent; `notes_approved_content` is set only on PMO approval
+
+---
+
+### Entity: MeetingSeries
+
+| Attribute | Type | Constraints | Notes |
+|---|---|---|---|
+| `series_id` | UUID | Primary key, immutable | |
+| `project_id` | UUID | Foreign key → Project, required; ON DELETE RESTRICT | |
+| `name` | string | Max 200 chars, required | e.g. "Project Apex Steering" |
+| `default_distribution_list` | JSON | Array of `{email: string, name: string}`, required, min 1 entry | Pre-configured recipient list |
+| `created_by` | UUID | Foreign key → User, required, immutable | PMO who created the series |
+| `created_at` | timestamp | ISO 8601 UTC, immutable | |
+| `updated_at` | timestamp | ISO 8601 UTC | |
+| `active` | boolean | Required, default true | Inactive series are not offered at upload |
+
+**Constraints:**
+- `default_distribution_list` entries must each have a valid RFC 5322 `email` value
+- A `project_id` + `name` combination must be unique — no two series with the same name on the same project
+
+---
+
+### Entity: Project
+
+| Attribute | Type | Constraints | Notes |
+|---|---|---|---|
+| `project_id` | UUID | Primary key, immutable | |
+| `client_id` | UUID | Foreign key → Client (out of scope for v1 — use string), required | |
+| `name` | string | Max 200 chars, required | Project display name |
+| `jira_project_key` | string | Max 20 chars, nullable | e.g. "AP"; required if JIRA integration is enabled for this project |
+| `sharepoint_site_id` | string | Max 200 chars, nullable | Required for RAID log write-back |
+| `sharepoint_raid_list_id` | string | Max 200 chars, nullable | Specific RAID log list ID within the site |
+| `ms_project_site_id` | string | Max 200 chars, nullable | Required for Status Report milestone data |
+| `ms_project_plan_list_id` | string | Max 200 chars, nullable | Specific plan list ID within the MS Project site |
+| `rag_config_id` | UUID | Foreign key → RagConfiguration, nullable | Per-project RAG thresholds; if null, use client default |
+| `active` | boolean | Required, default true | Inactive projects are not offered at upload |
+| `created_by` | UUID | Foreign key → User, required, immutable | |
+| `created_at` | timestamp | ISO 8601 UTC, immutable | |
+| `updated_at` | timestamp | ISO 8601 UTC | |
+
+**Constraints:**
+- If `sharepoint_site_id` is null, RAID log write-back is disabled for this project; PMO is notified at upload
+- If `jira_project_key` is null, JIRA ticket matching is disabled; JIRA-related proposals are not generated
+
+---
+
+### Entity: User
+
+| Attribute | Type | Constraints | Notes |
+|---|---|---|---|
+| `user_id` | UUID | Primary key, immutable | |
+| `azure_ad_oid` | string | Max 100 chars, required, unique | Azure AD object ID — primary SSO identifier |
+| `email` | string | RFC 5322 format, required, unique | |
+| `display_name` | string | Max 200 chars, required | |
+| `role` | enum | [PMO_ANALYST, PMO_LEAD, PLATFORM_ADMIN], required | Determines platform permissions |
+| `active` | boolean | Required, default true | |
+| `created_at` | timestamp | ISO 8601 UTC, immutable | |
+| `last_login_at` | timestamp | ISO 8601 UTC, nullable | |
+| `deleted_at` | timestamp | ISO 8601 UTC, nullable | Soft-delete; set on deactivation |
+
+**Permission model:**
+- `PMO_ANALYST`: can upload transcripts, review and approve proposals, configure distribution lists for their own series
+- `PMO_LEAD`: all PMO_ANALYST permissions + can configure governance standards, RAG thresholds, routing rules, and approve changes to client-level configuration
+- `PLATFORM_ADMIN`: all permissions + can manage users and client-level settings
+
+**Deletion rule:** Users are soft-deleted (`deleted_at` set; `active = false`). All FK references to `user_id` in audit log entries and RAID entries are retained as-is — the user record is preserved for non-repudiation. Soft-deleted users cannot log in. The "deleted user placeholder" mentioned in governance refers to display name anonymisation only — the `user_id` UUID is always retained.
 
 ---
 
@@ -606,8 +681,9 @@ Response 400: { "errors": { "field": "message" }, "errorMessages": ["string"] }
 
 #### Outlook (Microsoft Graph API)
 
-**Auth:** OAuth 2.0, delegated permissions: `Mail.Send`. Access token scoped to the PMO user's identity via delegated flow — agent sends on behalf of the authenticated PMO user, not as a service account.
-**Credentials:** OAuth 2.0 client ID and secret stored in Azure Key Vault; secret name: `outlook-graph-client-secret`.
+**Auth:** OAuth 2.0 **delegated flow** (on-behalf-of). The platform sends email as the authenticated PMO user, not as a service account. This requires the PMO's delegated access token, obtained via Azure AD OAuth 2.0 authorization code flow at login. The platform does NOT use client credentials flow for Outlook — client credentials would send as a service identity, which is both technically different and prohibited by "sends on behalf of PMO user" requirement.
+**Token storage:** PMO's delegated access token stored in the platform session (server-side); encrypted at rest; never logged. Refresh token stored in Azure Key Vault per user session; secret naming: `outlook-refresh-token-{user_id}`. Token refreshed 60 seconds before expiry using the refresh token.
+**Required Azure AD permissions:** `Mail.Send` (delegated scope). Must be consented by each PMO user at first login — not admin-consented at tenant level (to preserve the "sends as this user" identity).
 **Base URL:** `https://graph.microsoft.com/v1.0`
 **Timeout:** 10 seconds
 **Rate limit:** 10,000 requests per 10 minutes per user. No burst concern at PMO volumes.
@@ -646,6 +722,83 @@ Response 400: { "error": { "code": "string", "message": "string" } }
 - IF any guardrail fails THEN abort send; log `SEND_BLOCKED` event with specific reason; alert PMO
 
 **Fallback:** If send fails after retries → alert PMO with full approved content and recipient list; PMO can forward manually from their Outlook client. Set meeting status to SEND_FAILED (not DISTRIBUTED). Retry resumes when PMO triggers manual retry from platform UI.
+
+### LLM Extraction Interface
+
+#### Input to LLM (single call per meeting)
+
+The extraction prompt is a structured system + user message pair. The system prompt is fixed and version-controlled; the user message contains the transcript content.
+
+**System prompt (fixed, version-controlled in platform config):**
+```
+You are a PMO governance assistant. Extract all RAID items (Risks, Actions, Issues, Decisions), 
+a meeting summary, and confidence scores from the meeting transcript provided.
+
+Definitions:
+- RISK: A future threat that has not yet materialised. Language indicators: "might", "could", "risk of", 
+  "concerned about", "worried that", "at risk of".
+- ACTION: A committed task with an owner and (ideally) a due date. Language indicators: "will do", 
+  "I'll", "can you", "action:", "to do", "agreed to".
+- ISSUE: A current problem that exists now. Language indicators: "is broken", "blocked", "not working", 
+  "failing", "has failed", "cannot", "error".
+- DECISION: Something formally agreed in this meeting. Language indicators: "agreed", "decided", 
+  "confirmed", "we will go with", "approved". Must have been agreed, not merely proposed.
+
+For each item, assign a confidence_score (0.00-1.00) based on:
+- 1.00: Explicit, unambiguous statement with clear owner/outcome
+- 0.90: Clear statement, minor inference on one attribute (e.g. owner implied not stated)
+- 0.80: Reasonably clear but one attribute requires inference
+- Below 0.80: Ambiguous language, multiple interpretations possible, or key attribute missing
+
+Return a JSON object matching the schema exactly. Do not fabricate items. If no items of a type 
+exist, return an empty array for that type.
+```
+
+**User message:**
+```
+Meeting transcript:
+{transcript_text}
+
+Meeting date: {meeting_date_iso8601}
+Project: {project_name}
+Known participants: {comma_separated_participant_names_from_series_config}
+```
+
+**Token limits:** `transcript_text` must be ≤ 6,000 tokens. If transcript exceeds 6,000 tokens, chunk into overlapping 5,500-token segments (500-token overlap) and merge results, deduplicating by `source_quote` exact match.
+
+#### Expected LLM Output (JSON schema)
+
+```json
+{
+  "summary": "string (max 500 chars — plain text narrative of key topics and outcomes)",
+  "summary_confidence": "decimal 0.00-1.00",
+  "items": [
+    {
+      "raid_type": "RISK|ACTION|ISSUE|DECISION",
+      "title": "string (max 200 chars, required)",
+      "description": "string (max 2000 chars, required — full detail including context)",
+      "confidence_score": "decimal 0.00-1.00 (required)",
+      "source_quote": "string (max 1000 chars — verbatim text from transcript, required)",
+      "source_speaker": "string|null — matched against known_participants; null if unidentifiable",
+      "owner_name": "string|null — required for ACTION; null for RISK/ISSUE/DECISION unless named",
+      "due_date": "YYYY-MM-DD|null — for ACTION; null if not stated or inferable",
+      "due_date_original_text": "string|null — original text if date was inferred (e.g. 'by end of week')",
+      "severity": "LOW|MEDIUM|HIGH|CRITICAL|null — for RISK and ISSUE only; null for ACTION/DECISION",
+      "decision_maker": "string|null — for DECISION only; person who stated the decision"
+    }
+  ]
+}
+```
+
+**If LLM returns malformed JSON:** retry once with an explicit format correction prompt. If second attempt also fails, set `meeting.status = FAILED`; alert PMO; do not partially process.
+
+**If LLM returns an item with `confidence_score` absent:** treat as 0.50; flag as LOW_CONFIDENCE.
+
+#### Confidence Scoring Method
+
+Confidence scores are LLM self-reported as part of the structured output (not a separate classifier pass). The prompt definition above establishes the scoring rubric. During UAT, EPAM will validate that LLM confidence scores correlate with PMO acceptance rates — if acceptance rate for items scored ≥ 0.80 is below 80%, the rubric must be revised.
+
+---
 
 ### State Model
 
@@ -752,10 +905,44 @@ Automatically collect project data from configured sources, detect milestone hea
 
 ### Integration Contracts
 
-- JIRA: `GET /rest/api/3/search` for ticket and milestone status
-- MS Project: `GET /sites/{siteId}/lists/{planListId}/items` for schedule data
-- SharePoint RAID: `GET /sites/{siteId}/lists/{raidListId}/items` for risk and decision context
-- Outlook: `POST /me/sendMail` for approved report distribution
+All Wave 2 integrations use the same auth, credential storage, and base URLs as Wave 1 contracts. Only the operation-specific details are specified here.
+
+**Shared settings (all Wave 2 integrations):**
+- Auth: OAuth 2.0; credentials in Azure Key Vault per integration type
+- Microsoft Graph base URL: `https://graph.microsoft.com/v1.0`
+- JIRA base URL: `https://{org}.atlassian.net/rest/api/3`
+- Default timeout: 10 seconds
+- Default retry: HTTP 5xx → exponential backoff 2s, 4s, 8s (max 3); HTTP 429 → `Retry-After` header; HTTP 4xx → no retry
+- Circuit breaker: 5 consecutive failures → open for 60 seconds
+
+**JIRA — retrieve milestone/ticket status:**
+```
+GET /search?jql=project={projectKey}+AND+issuetype=Milestone&fields=summary,status,duedate,assignee
+Response 200: { "issues": [{ "key": "string", "fields": { "summary": "string", "status": { "name": "string" }, "duedate": "YYYY-MM-DD|null", "assignee": { "displayName": "string" }|null } }] }
+Response 400: { "errorMessages": ["string"] }
+Fallback: queue report with MISSED_DATA_SOURCE alert; do not generate from partial data
+```
+
+**MS Project (SharePoint list) — retrieve plan items:**
+```
+GET /sites/{project.ms_project_site_id}/lists/{project.ms_project_plan_list_id}/items?$select=fields&$expand=fields($select=Title,Status,StartDate,DueDate,PercentComplete,IsCriticalPath)
+Response 200: { "value": [{ "id": "string", "fields": { "Title": "string", "Status": "string", "StartDate": "ISO8601", "DueDate": "ISO8601", "PercentComplete": "integer 0-100", "IsCriticalPath": "boolean" } }] }
+Fallback: same as JIRA — queue report; alert PMO
+```
+
+**SharePoint — read RAID log for narrative context:**
+```
+GET /sites/{project.sharepoint_site_id}/lists/{project.sharepoint_raid_list_id}/items?$filter=fields/Status ne 'CLOSED'&$select=fields&$expand=fields
+Response 200: { "value": [{ "id": "string", "fields": { "RaidType": "string", "Title": "string", "Severity": "string", "Status": "string", "OwnerName": "string", "DueDate": "string" } }] }
+```
+
+**Outlook — distribute approved report:**
+```
+POST /me/sendMail (delegated, same auth as Wave 1 Outlook)
+Request: { "message": { "subject": "string", "body": { "contentType": "HTML", "content": "string (max 1MB)" }, "toRecipients": [{ "emailAddress": { "address": "string" } }] }, "saveToSentItems": true }
+Response 202: (no body)
+Fallback: if send fails after retries → alert PMO Lead; report stays in APPROVED state; PMO can re-trigger send
+```
 
 ### Escalation Triggers
 
@@ -784,10 +971,25 @@ Continuously assess every active project against configured governance standards
 
 ### Integration Contracts
 
-- SharePoint: `GET /sites/{siteId}/lists/{docsLibraryId}/items` for document evidence
-- JIRA: `GET /rest/api/3/issue/{key}` for change request and approval status
-- Platform internal RAID store: read Wave 1 outputs as governance evidence
-- Outlook: `POST /me/sendMail` for approved escalation notices only
+All Wave 2 shared settings apply (see Status Report Agent above).
+
+**SharePoint — read document evidence for governance checks:**
+```
+GET /sites/{project.sharepoint_site_id}/lists/{listId}/items?$filter=fields/ContentType eq '{documentType}'&$select=fields&$expand=fields($select=Title,Modified,ApprovalStatus)
+Response 200: { "value": [{ "id": "string", "fields": { "Title": "string", "Modified": "ISO8601", "ApprovalStatus": "string|null" } }] }
+Note: `listId` and `documentType` values are defined in the governance standard configuration per check
+Fallback: IF document list cannot be read THEN mark check as UNRESOLVABLE_GAP; do not assume compliant
+```
+
+**JIRA — check change request approval status:**
+```
+GET /issue/{issueKey}?fields=status,resolution,customfield_approvalStatus
+Response 200: { "key": "string", "fields": { "status": { "name": "string" }, "resolution": { "name": "string" }|null } }
+Response 404: { "errorMessages": ["Issue Does Not Exist"] } → treat as gap evidence absent → UNRESOLVABLE_GAP
+```
+
+**Outlook — send approved escalation notice (delegated, same as Wave 1):**
+Same contract as Wave 1 Outlook send. Escalation notices use the approving PMO Lead's delegated token.
 
 ---
 
@@ -837,6 +1039,58 @@ Detect new change requests, assemble impact assessment data from live project so
 
 ---
 
+## Teams Notification Integration
+
+All PMO alerts, reminders, and action prompts are delivered via Microsoft Teams personal chat messages to the relevant PMO user. This integration is used by every sub-agent.
+
+**Auth:** OAuth 2.0, application permissions: `Chat.Create`, `ChatMessage.Send`. Admin-consented at tenant level (application flow, not delegated — notifications are sent by the platform to users, not on behalf of a user).
+**Credentials:** Azure AD app registration client secret stored in Azure Key Vault; secret name: `teams-graph-app-secret`.
+**Base URL:** `https://graph.microsoft.com/v1.0`
+**Timeout:** 8 seconds
+**Rate limit:** 50 requests per second per app. Notifications are low-volume; no batching required.
+**Retry logic:**
+- HTTP 202: success
+- HTTP 429: retry after `Retry-After` header; max 2 retries
+- HTTP 500/503: retry once after 5 seconds; if fails, log and proceed (notification failure must not block the triggering workflow)
+- HTTP 401/403: do not retry; alert PLATFORM_ADMIN (app permission issue)
+
+**Send notification to PMO user:**
+```
+POST /chats/{chatId}/messages
+Request:
+{
+  "body": {
+    "contentType": "html",
+    "content": "string (HTML, max 2000 chars)"
+  }
+}
+Response 201: { "id": "string", "createdDateTime": "ISO8601" }
+```
+
+**Chat ID resolution:** The platform must maintain a `teams_chat_id` per user (stored on the `User` entity — add field: `teams_chat_id: string, max 200 chars, nullable`). Chat IDs are resolved at first notification by creating a 1:1 chat between the platform app and the user:
+```
+POST /chats
+Request: { "chatType": "oneOnOne", "members": [
+  { "@odata.type": "#microsoft.graph.aadUserConversationMember", "roles": ["owner"], "user@odata.bind": "https://graph.microsoft.com/v1.0/users/{platform_app_id}" },
+  { "@odata.type": "#microsoft.graph.aadUserConversationMember", "roles": ["owner"], "user@odata.bind": "https://graph.microsoft.com/v1.0/users/{user.azure_ad_oid}" }
+]}
+Response 201: { "id": "string (chatId)" }
+```
+Once resolved, `teams_chat_id` is stored on the User record and reused for all subsequent notifications to that user.
+
+**Message format — standard notification:**
+```html
+<b>[PMO Platform]</b> {event_title}<br/>
+{event_description}<br/>
+<a href="{platform_deep_link}">Open in platform →</a>
+```
+
+**Deep link format:** `https://{platform_host}/review/{entity_type}/{entity_id}` — links directly to the relevant review item, not the platform home screen.
+
+**Fallback:** If Teams notification fails after retries, fall back to Outlook notification via the same user's email address. If Outlook also fails, log `NOTIFICATION_FAILED` event; do not block the underlying workflow.
+
+---
+
 ## Platform-Wide Requirements
 
 | # | Requirement |
@@ -849,6 +1103,9 @@ Detect new change requests, assemble impact assessment data from live project so
 | P-06 | Human override always takes precedence. IF a PMO modifies an agent proposal THEN the modified version is recorded as the authoritative output; the original proposal is retained in the audit log as the agent's suggestion only. |
 | P-07 | All Microsoft Graph and JIRA API calls must use OAuth 2.0. Access tokens must not be stored in application logs. Token refresh is handled by the platform authentication layer. |
 | P-08 | The platform must operate in two modes per client: default mode (manual transcript upload; no Graph API transcript permissions required) and enhanced mode (automatic transcript retrieval where IT has provisioned Graph API scopes). Mode selection is per-client configuration. |
+| P-09 | **Configuration system:** All configurable parameters (RAG thresholds, confidence thresholds, governance standards, routing rules, audience templates, distribution lists, business hours) must be stored in a `PlatformConfiguration` table in the platform database, not hardcoded. Schema: `config_id` (UUID), `client_id` (string), `project_id` (UUID, nullable — null = client-level default), `config_key` (string, max 100 chars), `config_value` (JSON), `version` (integer, auto-increment), `changed_by` (UUID → User), `changed_at` (ISO 8601 UTC), `previous_value` (JSON, nullable). A PMO_LEAD user can update configuration via a `PUT /api/v1/config/{config_key}` endpoint. Changes take effect on the next scheduled run or immediately for on-demand operations. All configuration changes are versioned and audited. |
+| P-10 | **Batch review for JIRA updates:** "Batch review" (referenced in Task 1.16) is a dedicated view in the platform UI accessible from the Home Dashboard under "Pending JIRA Updates." It shows all queued low-priority JIRA update proposals across all meetings for a given project, grouped by meeting. The PMO selects which updates to apply; unchecked items are rejected. The PMO triggers batch application via an "Apply selected" button. The platform applies approved items and logs each as a separate JIRA update event in the audit trail. A PMO session that does not complete batch review leaves proposals in PENDING_JIRA_REVIEW status; no timeout — they remain until the PMO acts. |
+| P-11 | **Business day definition:** "Business day" in all SLA and timing calculations means Monday–Friday, 09:00–17:00 in the timezone configured for the client (`client_timezone` in PlatformConfiguration, default `Europe/London`). Public holidays are not automatically excluded in v1 — this is a known limitation. SLA calculations use calendar days as a fallback where business day calculation would require a holiday calendar. The spec note "overdue by >1 business day" means: approval requested timestamp + 1 × 24 hours of business hours (i.e. 09:00 day N to 09:00 day N+1, excluding weekends) has elapsed. If the approval request was raised on a Friday at 16:00, the 1-business-day SLA expires Monday at 16:00. |
 
 
 ---
