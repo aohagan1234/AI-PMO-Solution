@@ -62,17 +62,17 @@ Nothing gets written to a record or sent externally without explicit human appro
 
 Every RAID item is traced back to the meeting ID, timestamp, and speaker. If a decision is ever disputed — *"I never agreed to that"* — the PMO can point to the exact moment in the recording it came from. Generic summaries do not do this at the individual item level.
 
-**5. Meeting notes structure and distribution to all invitees**
+**5. Meeting notes structure and governed distribution**
 
-Copilot produces a summary for the person who asked for it. This tool produces structured meeting notes — narrative summary, decisions, and RAID action list at the foot — and distributes them via Outlook to every person who was *invited* to the meeting, not just those who attended. The invitee list is retrieved from the calendar invitation. People who could not attend receive the same governed record as those who were present. No generic AI tool manages this distribution step.
+Copilot produces a summary for the person who asked for it. This tool produces structured meeting notes — narrative summary, decisions, and RAID action list at the foot — and sends them via Outlook to a PMO-configured distribution list in one approved action. PMOs maintain standing distribution lists per recurring meeting series (set once, reused every time); for ad hoc meetings the list is confirmed at review time. People who could not attend receive the same governed record as those who were present. No generic AI tool manages this distribution step.
 
 **6. Consistency**
 
-A PMO using Copilot or an internal AI uses it when they remember to, with no standard process and no guaranteed connection to downstream systems. This tool runs as a standardised automated workflow for every meeting — the consistency is part of the governance value.
+A PMO using Copilot or an internal AI uses it when they remember to, with no standard process and no guaranteed connection to downstream systems. This tool processes every meeting the PMO uploads — consistently, with the same RAID taxonomy, the same confidence thresholds, and the same approval workflow every time. The consistency is part of the governance value.
 
 ### The one-line answer for the pitch
 
-> *"Copilot gives you better notes for yourself. This gives you an automated PMO governance workflow — RAID classification, system write-back, approval routing, structured minutes sent to all invitees, and a full audit trail. Those are different things."*
+> *"Copilot gives you better notes for yourself. This gives you a governed PMO workflow — RAID classification, system write-back, approval routing, structured minutes sent to your distribution list with one action, and a full audit trail. Those are different things."*
 
 ---
 

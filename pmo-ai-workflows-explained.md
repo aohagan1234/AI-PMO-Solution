@@ -44,13 +44,13 @@ After a meeting, a PMO typically spends 20–30 minutes re-reading notes to find
 
 | Step | What the AI Does | What the PMO Does |
 |---|---|---|
-| **Ingest transcript** | Reads the Teams/Zoom transcript, identifies speakers, links to project | Nothing — picked up automatically |
+| **Ingest transcript** | PMO uploads or pastes the transcript into the platform and selects the associated project. System identifies speakers and links to project context. Where Graph API has been provisioned by IT, retrieval is automatic — but manual upload is the default. | Upload transcript after the meeting — one action, under a minute |
 | **Generate meeting notes** | Produces structured meeting notes covering key topics, discussion, and decisions — with all RAID items listed at the foot | Reviews and approves before distribution |
 | **Extract RAID items** | Identifies Risks, Actions, Issues, and Decisions with confidence scores | Reviews flagged items; approves all entries |
 | **Assign owners & dates** | Infers who owns each action and converts vague dates to specific ones | Confirms ambiguous cases |
 | **Propose JIRA updates** | Matches actions to existing tickets; prepares comments, status changes, new tickets | Confirms before any update is applied |
 | **Propose RAID log entries** | Formats items into RAID schema and queues for approval | Approves each entry — nothing is written without sign-off |
-| **Distribute meeting notes** | Retrieves the full invitee list from the meeting invitation and sends approved notes via Outlook to all invited participants | Reviews and sends — AI never sends independently |
+| **Distribute meeting notes** | Pre-populates the distribution list from the PMO-configured standing list for that meeting series. PMO confirms or edits the list, then sends via Outlook. | Confirms recipient list and sends — one action; AI never sends independently |
 
 **Why it is primary:** Highest score, fully standalone, and it acts as the foundation — the actions, decisions, and RAID items it captures feed directly into Status Reports, Personal Task Management, Strategic Resourcing, and Governance Monitoring.
 
@@ -261,7 +261,7 @@ These were assessed and validated but require the data foundations that earlier 
 
 | Today | With the AI Tool |
 |---|---|
-| 30 min writing up meeting notes | Draft ready automatically after the meeting |
+| 30 min writing up meeting notes | PMO uploads transcript; draft ready within minutes |
 | RAID items lost or forgotten | Processed within 30 min of transcript; in the log after PMO approval |
 | JIRA updated manually (or not at all) | Updates proposed automatically after each meeting |
 | Milestone slippage spotted at report time, not before | Milestone health checked continuously; at-risk milestones flagged before the reporting cycle |

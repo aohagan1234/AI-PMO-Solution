@@ -16,14 +16,14 @@ It connects to the tools PMOs already use — Microsoft Teams, SharePoint, Outlo
 
 ### After the Meeting Ends (Same Day)
 
-A meeting ends at 3 PM. Teams transcribes the recording. Within minutes of the transcript being ready, the tool processes it — RAID items extracted, JIRA updates prepared, follow-up emails drafted.
+A meeting ends at 3 PM. The PMO opens the platform in their browser, uploads the Teams transcript (exported directly from Teams, or pasted as text), and selects the associated project. Processing takes a couple of minutes.
 
 By 3:20 PM, the PMO gets a Teams notification:
 
 ```
 📋  Project Apex Steering just processed
     6 items ready for your review
-    Meeting ended 3:00 PM  ·  Ready at 3:18 PM
+    Uploaded 3:05 PM  ·  Ready at 3:18 PM
 
     [Review now →]    [Review in morning queue →]
 ```
@@ -87,9 +87,9 @@ Each card shows:
 - **Proposed owner and severity**
 - **Three choices** — approve, modify, or reject
 
-The PMO works through all 14 items across three meetings in about 10–15 minutes. Every approved item is written to the SharePoint RAID log and JIRA automatically. The meeting notes — covering what was discussed, what was decided, and the full action list at the foot — are drafted and ready to send to all invited participants with one click.
+The PMO works through all 14 items across three meetings in about 10–15 minutes. Every approved item is written to the SharePoint RAID log and JIRA automatically. The meeting notes — covering what was discussed, what was decided, and the full action list at the foot — are drafted and ready to send. The distribution list is pre-populated from the standing list configured for that meeting series; the PMO confirms it and sends with one click.
 
-**What happens without the tool:** 60–90 minutes of re-reading notes, guessing at owners, manually updating JIRA, writing up minutes from scratch — often the day after the meeting, and often not sent to everyone who was invited.
+**What happens without the tool:** 60–90 minutes of re-reading notes, guessing at owners, manually updating JIRA, writing up minutes from scratch — often the day after the meeting, and often not sent to everyone who should receive them.
 
 ---
 
@@ -223,10 +223,10 @@ The PMO reads the assessment, adds a sentence about the timeline risk, and route
 
 | Task | Without the Tool | With the Tool |
 |---|---|---|
-| Meeting follow-up (3 meetings) | 60–90 min re-reading notes | 10–15 min in the review queue |
+| Meeting follow-up (3 meetings) | 60–90 min re-reading notes | Upload transcript; 10–15 min in the review queue |
 | RAID log updated | Later that day, or never | Same day if reviewed promptly, or first thing next morning |
 | JIRA updated | Manual, often forgotten | Automatic on approval |
-| Meeting notes sent to all invitees | Written from scratch, often delayed, often sent only to attendees | Draft ready, sent to all invited participants in 2 minutes |
+| Meeting notes sent | Written from scratch, often delayed, often sent only to attendees | Draft ready; confirm distribution list and send in 2 minutes |
 | Milestone slippage | Spotted at report time, often too late | Flagged continuously; at-risk milestones surfaced before the reporting cycle |
 | Governance gaps | Found in audits or escalations, too late | Every project checked weekly; gaps flagged automatically |
 | Change request impact assessment | 30–60 min cross-referencing plan, RAID, and financials | AI-assembled assessment ready to review in under 5 minutes |

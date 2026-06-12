@@ -115,7 +115,7 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 
 **Micro-Task Inventory**
 
-- **[1.1] Meeting Content Ingestion** — Receive transcript, identify speakers, clean text, link to project context.
+- **[1.1] Meeting Content Ingestion** — PMO uploads or pastes transcript into the platform and selects the associated project. System accepts Teams .vtt, plain text, or .docx formats. Identifies speakers, cleans text, links to project context. Where Graph API has been provisioned, transcript retrieval is automatic — but this is an optional enhancement, not a dependency.
 - **[1.2] Meeting Summary Generation** — Identify topics, extract discussion points, generate audience-adapted executive summary.
 - **[1.3] RAID Item Extraction:**
   - **[1.3.1] Risk (R):** Detect risk language ("might fail," "concerned about"), assess likelihood, identify owner, propose mitigation if discussed
@@ -125,7 +125,7 @@ RAID = **R**isks (future threats), **A**ctions (commitments with owners), **I**s
 - **[1.4] RAID Classification & Confidence** — Classify as R/A/I/D, generate confidence score per item, flag low-confidence (<0.80) for human review, cross-reference existing entries.
 - **[1.5] JIRA Integration** — Match actions to existing tickets, identify new tickets needed, prepare updates, flag high-priority for human review.
 - **[1.6] RAID Log Maintenance** — Format per schema, set severity for R/I, set due dates for A, link D to source meeting, route ALL entries for human approval.
-- **[1.7] Meeting Notes Generation** — Draft structured meeting notes: narrative summary of key topics and decisions, followed by the full RAID action list at the foot (owners, due dates, classifications). Retrieve invitee list from meeting calendar invitation. Route for human review before distribution to all invited participants via Outlook.
+- **[1.7] Meeting Notes Generation** — Draft structured meeting notes: narrative summary of key topics and decisions, followed by the full RAID action list at the foot (owners, due dates, classifications). Pre-populate distribution list from PMO-configured standing list for the meeting series; PMO confirms or edits before sending. Route for human review before distribution via Outlook.
 
 **Cognitive Dimensions**
 
@@ -245,7 +245,7 @@ BP3: Governance Gate (Synthesize → Execute)
 
 | ID | Assumption | Confidence | Validation |
 |---|---|---|---|
-| A-01 | Meetings are recorded/transcribed | Medium | Ask stakeholder |
+| A-01 | Meetings are transcribed in Teams/Zoom and PMOs can export or copy the transcript | Medium | Confirm per client — transcript export access is the key dependency for the manual upload model |
 | A-02 | JIRA is primary tracking system | Medium | System inventory |
 | A-03 | RAID log is formal governance artifact | Medium | Confirm with compliance |
 | A-04 | Decisions frequently disputed after meetings | High | Implied by pain points |
@@ -620,8 +620,8 @@ LEVEL 0 — HUMAN ONLY
 
 | Failure | Detection | Fallback |
 |---|---|---|
-| Transcript unavailable | No file/API response | Request manual notes |
-| Low-quality transcript | Low confidence scores | Flag for manual review |
+| PMO uploads wrong or incomplete transcript | Low confidence scores across extraction | Flag quality issue; prompt PMO to re-upload |
+| Low-quality transcript (garbled audio, missing speakers) | Low confidence scores | Flag affected sections for manual review |
 | Decision logged as proposal | Post-hoc audit | All D entries need approval |
 | Risk misclassified as Issue | Post-hoc audit | All R/I entries need approval |
 | Action missed | Post-hoc audit | Conservative extraction |
@@ -658,14 +658,15 @@ Every action logs: `meeting_id`, `timestamp`, `event_type`, `raid_type` (R/A/I/D
 
 ### Systems Inventory
 
-| System | Purpose | Owner | Access | Availability | Risk |
+| System | Purpose | Owner | Access | Required | Risk |
 |---|---|---|---|---|---|
-| Microsoft Teams | Meeting transcripts | IT | Graph API | High | Low |
-| Zoom | Meeting transcripts (alt) | IT | REST API | Medium | Low |
-| Jira | Project tracking | PMO/IT | REST API | High | Low |
-| SharePoint | RAID logs, documents | IT | Graph API | High | Medium |
-| Outlook | Email | IT | Graph API | High | Low |
-| MS Project | Project scheduling | PMO | Graph API | Medium | Medium |
+| EPAM Platform (upload UI) | Primary transcript input — PMO uploads/pastes transcript | EPAM | N/A | **Required (default)** | Low |
+| Microsoft Teams | Automatic transcript retrieval (optional enhancement) | IT | Graph API — requires IT provisioning | Optional | Low |
+| Zoom | Automatic transcript retrieval alternative (optional) | IT | REST API — requires IT provisioning | Optional | Low |
+| Jira | Project tracking — read tickets, propose updates | PMO/IT | REST API | Required | Low |
+| SharePoint | RAID logs, documents — read and write | IT | Graph API | Required | Medium |
+| Outlook | Meeting notes distribution, notifications | IT | Graph API | Required | Low |
+| MS Project | Project scheduling data (Status Reports) | PMO | Graph API | Required (Wave 2) | Medium |
 
 ---
 
@@ -673,7 +674,8 @@ Every action logs: `meeting_id`, `timestamp`, `event_type`, `raid_type` (R/A/I/D
 
 | Object | System of Record | Key | Sensitivity |
 |---|---|---|---|
-| Meeting Transcript | Teams/Zoom | meeting_id | Medium (PII possible) |
+| Meeting Transcript | PMO upload (default) / Teams/Zoom API (optional) | meeting_id | Medium (PII possible) |
+| Distribution List | EPAM platform (PMO-configured per meeting series) | series_id | Low |
 | RAID Entry | SharePoint | entry_id | Medium (audit requirement) |
 | JIRA Ticket | Jira | ticket_key | Low |
 | Meeting Summary | Agent store | summary_id | Low |
@@ -682,9 +684,10 @@ Every action logs: `meeting_id`, `timestamp`, `event_type`, `raid_type` (R/A/I/D
 
 ### Key Interfaces
 
-#### Teams (Graph API)
+#### Teams (Graph API) — Optional Enhancement
 
 **Auth:** OAuth 2.0 (Azure AD) | **Base:** `https://graph.microsoft.com/v1.0/`
+**Note:** Requires IT provisioning of Graph API scopes. Not required for Wave 1 default operation — enables automatic transcript retrieval where permitted.
 
 | Operation | Method | Endpoint |
 |---|---|---|
@@ -738,11 +741,11 @@ Every action logs: `meeting_id`, `timestamp`, `event_type`, `raid_type` (R/A/I/D
 ### Data Flow
 
 ```
-Teams/Zoom ──► Agent [Ingest → Extract → Classify → Generate] ──► Proposals
-                               ↕                                      ↓
+PMO Upload ──► Agent [Ingest → Extract → Classify → Generate] ──► Proposals
+(default)                      ↕                                      ↓
                          Jira (read)                             PMO Analyst
-                                                                     ↓
-                                                       Approve ──► Jira / SharePoint / Outlook
+Teams/Zoom API                                                        ↓
+(optional enhancement) ─►                             Approve ──► Jira / SharePoint / Outlook
 ```
 
 ---
@@ -751,8 +754,8 @@ Teams/Zoom ──► Agent [Ingest → Extract → Classify → Generate] ──
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| Transcript unavailable | High | Manual notes fallback |
-| Poor transcript quality | High | Flag for manual review |
+| PMO unable to export transcript (client restriction) | High | Confirm transcript download access per client before build; this is the only genuine blocker for manual upload model |
+| Poor transcript quality | Medium | Flag low-confidence sections; prompt PMO to supplement with manual notes |
 | JIRA rate limiting | Medium | Throttling; batch updates |
 | SharePoint permissions | Medium | IT to provision access |
 | PII in transcripts | Medium | PII detection; masking in logs |
@@ -763,9 +766,10 @@ Teams/Zoom ──► Agent [Ingest → Extract → Classify → Generate] ──
 
 | Item | Impact | Resolution |
 |---|---|---|
-| Teams transcription API access | BLOCKING | IT to provision Graph API permissions |
+| PMO transcript export access | **CONFIRM EARLY** — if clients restrict transcript download, manual upload model is blocked | Confirm per client that PMOs can export or copy Teams/Zoom transcripts |
 | RAID log SharePoint schema | MEDIUM | PMO to document current schema |
 | JIRA project field mappings | MEDIUM | PMO to provide per-project config |
+| Teams Graph API permissions | NOT BLOCKING for Wave 1 | Pursue in parallel as optional enhancement; manual upload covers Wave 1 |
 
 ---
 
@@ -920,8 +924,8 @@ Tag all unconfirmed statements: `[ASSUMPTION: High/Medium/Low]`
 
 | ID | Assumption | Confidence | Status |
 |---|---|---|---|
-| U1 | Teams meetings recorded | Medium | VALIDATE |
-| U2 | Transcription API accessible | Medium | VALIDATE |
+| U1 | Meetings transcribed in Teams/Zoom | Medium | VALIDATE — transcript must exist for PMO to upload |
+| U2 | PMOs can export or copy transcript file | Medium | VALIDATE per client — key dependency for manual upload model |
 | U3 | JIRA is primary tracking | Medium | Confirm |
 | U4 | RAID log is SharePoint list | Low | VALIDATE |
 
@@ -979,10 +983,11 @@ Tag all unconfirmed statements: `[ASSUMPTION: High/Medium/Low]`
 
 | ID | Gap | Status | Impact |
 |---|---|---|---|
-| U1 | Teams transcription API access | BLOCKING | Cannot process meetings |
-| U2 | RAID log SharePoint schema | MEDIUM | Cannot propose entries |
-| U3 | JIRA field mappings | MEDIUM | Cannot match tickets |
+| U1 | PMO transcript export access confirmation | CONFIRM EARLY | Manual upload model requires PMOs can export transcripts; confirm per client |
+| U2 | RAID log SharePoint schema | MEDIUM | Cannot propose entries in correct format |
+| U3 | JIRA field mappings | MEDIUM | Cannot match tickets accurately |
 | U4 | High-priority ticket definition | LOW | Using assumed criteria |
+| U5 | Teams Graph API access | NOT BLOCKING | Optional enhancement; pursue in parallel with Wave 1 build |
 
 ---
 
